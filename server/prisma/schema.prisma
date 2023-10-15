@@ -16,8 +16,21 @@ model User {
   name           String
   password       String
   isActivated    Boolean  @default(false)
-  activationLink String   @map("activation_link")
+  activationLink String?  @map("activation_link")
   roles          String[]
+
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  refreshToken String[]
+  revoked      Boolean  @default(false)
+  User         User?    @relation(fields: [userId], references: [id])
+  userId       Int?
 }
 
 model Project {

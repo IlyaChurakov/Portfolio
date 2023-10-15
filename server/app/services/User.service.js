@@ -1,4 +1,4 @@
-import { hash } from 'argon2'
+import { hash, verify } from 'argon2'
 import { v4 as uuidv4 } from 'uuid'
 import { prisma } from '../prisma.js'
 
@@ -49,21 +49,22 @@ class UserService {
 	}
 
 	async login(email, password) {
-		const user = await UserModel.findOne({ email })
-		if (!user) throw ApiError.BadRequest('User not found')
+		const user = await prisma.user.findUnique({
+			where: {
+				email
+			}
+		})
+		if (!user) throw new Error('User not found')
 
-		const isPassEquals = await compare(password, user.password)
-		if (!isPassEquals) throw ApiError.BadRequest('Invalid password')
+		const isPassEquals = await verify(user.password, password)
+		if (!isPassEquals) throw new Error('Invalid password')
 
-		const userDto = new UserDto(user)
-		const tokens = TokenService.generateTokens({ ...userDto })
+		// const userDto = new UserDto(user)
+		// const tokens = TokenService.generateTokens({ ...userDto })
 
-		await TokenService.saveToken(userDto.id, tokens.refreshToken)
+		// await TokenService.saveToken(userDto.id, tokens.refreshToken)
 
-		return {
-			...tokens,
-			user: userDto
-		}
+		return user
 	}
 
 	async logout(refreshToken) {
@@ -95,7 +96,7 @@ class UserService {
 	}
 
 	async getAllUsers() {
-		const users = await UserModel.find()
+		const users = await prisma.user.findMany()
 		return users
 	}
 }
