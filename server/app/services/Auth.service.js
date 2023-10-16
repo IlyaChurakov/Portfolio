@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import { prisma } from '../utils/prisma.js'
 
 class TokenService {
 	generateTokens(payload) {
@@ -30,15 +31,15 @@ class TokenService {
 		}
 	}
 
-	async saveToken(userId, refreshToken) {
-		const tokenData = await TokenModel.findOne({ user: userId })
-
-		if (tokenData) {
-			tokenData.refreshToken = refreshToken
-			return tokenData.save()
-		}
-
-		const token = await TokenModel.create({ user: userId, refreshToken })
+	async addRefreshTokenToWhitelist({ userId, refreshToken }) {
+		console.log('WWWWWWWWWWWW')
+		const token = await prisma.refreshToken.create({
+			data: {
+				userId,
+				refreshToken
+			}
+		})
+		console.log('RRRRRRRRRRRRRRR')
 		return token
 	}
 

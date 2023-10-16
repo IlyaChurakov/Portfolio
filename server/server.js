@@ -5,8 +5,8 @@ import dotenv from 'dotenv'
 
 import express from 'express'
 import morgan from 'morgan'
-import { prisma } from './app/prisma.js'
 import router from './app/routes/index.js'
+import { prisma } from './app/utils/prisma.js'
 
 dotenv.config()
 

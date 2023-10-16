@@ -1,6 +1,10 @@
 import { hash, verify } from 'argon2'
 import { v4 as uuidv4 } from 'uuid'
-import { prisma } from '../prisma.js'
+import { UserDto } from '../dto/user.dto.js'
+import { generateTokens } from '../utils/jwt.js'
+import { prisma } from '../utils/prisma.js'
+import AuthService from './Auth.service.js'
+import MailService from './Mail.service.js'
 
 class UserService {
 	async registration(name, email, password) {
@@ -21,22 +25,26 @@ class UserService {
 			}
 		})
 
-		return user
+		await MailService.sendActivationMail(
+			email,
+			`${process.env.API_URL}/api/activate/${user.activationLink}`
+		)
 
-		// await MailService.sendActivationMail(
-		// 	email,
-		// 	`${process.env.API_URL}/api/activate/${activationLink}`
-		// )
+		const userDto = new UserDto(user)
+		const { accessToken, refreshToken } = generateTokens({
+			...userDto
+		})
 
-		// const userDto = new UserDto(user)
-		// const tokens = TokenService.generateTokens({ ...userDto })
+		await AuthService.addRefreshTokenToWhitelist({
+			userId: userDto.id,
+			refreshToken
+		})
 
-		// await TokenService.saveToken(userDto.id, tokens.refreshToken)
-
-		// return {
-		// 	...tokens,
-		// 	user: userDto
-		// }
+		return {
+			accessToken,
+			refreshToken,
+			user: userDto
+		}
 	}
 
 	async activate(activationLink) {
@@ -98,6 +106,14 @@ class UserService {
 	async getAllUsers() {
 		const users = await prisma.user.findMany()
 		return users
+	}
+
+	async deleteUserById(id) {
+		return await prisma.user.delete({
+			where: {
+				id
+			}
+		})
 	}
 }
 
