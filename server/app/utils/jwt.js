@@ -12,7 +12,7 @@ export function generateRefreshToken(payload) {
 	})
 }
 
-export function generateTokens(payload, jti) {
+export function generateTokens(payload) {
 	const accessToken = generateAccessToken(payload)
 	const refreshToken = generateRefreshToken(payload)
 

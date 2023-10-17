@@ -32,14 +32,12 @@ class TokenService {
 	}
 
 	async addRefreshTokenToWhitelist({ userId, refreshToken }) {
-		console.log('WWWWWWWWWWWW')
 		const token = await prisma.refreshToken.create({
 			data: {
 				userId,
-				refreshToken
+				hashedToken: refreshToken
 			}
 		})
-		console.log('RRRRRRRRRRRRRRR')
 		return token
 	}
 
