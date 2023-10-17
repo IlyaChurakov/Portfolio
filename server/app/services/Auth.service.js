@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken'
 import { prisma } from '../utils/prisma.js'
 
-class TokenService {
+class AuthService {
 	generateTokens(payload) {
 		const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-			expiresIn: '20s'
+			expiresIn: '5m'
 		})
 		const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-			expiresIn: '30d'
+			expiresIn: '8h'
 		})
 
 		return { accessToken, refreshToken }
@@ -16,8 +16,10 @@ class TokenService {
 	validateAccessToken(token) {
 		try {
 			const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
+
 			return userData
 		} catch (err) {
+			console.log(err)
 			return null
 		}
 	}
@@ -31,7 +33,7 @@ class TokenService {
 		}
 	}
 
-	async addRefreshTokenToWhitelist({ userId, refreshToken }) {
+	async saveToken(userId, refreshToken) {
 		const token = await prisma.refreshToken.create({
 			data: {
 				userId,
@@ -42,14 +44,22 @@ class TokenService {
 	}
 
 	async removeToken(refreshToken) {
-		const tokenData = await TokenModel.deleteOne({ refreshToken })
+		const tokenData = await prisma.refreshToken.deleteMany({
+			where: {
+				hashedToken: refreshToken
+			}
+		})
 		return tokenData
 	}
 
 	async findToken(refreshToken) {
-		const tokenData = await TokenModel.findOne({ refreshToken })
+		const tokenData = await prisma.refreshToken.findMany({
+			where: {
+				hashedToken: refreshToken
+			}
+		})
 		return tokenData
 	}
 }
 
-export default new TokenService()
+export default new AuthService()

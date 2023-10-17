@@ -1,7 +1,7 @@
 import { hash, verify } from 'argon2'
 import { v4 as uuidv4 } from 'uuid'
 import { UserDto } from '../dto/user.dto.js'
-import { generateTokens } from '../utils/jwt.js'
+import ApiError from '../errors/api.error.js'
 import { prisma } from '../utils/prisma.js'
 import AuthService from './Auth.service.js'
 import MailService from './Mail.service.js'
@@ -14,7 +14,8 @@ class UserService {
 			}
 		})
 
-		if (candidate) throw new Error(`User with email ${email} already exists`)
+		if (candidate)
+			throw ApiError.BadRequest(`User with email ${email} already exists`)
 
 		const user = await prisma.user.create({
 			data: {
@@ -31,14 +32,11 @@ class UserService {
 		)
 
 		const userDto = new UserDto(user)
-		const { accessToken, refreshToken } = generateTokens({
+		const { accessToken, refreshToken } = AuthService.generateTokens({
 			...userDto
 		})
 
-		await AuthService.addRefreshTokenToWhitelist({
-			userId: userDto.id,
-			refreshToken
-		})
+		await AuthService.saveToken(userDto.id, refreshToken)
 
 		return {
 			accessToken,
@@ -48,12 +46,23 @@ class UserService {
 	}
 
 	async activate(activationLink) {
-		const user = await UserModel.findOne({ activationLink })
-
+		// TODO: Сделать поиск уникального юзера
+		const user = await prisma.user.findMany({
+			where: {
+				activationLink
+			}
+		})
+		console.log(user)
 		if (!user) throw ApiError.BadRequest('Invalid activation link')
 
-		user.isActivated = true
-		await user.save()
+		await prisma.user.update({
+			where: {
+				id: user[0].id
+			},
+			data: {
+				isActivated: true
+			}
+		})
 	}
 
 	async login(email, password) {
@@ -62,21 +71,27 @@ class UserService {
 				email
 			}
 		})
-		if (!user) throw new Error('User not found')
+		if (!user) throw ApiError.BadRequest('User not found')
 
 		const isPassEquals = await verify(user.password, password)
-		if (!isPassEquals) throw new Error('Invalid password')
+		if (!isPassEquals) throw ApiError.BadRequest('Invalid password')
 
-		// const userDto = new UserDto(user)
-		// const tokens = TokenService.generateTokens({ ...userDto })
+		const userDto = new UserDto(user)
+		const { accessToken, refreshToken } = AuthService.generateTokens({
+			...userDto
+		})
 
-		// await TokenService.saveToken(userDto.id, tokens.refreshToken)
+		await AuthService.saveToken(userDto.id, refreshToken)
 
-		return user
+		return {
+			accessToken,
+			refreshToken,
+			user: userDto
+		}
 	}
 
 	async logout(refreshToken) {
-		const token = await TokenService.removeToken(refreshToken)
+		const token = await AuthService.removeToken(refreshToken)
 		return token
 	}
 
@@ -84,18 +99,22 @@ class UserService {
 		if (!refreshToken) {
 			throw ApiError.UnauthorizedError()
 		}
-		const userData = TokenService.validateRefreshToken(refreshToken)
-		const tokenFromDb = await TokenService.findToken(refreshToken)
+		const userData = AuthService.validateRefreshToken(refreshToken)
+		const tokenFromDb = await AuthService.findToken(refreshToken)
 
 		if (!userData || !tokenFromDb) {
 			throw ApiError.UnauthorizedError()
 		}
 
-		const user = await UserModel.findById(userData.id)
+		const user = await prisma.user.findUnique({
+			where: {
+				id: userData.id
+			}
+		})
 		const userDto = new UserDto(user)
-		const tokens = TokenService.generateTokens({ ...userDto })
+		const tokens = AuthService.generateTokens({ ...userDto })
 
-		await TokenService.saveToken(userDto.id, tokens.refreshToken)
+		await AuthService.saveToken(userDto.id, tokens.refreshToken)
 
 		return {
 			...tokens,

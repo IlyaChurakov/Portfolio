@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 
 import express from 'express'
 import morgan from 'morgan'
+import errorMiddleware from './app/middlewares/error.middleware.js'
 import router from './app/routes/index.js'
 import { prisma } from './app/utils/prisma.js'
 
@@ -15,13 +16,18 @@ const app = express()
 async function main() {
 	if (process.env.NODE_ENV === 'development') app.use(morgan('dev'))
 
-	app.use(cors())
 	app.use(express.json())
 	app.use(cookieParser())
-
+	app.use(
+		cors()
+		// cors({
+		// 	credentials: true,
+		// 	origin: process.env.CLIENT_URL
+		// })
+		//TODO: обработка ошибок cors
+	)
 	app.use('/api', router)
-
-	// app.use(errorMiddleware)
+	app.use(errorMiddleware)
 
 	const PORT = process.env.PORT || 5000
 
