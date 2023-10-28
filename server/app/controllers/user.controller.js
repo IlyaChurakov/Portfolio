@@ -8,12 +8,13 @@ const registrationSchema = yup.object().shape({
 })
 
 class UserController {
-	async registration(req, res, next) {
+	async register(req, res, next) {
 		try {
 			await registrationSchema.validate(req.body)
 
 			const { name, email, password } = req.body
-			const userData = await UserService.registration(name, email, password)
+
+			const userData = await UserService.register(name, email, password)
 
 			res.cookie('refreshToken', userData.refreshToken, {
 				maxAge: 30 * 24 * 60 * 60 * 1000,

@@ -7,7 +7,7 @@ import AuthService from './Auth.service.js'
 import MailService from './Mail.service.js'
 
 class UserService {
-	async registration(name, email, password) {
+	async register(name, email, password) {
 		const candidate = await prisma.user.findUnique({
 			where: {
 				email
@@ -28,7 +28,7 @@ class UserService {
 
 		await MailService.sendActivationMail(
 			email,
-			`${process.env.API_URL}/api/activate/${user.activationLink}`
+			`${process.env.API_URL}/api/user/activate/${user.activationLink}`
 		)
 
 		const userDto = new UserDto(user)

@@ -19,11 +19,10 @@ async function main() {
 	app.use(express.json())
 	app.use(cookieParser())
 	app.use(
-		cors()
-		// cors({
-		// 	credentials: true,
-		// 	origin: process.env.CLIENT_URL
-		// })
+		cors({
+			credentials: true,
+			origin: process.env.CLIENT_URL
+		})
 		//TODO: обработка ошибок cors
 	)
 	app.use('/api', router)

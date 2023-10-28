@@ -3,9 +3,9 @@ import userController from '../controllers/user.controller.js'
 
 const router = new Router()
 
-router.post('/registration', userController.registration)
+router.post('/register', userController.register)
 router.post('/login', userController.login)
 router.post('/logout', userController.logout)
-router.post('/refresh', userController.refresh)
+router.get('/refresh', userController.refresh)
 
 export default router
