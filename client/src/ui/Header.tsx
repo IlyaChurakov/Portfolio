@@ -15,13 +15,25 @@ const Header: FC = () => {
 	}
 
 	return (
-		<div>
+		<div className=' absolute top-0 w-full px-5 flex justify-between h-10 items-center'>
 			{pathname !== '/profile' && (
-				<GoPerson onClick={() => navigate('/profile')} />
+				<GoPerson
+					className='text-xl cursor-pointer'
+					onClick={() => navigate('/profile')}
+				/>
 			)}
 
-			<GoArrowLeft onClick={() => navigate('/')} />
-			<IoLogOutOutline onClick={logoutHandler} />
+			{pathname !== '/' && (
+				<GoArrowLeft
+					className=' text-xl cursor-pointer'
+					onClick={() => navigate('/')}
+				/>
+			)}
+
+			<IoLogOutOutline
+				className=' text-xl cursor-pointer'
+				onClick={logoutHandler}
+			/>
 		</div>
 	)
 }

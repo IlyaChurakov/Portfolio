@@ -13,11 +13,11 @@ const Profile: FC = () => {
 	}
 
 	return (
-		<div>
-			<h1>{store.user.name}</h1>
-			<h2>{store.user.email}</h2>
+		<div className='flex flex-col'>
+			<h1 className='text-center text-3xl font-bold mb-3'>{store.user.name}</h1>
+			<h2 className=' text-center text-gray-400 mb-3'>{store.user.email}</h2>
 			{!store.user.isActivated && <p>Подтвердите аккаунт</p>}
-			<button style={{ color: 'red' }} onClick={deleteAccount}>
+			<button className='text-red-500' onClick={deleteAccount}>
 				Delete account
 			</button>
 		</div>

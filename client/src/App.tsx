@@ -3,6 +3,7 @@ import { FC, useContext, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Context } from './main'
 import Router from './routes/Router'
+import './tailwind.css'
 import Header from './ui/Header'
 
 const App: FC = () => {

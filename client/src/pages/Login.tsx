@@ -18,29 +18,40 @@ const Login: FC = () => {
 	}, [store.isAuth])
 
 	return (
-		<div>
+		<div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96  bg-green-600 flex flex-col p-5'>
 			<input
 				type='text'
 				placeholder='Name'
 				onChange={e => setName(e.target.value)}
 				value={name}
+				className='mb-5 bg-transparent border border-white rounded-sm p-1 outline-0 text-white placeholder:text-white'
 			/>
 			<input
 				type='email'
 				placeholder='Email'
 				onChange={e => setEmail(e.target.value)}
 				value={email}
+				className='mb-5 bg-transparent border border-white rounded-sm p-1 outline-0 text-white placeholder:text-white'
 			/>
 			<input
 				type='password'
 				placeholder='Password'
 				onChange={e => setPassword(e.target.value)}
 				value={password}
+				className='mb-5 bg-transparent border border-white rounded-sm p-1 outline-0 text-white placeholder:text-white'
 			/>
 
-			<div>
-				<button onClick={() => store.login(email, password)}>Login</button>
-				<button onClick={() => store.register(email, password, name)}>
+			<div className=' grid grid-cols-2 gap-5'>
+				<button
+					className='w-full bg-transparent border border-white rounded-sm text-white hover:text-green-600 hover:bg-white'
+					onClick={() => store.login(email, password)}
+				>
+					Login
+				</button>
+				<button
+					className='w-full bg-transparent border border-white rounded-sm text-white hover:text-green-600 hover:bg-white'
+					onClick={() => store.register(email, password, name)}
+				>
 					Register
 				</button>
 			</div>
