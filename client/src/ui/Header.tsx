@@ -1,7 +1,8 @@
 import { FC, useContext } from 'react'
 import { GoArrowLeft, GoPerson } from 'react-icons/go'
-import { IoLogOutOutline } from 'react-icons/io5'
+import { MdLogout } from 'react-icons/md'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Container from '../layouts/Container'
 import { Context } from '../main'
 
 const Header: FC = () => {
@@ -15,26 +16,33 @@ const Header: FC = () => {
 	}
 
 	return (
-		<div className=' absolute top-0 w-full px-5 flex justify-between h-10 items-center'>
-			{pathname !== '/profile' && (
-				<GoPerson
-					className='text-xl cursor-pointer'
-					onClick={() => navigate('/profile')}
-				/>
-			)}
+		<header className='bg-gray-600'>
+			<Container>
+				<div className='w-full flex justify-between h-10 items-center'>
+					{pathname !== '/profile' && (
+						<GoPerson
+							className='text-xl cursor-pointer'
+							onClick={() => navigate('/profile')}
+							fill='#fff'
+						/>
+					)}
 
-			{pathname !== '/' && (
-				<GoArrowLeft
-					className=' text-xl cursor-pointer'
-					onClick={() => navigate('/')}
-				/>
-			)}
+					{pathname !== '/' && (
+						<GoArrowLeft
+							className=' text-xl cursor-pointer'
+							onClick={() => navigate('/')}
+							fill='#fff'
+						/>
+					)}
 
-			<IoLogOutOutline
-				className=' text-xl cursor-pointer'
-				onClick={logoutHandler}
-			/>
-		</div>
+					<MdLogout
+						className=' text-xl cursor-pointer'
+						onClick={logoutHandler}
+						fill='#fff'
+					/>
+				</div>
+			</Container>
+		</header>
 	)
 }
 
