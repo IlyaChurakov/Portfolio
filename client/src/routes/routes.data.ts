@@ -1,6 +1,7 @@
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
+import ProfileUsers from '../pages/ProfileUsers'
 
 enum Roles {
 	Admin = 'admin',
@@ -10,8 +11,9 @@ enum Roles {
 interface Route {
 	path: string
 	component: React.ComponentType
-	isAuth: boolean
+	isAuth?: boolean
 	roles?: Roles[]
+	nestedRoutes?: Route[]
 }
 
 export const routes: Route[] = [
@@ -26,8 +28,9 @@ export const routes: Route[] = [
 		isAuth: false,
 	},
 	{
-		path: '/profile',
+		path: '/profile/*',
 		component: Profile,
 		isAuth: true,
+		nestedRoutes: [{ path: 'users', component: ProfileUsers }],
 	},
 ]

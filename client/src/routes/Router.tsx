@@ -23,8 +23,26 @@ const Router = () => {
 							key={item.path}
 							path={item.path}
 							element={<item.component />}
-						/>
+						>
+							{item.nestedRoutes &&
+								item.nestedRoutes.map(nestedItem => {
+									return (
+										<Route
+											key={nestedItem.path}
+											path={nestedItem.path}
+											element={<nestedItem.component />}
+										/>
+									)
+								})}
+						</Route>
 					)
+					// return (
+					// 	<Route
+					// 		key={item.path}
+					// 		path={item.path}
+					// 		element={<item.component />}
+					// 	/>
+					// )
 				})}
 				<Route path='*' element={<NotFound />} />
 			</Routes>

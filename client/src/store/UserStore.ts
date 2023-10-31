@@ -3,6 +3,7 @@ import $axios from '../http'
 import { IUser } from '../models/IUser'
 import { AuthResponse } from '../models/response/AuthResponse'
 import AuthService from '../services/Auth.service'
+import UserService from '../services/User.service'
 
 export default class UserStore {
 	user = {} as IUser
@@ -53,10 +54,12 @@ export default class UserStore {
 			console.log(err.response?.data?.message)
 		}
 	}
-	async deleteAccount() {
+	async deleteAccount(id?: number) {
 		try {
-			await AuthService.deleteAccount(+this.user.id)
-			await this.logout()
+			await UserService.deleteAccount(id || +this.user.id)
+			if (id === +this.user.id) {
+				await this.logout()
+			}
 		} catch (err) {
 			console.log(err)
 		}
