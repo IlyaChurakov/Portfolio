@@ -9,4 +9,23 @@ export default class UserService {
 	static async deleteAccount(id: number): Promise<void> {
 		return $axios.delete(`/user/${id}`)
 	}
+	static async addRole({
+		id,
+		role,
+	}: {
+		id: number
+		role: string
+	}): Promise<void> {
+		console.log(id, role)
+		return $axios.patch(`/user/add-role/${id}`, { role })
+	}
+	static async deleteRole({
+		id,
+		role,
+	}: {
+		id: number
+		role: string
+	}): Promise<void> {
+		return $axios.patch(`/user/delete-role/${id}`, { role })
+	}
 }

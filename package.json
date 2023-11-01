@@ -1,0 +1,10 @@
+{
+	"scripts": {
+		"dev": "concurrently -c white,yellow -n server,client \"yarn watch-server\" \"yarn watch-client\"",
+		"watch-server": "cd server && yarn dev",
+		"watch-client": "cd client && yarn dev"
+	},
+	"dependencies": {
+		"concurrently": "^8.2.2"
+	}
+}

@@ -4,7 +4,7 @@ import Container from '../layouts/Container'
 
 const Footer: FC = () => {
 	return (
-		<footer className='w-full h-full p-10 bg-gray-600'>
+		<footer className='w-full h-full p-10 bg-[#595961]'>
 			<Container>
 				<ul className='w-1/4 text-white'>
 					<li>

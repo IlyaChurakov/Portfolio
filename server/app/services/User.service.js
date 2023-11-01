@@ -134,6 +134,37 @@ class UserService {
 			}
 		})
 	}
+
+	async addRole(id, role) {
+		return await prisma.user.update({
+			where: {
+				id
+			},
+			data: {
+				roles: {
+					push: role
+				}
+			}
+		})
+	}
+
+	async deleteRole(id, role) {
+		const user = await prisma.user.findUnique({
+			where: {
+				id
+			}
+		})
+
+		if (!user) throw ApiError.BadRequest('User not found')
+		return await prisma.user.update({
+			where: {
+				id
+			},
+			data: {
+				roles: { set: user.roles.filter(r => r !== role) }
+			}
+		})
+	}
 }
 
 export default new UserService()

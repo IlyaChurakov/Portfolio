@@ -95,6 +95,28 @@ class UserController {
 			next(err)
 		}
 	}
+	async addRole(req, res, next) {
+		try {
+			const { id } = req.params
+			const { role } = req.body
+
+			const user = await UserService.addRole(+id, role)
+			return res.json(user)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async deleteRole(req, res, next) {
+		try {
+			const { id } = req.params
+			const { role } = req.body
+
+			const user = await UserService.deleteRole(+id, role)
+			return res.json(user)
+		} catch (err) {
+			next(err)
+		}
+	}
 }
 
 export default new UserController()

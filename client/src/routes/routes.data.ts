@@ -1,6 +1,7 @@
 import Home from '../pages/Home'
 import Login from '../pages/Login'
 import Profile from '../pages/Profile'
+import ProfilePerson from '../pages/ProfilePerson'
 import ProfileUsers from '../pages/ProfileUsers'
 
 enum Roles {
@@ -31,6 +32,9 @@ export const routes: Route[] = [
 		path: '/profile/*',
 		component: Profile,
 		isAuth: true,
-		nestedRoutes: [{ path: 'users', component: ProfileUsers }],
+		nestedRoutes: [
+			{ path: '', component: ProfilePerson },
+			{ path: 'users', component: ProfileUsers, roles: [Roles.Admin] },
+		],
 	},
 ]

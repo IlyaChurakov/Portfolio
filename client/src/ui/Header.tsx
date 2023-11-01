@@ -16,14 +16,14 @@ const Header: FC = () => {
 	}
 
 	return (
-		<header className='bg-gray-600'>
+		<header className='bg-[#DDDDDD]'>
 			<Container>
 				<div className='w-full flex justify-between h-10 items-center'>
-					{pathname !== '/profile' && (
+					{pathname.indexOf('profile') == -1 && (
 						<GoPerson
 							className='text-xl cursor-pointer'
 							onClick={() => navigate('/profile')}
-							fill='#fff'
+							fill='#595961'
 						/>
 					)}
 
@@ -31,14 +31,14 @@ const Header: FC = () => {
 						<GoArrowLeft
 							className=' text-xl cursor-pointer'
 							onClick={() => navigate('/')}
-							fill='#fff'
+							fill='#595961'
 						/>
 					)}
 
 					<MdLogout
 						className=' text-xl cursor-pointer'
 						onClick={logoutHandler}
-						fill='#fff'
+						fill='#595961'
 					/>
 				</div>
 			</Container>

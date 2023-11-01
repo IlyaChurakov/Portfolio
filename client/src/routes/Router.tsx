@@ -8,6 +8,11 @@ import { routes } from './routes.data.ts'
 const Router = () => {
 	const { store } = useContext(Context)
 
+	function haveCommonValues(arr1: string[], arr2: string[]) {
+		// Проверяем, есть ли хотя бы одно общее значение в массивах
+		return arr1.some(value1 => arr2.some(value2 => value1 === value2))
+	}
+
 	if (store.isLoading) return <div>Loading...</div>
 
 	return (
@@ -26,13 +31,14 @@ const Router = () => {
 						>
 							{item.nestedRoutes &&
 								item.nestedRoutes.map(nestedItem => {
-									return (
-										<Route
-											key={nestedItem.path}
-											path={nestedItem.path}
-											element={<nestedItem.component />}
-										/>
-									)
+									if (nestedItem.roles?.includes())
+										return (
+											<Route
+												key={nestedItem.path}
+												path={nestedItem.path}
+												element={<nestedItem.component />}
+											/>
+										)
 								})}
 						</Route>
 					)

@@ -5,19 +5,18 @@ import Container from '../layouts/Container'
 const Home: FC = () => {
 	return (
 		<div className='flex flex-col'>
-			<section className='bg-green-700 p-10 '>
+			<section className='bg-[#595961] p-10 '>
 				<Container>
-					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
-						Lorem ipsum dolor sit amet consectetur adipisicing elit.
-					</h1>
-					<h2 className='text-black text-4xl font-extrabold'>
-						Autem saepe temporibus esse cupiditate optio. Consectetur enim
-						accusantium nam tenetur? Harum enim et atque ipsa veritatis quas
-						adipisci aut dolores aspernatur!
+					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>Title</h1>
+					<h2 className='text-[#D6A47C] text-xl font-extrabold'>
+						Lorem ipsum dolor, sit amet consectetur adipisicing elit. Assumenda
+						similique doloribus soluta asperiores, nostrum unde eveniet aliquid
+						mollitia cumque porro at dolores iure, sequi ad officiis quos rerum
+						est veniam.
 					</h2>
 				</Container>
 			</section>
-			<section className='bg-gray-700 p-5'>
+			{/* <section className=' bg-[#DDDDDD] p-5'>
 				<Container>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Новости
@@ -50,7 +49,7 @@ const Home: FC = () => {
 						<div className='h-48 w-48 bg-gray-100'></div>
 					</div>
 				</Container>
-			</section>
+			</section> */}
 		</div>
 	)
 }
