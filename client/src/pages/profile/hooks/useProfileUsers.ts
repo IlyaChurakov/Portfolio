@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import $axios from '../http'
-import { UserResponse } from '../models/response/UsersResponse'
+import $axios from '../../../http'
+import { UserResponse } from '../../../models/response/UsersResponse'
 
 const useProfileUsers = () => {
 	return useQuery<UserResponse[]>({

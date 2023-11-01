@@ -10,6 +10,6 @@ export class UserDto {
 		this.email = model.email
 		this.id = model.id
 		this.isActivated = model.isActivated
-		this.isActivated = model.roles
+		this.roles = model.roles
 	}
 }

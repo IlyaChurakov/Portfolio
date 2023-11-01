@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import UserService from '../services/User.service'
+import UserService from '../../../services/User.service'
 
 type hookProps = Function
 

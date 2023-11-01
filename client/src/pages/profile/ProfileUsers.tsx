@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import { FC, useContext } from 'react'
-import { Context } from '../main'
-import UserService from '../services/User.service'
-import useDeleteUser from './useDeleteUser'
-import useProfileUsers from './useProfileUsers'
+import { Context } from '../../main'
+import UserService from '../../services/User.service'
+import useDeleteUser from './hooks/useDeleteUser'
+import useProfileUsers from './hooks/useProfileUsers'
 
 const ProfileUsers: FC = () => {
 	const { store } = useContext(Context)

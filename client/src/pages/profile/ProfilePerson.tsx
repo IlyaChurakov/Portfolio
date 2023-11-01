@@ -1,6 +1,6 @@
 import { FC, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Context } from '../main'
+import { Context } from '../../main'
 
 const ProfilePerson: FC = () => {
 	const { store } = useContext(Context)

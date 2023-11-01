@@ -1,32 +1,30 @@
 import Home from '../pages/Home'
 import Login from '../pages/Login'
-import Profile from '../pages/Profile'
-import ProfilePerson from '../pages/ProfilePerson'
-import ProfileUsers from '../pages/ProfileUsers'
+import Profile from '../pages/profile/Profile'
+import ProfilePerson from '../pages/profile/ProfilePerson'
+import ProfileUsers from '../pages/profile/ProfileUsers'
 
 enum Roles {
 	Admin = 'admin',
 	User = 'user',
 }
 
-interface Route {
+export interface IRoute {
 	path: string
 	component: React.ComponentType
 	isAuth?: boolean
 	roles?: Roles[]
-	nestedRoutes?: Route[]
+	nestedRoutes?: IRoute[]
 }
 
-export const routes: Route[] = [
+export const routes: IRoute[] = [
 	{
 		path: '/',
 		component: Home,
-		isAuth: true,
 	},
 	{
 		path: '/login',
 		component: Login,
-		isAuth: false,
 	},
 	{
 		path: '/profile/*',

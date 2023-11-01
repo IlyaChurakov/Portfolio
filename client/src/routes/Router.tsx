@@ -3,53 +3,29 @@ import { useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Context } from '../main.tsx'
 import NotFound from '../pages/NotFound.tsx'
-import { routes } from './routes.data.ts'
+import { IRoute, routes } from './routes.data.ts'
 
 const Router = () => {
 	const { store } = useContext(Context)
 
-	function haveCommonValues(arr1: string[], arr2: string[]) {
-		// Проверяем, есть ли хотя бы одно общее значение в массивах
-		return arr1.some(value1 => arr2.some(value2 => value1 === value2))
-	}
-
 	if (store.isLoading) return <div>Loading...</div>
+
+	function renderRoutes(routes: IRoute[]) {
+		return routes.map(route => {
+			if (route.isAuth && !store.isAuth) return false
+
+			return (
+				<Route key={route.path} path={route.path} element={<route.component />}>
+					{route.nestedRoutes && renderRoutes(route.nestedRoutes)}
+				</Route>
+			)
+		})
+	}
 
 	return (
 		<>
 			<Routes>
-				{routes.map(item => {
-					if (item.isAuth && !store.isAuth) {
-						return false
-					}
-
-					return (
-						<Route
-							key={item.path}
-							path={item.path}
-							element={<item.component />}
-						>
-							{item.nestedRoutes &&
-								item.nestedRoutes.map(nestedItem => {
-									if (nestedItem.roles?.includes())
-										return (
-											<Route
-												key={nestedItem.path}
-												path={nestedItem.path}
-												element={<nestedItem.component />}
-											/>
-										)
-								})}
-						</Route>
-					)
-					// return (
-					// 	<Route
-					// 		key={item.path}
-					// 		path={item.path}
-					// 		element={<item.component />}
-					// 	/>
-					// )
-				})}
+				{renderRoutes(routes)}
 				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</>

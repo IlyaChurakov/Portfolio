@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react'
 import { GoArrowLeft, GoPerson } from 'react-icons/go'
 import { MdLogout } from 'react-icons/md'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Container from '../layouts/Container'
 import { Context } from '../main'
 
@@ -19,13 +19,18 @@ const Header: FC = () => {
 		<header className='bg-[#DDDDDD]'>
 			<Container>
 				<div className='w-full flex justify-between h-10 items-center'>
-					{pathname.indexOf('profile') == -1 && (
-						<GoPerson
-							className='text-xl cursor-pointer'
-							onClick={() => navigate('/profile')}
-							fill='#595961'
-						/>
-					)}
+					{pathname.indexOf('profile') == -1 &&
+						(!store.isAuth ? (
+							<Link to='/login' className='#595961'>
+								Sign in
+							</Link>
+						) : (
+							<GoPerson
+								className='text-xl cursor-pointer'
+								onClick={() => navigate('/profile')}
+								fill='#595961'
+							/>
+						))}
 
 					{pathname !== '/' && (
 						<GoArrowLeft

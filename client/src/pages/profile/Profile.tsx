@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import Container from '../layouts/Container'
+import Container from '../../layouts/Container'
 
 const Profile: FC = () => {
 	return (
