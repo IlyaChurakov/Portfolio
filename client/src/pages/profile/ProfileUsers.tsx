@@ -15,36 +15,39 @@ const ProfileUsers: FC = () => {
 
 	return (
 		<div className='p-5'>
-			<table className='w-full bg-white'>
+			<table className='w-full bg-white '>
 				<thead>
-					<tr>
-						<th className='h-5 border-solid border-2 border-gray-300'>Id</th>
-						<th className='h-5 border-solid border-2 border-gray-300'>Email</th>
-						<th className='h-5 border-solid border-2 border-gray-300'>Name</th>
-						<th className='h-5 border-solid border-2 border-gray-300'>
+					<tr className='border-none h-10'>
+						<th className='border-none font-normal bg-[#393D61] text-white'>
+							Id
+						</th>
+						<th className='border-none font-normal bg-[#6767AA] text-white'>
+							Email
+						</th>
+						<th className='border-none font-normal bg-[#A9A9CC]'>Name</th>
+						<th className='border-none font-normal bg-[#F2E0D0]'>
 							isActivated
 						</th>
-						<th className='h-5 border-solid border-2 border-gray-300'>Roles</th>
-						<th className='h-5 border-solid border-2 border-gray-300'></th>
+						<th className='border-none font-normal bg-[#D6A47C]'>Roles</th>
+						<th className='border-none font-normal bg-[#B88156] text-white'>
+							Actions
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					{store.userList?.map(item => {
 						return (
-							<tr key={item.id}>
-								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
-									{item.id}
-								</td>
-								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
-									{item.email}
-								</td>
-								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
-									{item.name}
-								</td>
-								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
+							<tr
+								key={item.id}
+								className='border-b border-dotted border-gray-300'
+							>
+								<td className='h-5 text-center font-bold'>{item.id}</td>
+								<td className='h-5 text-center'>{item.email}</td>
+								<td className='h-5 text-center'>{item.name}</td>
+								<td className='h-5 text-center'>
 									{item.isActivated ? 'true' : 'false'}
 								</td>
-								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
+								<td className='h-5 text-center'>
 									{item.roles.map(role => {
 										return (
 											<div
@@ -71,7 +74,7 @@ const ProfileUsers: FC = () => {
 										/>
 									</div>
 								</td>
-								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
+								<td className='h-5 text-center'>
 									{+item.id !== +store.user.id ? (
 										<button
 											onClick={() => {

@@ -14,7 +14,7 @@ const List = ({ id, isShow, roles }: IList) => {
 	if (!isShow) return null
 
 	return (
-		<nav className='bg-gray-100 absolute w-full  shadow-xl  '>
+		<nav className='bg-gray-100 absolute w-full  shadow-xl  z-10 border-none'>
 			<ul>
 				{roles.map(role => (
 					<li key={role}>
