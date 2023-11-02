@@ -1,9 +1,12 @@
 import { observer } from 'mobx-react-lite'
-import { FC } from 'react'
+import { FC, useContext } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import Container from '../../layouts/Container'
+import { Context } from '../../main'
 
 const Profile: FC = () => {
+	const { store } = useContext(Context)
+
 	return (
 		<>
 			<section className='bg-[#595961] p-2'>
@@ -12,11 +15,13 @@ const Profile: FC = () => {
 						to={'/profile'}
 						className='mr-5 text-[#A7ACB0]  hover:text-white'
 					>
-						Profile
+						Профиль
 					</Link>
-					<Link to={'users'} className='mr-5 text-[#A7ACB0] hover:text-white'>
-						Users
-					</Link>
+					{store.user.roles.includes('admin') && (
+						<Link to={'users'} className='mr-5 text-[#A7ACB0] hover:text-white'>
+							Список пользователей
+						</Link>
+					)}
 				</Container>
 			</section>
 			<section>

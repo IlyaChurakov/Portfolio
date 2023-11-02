@@ -14,7 +14,7 @@ const ProfilePerson: FC = () => {
 	return (
 		<div className='flex flex-col p-10'>
 			<h1 className='text-center text-3xl font-bold mb-3'>{store.user.name}</h1>
-			<h2 className=' text-center text-white mb-3'>{store.user.email}</h2>
+			<h2 className=' text-center text-[#D6A47C] mb-3'>{store.user.email}</h2>
 			{!store.user.isActivated && (
 				<p className='text-center mb-3'>Подтвердите аккаунт</p>
 			)}

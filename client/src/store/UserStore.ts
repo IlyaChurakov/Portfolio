@@ -36,7 +36,7 @@ export default class UserStore {
 			this.setAuth(true)
 			this.setUser(response.data.user)
 		} catch (err) {
-			console.log(err.response?.data?.message)
+			throw new Error(err.response?.data?.message)
 		}
 	}
 	async register(email: string, password: string, name: string) {
@@ -46,7 +46,7 @@ export default class UserStore {
 			this.setAuth(true)
 			this.setUser(response.data.user)
 		} catch (err) {
-			console.log(err.response?.data?.message)
+			throw new Error((err as Error).message)
 		}
 	}
 	async logout() {
@@ -56,7 +56,7 @@ export default class UserStore {
 			this.setAuth(false)
 			this.setUser({} as IUser)
 		} catch (err) {
-			console.log(err.response?.data?.message)
+			throw new Error((err as Error).message)
 		}
 	}
 	async checkAuth() {

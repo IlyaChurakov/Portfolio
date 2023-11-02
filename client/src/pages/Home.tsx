@@ -7,12 +7,12 @@ const Home: FC = () => {
 		<div className='flex flex-col'>
 			<section className='bg-[#595961] p-10 '>
 				<Container>
-					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>Title</h1>
+					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
+						Илья Чураков
+					</h1>
 					<h2 className='text-[#D6A47C] text-xl font-extrabold'>
-						Lorem ipsum dolor, sit amet consectetur adipisicing elit. Assumenda
-						similique doloribus soluta asperiores, nostrum unde eveniet aliquid
-						mollitia cumque porro at dolores iure, sequi ad officiis quos rerum
-						est veniam.
+						Портфолио <span className='text-2xl text-gray-300'>front-end</span>{' '}
+						разработчика
 					</h2>
 				</Container>
 			</section>

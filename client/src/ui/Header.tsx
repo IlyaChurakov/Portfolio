@@ -17,7 +17,7 @@ const Header: FC = () => {
 	}
 
 	return (
-		<header className='bg-[#DDDDDD]'>
+		<header className='bg-[#D6A47C]'>
 			<Container>
 				<div className='w-full flex justify-between h-10 items-center'>
 					{pathname.indexOf('profile') == -1 &&
