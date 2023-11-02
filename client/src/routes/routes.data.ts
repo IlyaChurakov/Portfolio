@@ -1,5 +1,6 @@
 import Home from '../pages/Home'
 import Login from '../pages/Login'
+import Register from '../pages/Register'
 import Profile from '../pages/profile/Profile'
 import ProfilePerson from '../pages/profile/ProfilePerson'
 import ProfileUsers from '../pages/profile/ProfileUsers'
@@ -25,6 +26,10 @@ export const routes: IRoute[] = [
 	{
 		path: '/login',
 		component: Login,
+	},
+	{
+		path: '/register',
+		component: Register,
 	},
 	{
 		path: '/profile/*',

@@ -1,30 +1,21 @@
-import { useMutation } from '@tanstack/react-query'
-import { FC, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
+import { FC, useContext, useEffect } from 'react'
+import { GoX } from 'react-icons/go'
 import { Context } from '../../main'
-import UserService from '../../services/User.service'
-import useDeleteUser from './hooks/useDeleteUser'
-import useProfileUsers from './hooks/useProfileUsers'
+import Menu from './menu/Menu'
 
 const ProfileUsers: FC = () => {
 	const { store } = useContext(Context)
-	const { data, refetch } = useProfileUsers()
-	const { mutate } = useDeleteUser(refetch)
 
-	const { mutate: addRole } = useMutation({
-		mutationKey: ['delete user'],
-		mutationFn: (arg: { id: number; role: string }) =>
-			UserService.addRole(arg).then(() => refetch()),
-	})
+	useEffect(() => {
+		store.getUserList()
+	}, [])
 
-	const { mutate: deleteRole } = useMutation({
-		mutationKey: ['delete user'],
-		mutationFn: (arg: { id: number; role: string }) =>
-			UserService.deleteRole(arg).then(() => refetch()),
-	})
+	const roles = ['admin', 'user', 'developer']
 
 	return (
 		<div className='p-5'>
-			<table className='w-full'>
+			<table className='w-full bg-white'>
 				<thead>
 					<tr>
 						<th className='h-5 border-solid border-2 border-gray-300'>Id</th>
@@ -34,10 +25,11 @@ const ProfileUsers: FC = () => {
 							isActivated
 						</th>
 						<th className='h-5 border-solid border-2 border-gray-300'>Roles</th>
+						<th className='h-5 border-solid border-2 border-gray-300'></th>
 					</tr>
 				</thead>
 				<tbody>
-					{data?.map(item => {
+					{store.userList?.map(item => {
 						return (
 							<tr key={item.id}>
 								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
@@ -55,37 +47,36 @@ const ProfileUsers: FC = () => {
 								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
 									{item.roles.map(role => {
 										return (
-											<div key={role}>
-												{role}{' '}
+											<div
+												key={role}
+												className='grid grid-cols-[1fr_25px] justify-items-center bg-gray-200 m-2 rounded-sm hover:bg-gray-300'
+											>
+												<div>{role}</div>
 												<button
-													className='text-red-500'
-													onClick={() =>
-														deleteRole({ id: +item.id, role: role })
-													}
+													onClick={() => store.removeRoleById(+item.id, role)}
 												>
-													delete
+													<GoX fill='red' />
 												</button>
 											</div>
 										)
 									})}
-									<button
-										onClick={() => {
-											const result = prompt('Введите роль', 'admin')
-											if (result && !item.roles.includes(result)) {
-												addRole({ id: +item.id, role: result })
-											}
-										}}
-										className='text-green-500'
-									>
-										add role
-									</button>
+									<div className='w-full grid justify-items-end relative'>
+										<Menu
+											roles={roles.filter(role => {
+												if (!item.roles.includes(role)) {
+													return role
+												}
+											})}
+											id={+item.id}
+										/>
+									</div>
 								</td>
 								<td className='h-5 border-solid border-2 border-gray-300 text-center'>
 									{+item.id !== +store.user.id ? (
 										<button
 											onClick={() => {
 												if (confirm(`Удалить пользователя ${item.email}`)) {
-													mutate(+item.id)
+													store.deleteAccount(+item.id)
 												}
 											}}
 											className='text-red-500'
@@ -105,4 +96,4 @@ const ProfileUsers: FC = () => {
 	)
 }
 
-export default ProfileUsers
+export default observer(ProfileUsers)

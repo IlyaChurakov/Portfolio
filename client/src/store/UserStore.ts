@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import $axios from '../http'
 import { IUser } from '../models/IUser'
 import { AuthResponse } from '../models/response/AuthResponse'
+import { UserResponse } from '../models/response/UsersResponse'
 import AuthService from '../services/Auth.service'
 import UserService from '../services/User.service'
 
@@ -9,6 +10,7 @@ export default class UserStore {
 	user = {} as IUser
 	isAuth = false
 	isLoading = false
+	userList = [] as UserResponse[]
 
 	constructor() {
 		makeAutoObservable(this)
@@ -22,6 +24,9 @@ export default class UserStore {
 	}
 	setLoading(bool: boolean) {
 		this.isLoading = bool
+	}
+	setUserList(userList: UserResponse[]) {
+		this.userList = userList
 	}
 	async login(email: string, password: string) {
 		try {
@@ -54,16 +59,6 @@ export default class UserStore {
 			console.log(err.response?.data?.message)
 		}
 	}
-	async deleteAccount(id?: number) {
-		try {
-			await UserService.deleteAccount(id || +this.user.id)
-			if (id === +this.user.id) {
-				await this.logout()
-			}
-		} catch (err) {
-			console.log(err)
-		}
-	}
 	async checkAuth() {
 		this.setLoading(true)
 
@@ -80,6 +75,43 @@ export default class UserStore {
 			console.log(err.response?.data?.message)
 		} finally {
 			this.setLoading(false)
+		}
+	}
+
+	async getUserList() {
+		try {
+			const { data } = await UserService.getUsersList()
+			this.setUserList(data)
+		} catch (err) {
+			console.log(err)
+		}
+	}
+	async deleteAccount(id?: number) {
+		try {
+			await UserService.deleteAccount(id || +this.user.id)
+			if (id === +this.user.id) {
+				await this.logout()
+			} else {
+				await this.getUserList()
+			}
+		} catch (err) {
+			console.log(err)
+		}
+	}
+	async addRoleById(id: number, role: string) {
+		try {
+			await UserService.addRole(id, role)
+			await this.getUserList()
+		} catch (err) {
+			console.log(err)
+		}
+	}
+	async removeRoleById(id: number, role: string) {
+		try {
+			await UserService.deleteRole(id, role)
+			await this.getUserList()
+		} catch (err) {
+			console.log(err)
 		}
 	}
 }

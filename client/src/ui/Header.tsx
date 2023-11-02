@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite'
 import { FC, useContext } from 'react'
 import { GoArrowLeft, GoPerson } from 'react-icons/go'
 import { MdLogout } from 'react-icons/md'
@@ -51,4 +52,4 @@ const Header: FC = () => {
 	)
 }
 
-export default Header
+export default observer(Header)
