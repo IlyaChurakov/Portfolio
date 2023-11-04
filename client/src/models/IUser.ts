@@ -7,4 +7,5 @@ export interface IUser {
 	updatedAt: Date
 	createdAt: Date
 	avatar: string
+	description: string
 }

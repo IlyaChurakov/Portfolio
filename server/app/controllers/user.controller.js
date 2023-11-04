@@ -136,6 +136,18 @@ class UserController {
 			next(err)
 		}
 	}
+
+	async addDescription(req, res, next) {
+		try {
+			const { id } = req.params
+			const { description } = req.body
+
+			const user = await UserService.addDescription(+id, description)
+			return res.json(user)
+		} catch (err) {
+			next(err)
+		}
+	}
 }
 
 export default new UserController()

@@ -10,5 +10,6 @@ router.patch('/delete-role/:id', userController.deleteRole)
 router.patch('/add-role/:id', userController.addRole)
 router.get('/activate/:link', userController.activate)
 router.post('/upload-avatar/:id', userController.uploadAvatar)
+router.post('/change-description/:id', userController.addDescription)
 
 export default router

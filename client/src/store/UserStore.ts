@@ -113,6 +113,13 @@ export default class UserStore {
 			console.log(err)
 		}
 	}
+	async changeDescription(id: number, description: string) {
+		try {
+			await UserService.changeDescription(id, description)
+		} catch (err) {
+			console.log(err)
+		}
+	}
 	async removeRoleById(id: number, role: string) {
 		try {
 			await UserService.deleteRole(id, role)

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
-import { GoX } from 'react-icons/go'
+import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
 import { Context } from '../../main'
 import Menu from './menu/Menu'
 
@@ -44,8 +44,12 @@ const ProfileUsers: FC = () => {
 								<td className='h-5 text-center font-bold'>{item.id}</td>
 								<td className='h-5 text-center'>{item.email}</td>
 								<td className='h-5 text-center'>{item.name}</td>
-								<td className='h-5 text-center'>
-									{item.isActivated ? 'true' : 'false'}
+								<td className='h-5 '>
+									{item.isActivated ? (
+										<GoCheckCircleFill fill='green' className='m-auto' />
+									) : (
+										<GoXCircleFill fill='red' className='m-auto' />
+									)}
 								</td>
 								<td className='h-5 text-center'>
 									{item.roles.map(role => {

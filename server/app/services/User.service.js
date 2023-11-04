@@ -180,6 +180,17 @@ class UserService {
 			}
 		})
 	}
+
+	async addDescription(id, description) {
+		return await prisma.user.update({
+			where: {
+				id
+			},
+			data: {
+				description
+			}
+		})
+	}
 }
 
 export default new UserService()

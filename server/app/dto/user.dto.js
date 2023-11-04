@@ -7,6 +7,7 @@ export class UserDto {
 	createdAt
 	updatedAt
 	avatar
+	description
 
 	constructor(model) {
 		this.name = model.name
@@ -17,5 +18,6 @@ export class UserDto {
 		this.createdAt = model.createdAt
 		this.updatedAt = model.updatedAt
 		this.avatar = model.avatar
+		this.description = model.description
 	}
 }
