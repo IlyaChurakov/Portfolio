@@ -18,6 +18,7 @@ model User {
   isActivated    Boolean  @default(false)
   activationLink String?  @map("activation_link")
   roles          String[]
+  avatar         String?
 
   refreshTokens RefreshToken[]
 }

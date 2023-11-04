@@ -9,6 +9,8 @@ import errorMiddleware from './app/middlewares/error.middleware.js'
 import router from './app/routes/index.js'
 import { prisma } from './app/utils/prisma.js'
 
+import fileUpload from 'express-fileupload'
+
 dotenv.config()
 
 const app = express()
@@ -16,8 +18,6 @@ const app = express()
 async function main() {
 	if (process.env.NODE_ENV === 'development') app.use(morgan('dev'))
 
-	app.use(express.json())
-	app.use(cookieParser())
 	app.use(
 		cors({
 			credentials: true,
@@ -25,6 +25,11 @@ async function main() {
 		})
 		//TODO: обработка ошибок cors
 	)
+	app.use(express.json())
+	app.use(express.static('static'))
+	app.use(fileUpload({}))
+	app.use(cookieParser())
+
 	app.use('/api', router)
 	app.use(errorMiddleware)
 

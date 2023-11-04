@@ -4,6 +4,9 @@ export class UserDto {
 	id
 	isActivated
 	roles
+	createdAt
+	updatedAt
+	avatar
 
 	constructor(model) {
 		this.name = model.name
@@ -11,5 +14,8 @@ export class UserDto {
 		this.id = model.id
 		this.isActivated = model.isActivated
 		this.roles = model.roles
+		this.createdAt = model.createdAt
+		this.updatedAt = model.updatedAt
+		this.avatar = model.avatar
 	}
 }

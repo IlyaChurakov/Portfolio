@@ -106,6 +106,13 @@ export default class UserStore {
 			console.log(err)
 		}
 	}
+	async uploadAvatar(id: number, avatar: FormData) {
+		try {
+			await UserService.uploadAvatar(id, avatar)
+		} catch (err) {
+			console.log(err)
+		}
+	}
 	async removeRoleById(id: number, role: string) {
 		try {
 			await UserService.deleteRole(id, role)

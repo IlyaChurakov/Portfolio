@@ -41,11 +41,15 @@ const Header: FC = () => {
 						/>
 					)}
 
-					<MdLogout
-						className=' text-xl cursor-pointer'
-						onClick={logoutHandler}
-						fill='#595961'
-					/>
+					{store.isAuth ? (
+						<MdLogout
+							className=' text-xl cursor-pointer'
+							onClick={logoutHandler}
+							fill='#595961'
+						/>
+					) : (
+						<div></div>
+					)}
 				</div>
 			</Container>
 		</header>

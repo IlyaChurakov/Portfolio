@@ -4,4 +4,7 @@ export interface IUser {
 	email: string
 	isActivated: string
 	roles: string[]
+	updatedAt: Date
+	createdAt: Date
+	avatar: string
 }

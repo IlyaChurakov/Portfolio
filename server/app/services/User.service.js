@@ -169,6 +169,17 @@ class UserService {
 			}
 		})
 	}
+
+	async uploadAvatar(id, avatar) {
+		return await prisma.user.update({
+			where: {
+				id
+			},
+			data: {
+				avatar
+			}
+		})
+	}
 }
 
 export default new UserService()

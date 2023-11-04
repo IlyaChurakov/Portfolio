@@ -1,3 +1,5 @@
+import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import UserService from '../services/User.service.js'
 
@@ -112,6 +114,23 @@ class UserController {
 			const { role } = req.body
 
 			const user = await UserService.deleteRole(+id, role)
+			return res.json(user)
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	async uploadAvatar(req, res, next) {
+		try {
+			console.log(req.files)
+			const { id } = req.params
+			const { img } = req.files
+
+			const fileName = uuidv4() + '.jpg'
+
+			img.mv(path.resolve('static', fileName))
+
+			const user = await UserService.uploadAvatar(+id, fileName)
 			return res.json(user)
 		} catch (err) {
 			next(err)
