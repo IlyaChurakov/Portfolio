@@ -28,21 +28,23 @@ export default class UserStore {
 	setUserList(userList: UserResponse[]) {
 		this.userList = userList
 	}
+
+	// Основные методы авторизации
+	async register(email: string, password: string, name: string) {
+		try {
+			const response = await AuthService.register(email, password, name)
+			localStorage.setItem('token', response.data.accessToken)
+			this.setAuth(true)
+			this.setUser(response.data.user)
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
 	async login(email: string, password: string) {
 		try {
 			const response = await AuthService.login(email, password)
 			localStorage.setItem('token', response.data.accessToken)
 			console.log(response.data.user)
-			this.setAuth(true)
-			this.setUser(response.data.user)
-		} catch (err) {
-			throw new Error(err.response?.data?.message)
-		}
-	}
-	async register(email: string, password: string, name: string) {
-		try {
-			const response = await AuthService.register(email, password, name)
-			localStorage.setItem('token', response.data.accessToken)
 			this.setAuth(true)
 			this.setUser(response.data.user)
 		} catch (err) {
@@ -72,18 +74,19 @@ export default class UserStore {
 			this.setAuth(true)
 			this.setUser(response.data.user)
 		} catch (err) {
-			console.log(err.response?.data?.message)
+			throw new Error((err as Error).message)
 		} finally {
 			this.setLoading(false)
 		}
 	}
 
+	// Методы по работе с юзерами и самим юзером
 	async getUserList() {
 		try {
 			const { data } = await UserService.getUsersList()
 			this.setUserList(data)
 		} catch (err) {
-			console.log(err)
+			throw new Error((err as Error).message)
 		}
 	}
 	async deleteAccount(id?: number) {
@@ -95,7 +98,7 @@ export default class UserStore {
 				await this.getUserList()
 			}
 		} catch (err) {
-			console.log(err)
+			throw new Error((err as Error).message)
 		}
 	}
 	async addRoleById(id: number, role: string) {
@@ -103,21 +106,7 @@ export default class UserStore {
 			await UserService.addRole(id, role)
 			await this.getUserList()
 		} catch (err) {
-			console.log(err)
-		}
-	}
-	async uploadAvatar(id: number, avatar: FormData) {
-		try {
-			await UserService.uploadAvatar(id, avatar)
-		} catch (err) {
-			console.log(err)
-		}
-	}
-	async changeDescription(id: number, description: string) {
-		try {
-			await UserService.changeDescription(id, description)
-		} catch (err) {
-			console.log(err)
+			throw new Error((err as Error).message)
 		}
 	}
 	async removeRoleById(id: number, role: string) {
@@ -125,7 +114,23 @@ export default class UserStore {
 			await UserService.deleteRole(id, role)
 			await this.getUserList()
 		} catch (err) {
-			console.log(err)
+			throw new Error((err as Error).message)
+		}
+	}
+	async uploadAvatar(id: number, avatar: FormData) {
+		try {
+			const { data } = await UserService.uploadAvatar(id, avatar)
+			this.setUser(data)
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
+	async changeDescription(id: number, description: string) {
+		try {
+			const { data } = await UserService.changeDescription(id, description)
+			this.setUser(data)
+		} catch (err) {
+			throw new Error((err as Error).message)
 		}
 	}
 }

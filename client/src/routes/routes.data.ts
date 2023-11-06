@@ -4,6 +4,11 @@ import Register from '../pages/Register'
 import Profile from '../pages/profile/Profile'
 import ProfilePerson from '../pages/profile/ProfilePerson'
 import ProfileUsers from '../pages/profile/ProfileUsers'
+import AddProject from '../pages/projects/AddProject'
+import EditProject from '../pages/projects/EditProject'
+import Project from '../pages/projects/Project'
+import ProjectList from '../pages/projects/ProjectList'
+import Projects from '../pages/projects/Projects'
 
 enum Roles {
 	Admin = 'admin',
@@ -38,6 +43,16 @@ export const routes: IRoute[] = [
 		nestedRoutes: [
 			{ path: '', component: ProfilePerson },
 			{ path: 'users', component: ProfileUsers, roles: [Roles.Admin] },
+		],
+	},
+	{
+		path: '/projects/*',
+		component: Projects,
+		nestedRoutes: [
+			{ path: '', component: ProjectList },
+			{ path: ':id', component: Project },
+			{ path: ':id/edit', component: EditProject, roles: [Roles.Admin] },
+			{ path: 'new', component: AddProject, roles: [Roles.Admin] },
 		],
 	},
 ]

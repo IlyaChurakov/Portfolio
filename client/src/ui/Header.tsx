@@ -19,36 +19,51 @@ const Header: FC = () => {
 	return (
 		<header className='bg-[#D6A47C]'>
 			<Container>
-				<div className='w-full flex justify-between h-10 items-center'>
+				<div className='w-full flex justify-between h-10 items-center px-5'>
 					{pathname.indexOf('profile') == -1 &&
 						(!store.isAuth ? (
 							<Link to='/login' className='#595961'>
 								Sign in
 							</Link>
 						) : (
-							<GoPerson
-								className='text-xl cursor-pointer'
-								onClick={() => navigate('/profile')}
-								fill='#595961'
-							/>
+							pathname.indexOf('projects') == -1 && (
+								<GoPerson
+									className='text-xl cursor-pointer'
+									onClick={() => navigate('/profile')}
+									fill='#595961'
+								/>
+							)
 						))}
 
 					{pathname !== '/' && (
 						<GoArrowLeft
 							className=' text-xl cursor-pointer'
-							onClick={() => navigate('/')}
+							onClick={() => {
+								console.log(pathname)
+								if (pathname.includes('edit')) {
+									navigate(pathname.split('/edit')[0])
+								}
+								if (
+									pathname == '/projects' ||
+									pathname == '/profile' ||
+									pathname == '/profile/users'
+								) {
+									navigate('/')
+								}
+								if (pathname.includes('/projects/')) {
+									navigate('/projects')
+								}
+							}}
 							fill='#595961'
 						/>
 					)}
 
-					{store.isAuth ? (
+					{store.isAuth && pathname.includes('profile') && (
 						<MdLogout
 							className=' text-xl cursor-pointer'
 							onClick={logoutHandler}
 							fill='#595961'
 						/>
-					) : (
-						<div></div>
 					)}
 				</div>
 			</Container>

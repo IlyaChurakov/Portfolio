@@ -52,7 +52,7 @@ class UserService {
 				activationLink
 			}
 		})
-		console.log(user)
+
 		if (!user) throw ApiError.BadRequest('Invalid activation link')
 
 		await prisma.user.update({

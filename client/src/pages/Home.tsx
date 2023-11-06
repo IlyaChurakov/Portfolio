@@ -1,10 +1,27 @@
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
+import { Link } from 'react-router-dom'
 import Container from '../layouts/Container'
 
 const Home: FC = () => {
 	return (
 		<div className='flex flex-col'>
+			<section className='bg-[#595961] py-2 px-5'>
+				<Container>
+					<Link
+						to={'/profile'}
+						className='mr-5 text-[#A7ACB0]  hover:text-white'
+					>
+						Профиль
+					</Link>
+					<Link
+						to={'/projects'}
+						className='mr-5 text-[#A7ACB0]  hover:text-white'
+					>
+						Проекты
+					</Link>
+				</Container>
+			</section>
 			<section className='bg-[#595961] p-10 '>
 				<Container>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
@@ -16,6 +33,7 @@ const Home: FC = () => {
 					</h2>
 				</Container>
 			</section>
+
 			{/* <section className=' bg-[#DDDDDD] p-5'>
 				<Container>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>

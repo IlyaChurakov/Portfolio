@@ -122,7 +122,6 @@ class UserController {
 
 	async uploadAvatar(req, res, next) {
 		try {
-			console.log(req.files)
 			const { id } = req.params
 			const { img } = req.files
 
@@ -131,6 +130,7 @@ class UserController {
 			img.mv(path.resolve('static', fileName))
 
 			const user = await UserService.uploadAvatar(+id, fileName)
+			console.log(user)
 			return res.json(user)
 		} catch (err) {
 			next(err)

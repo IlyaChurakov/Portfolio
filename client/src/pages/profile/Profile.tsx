@@ -9,7 +9,7 @@ const Profile: FC = () => {
 
 	return (
 		<>
-			<section className='bg-[#595961] p-2'>
+			<section className='bg-[#595961] py-2 px-5'>
 				<Container>
 					<Link
 						to={'/profile'}

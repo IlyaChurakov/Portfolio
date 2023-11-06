@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { GoPlus } from 'react-icons/go'
-import { Context } from '../../../main'
+import { Context } from '../../../../main'
 
 interface IList {
 	id: number

@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { IoMdCreate } from 'react-icons/io'
 import { RiSave3Fill } from 'react-icons/ri'
-import { Context } from '../../main'
+import { Context } from '../../../main'
 
 interface IDescriptionProps {
 	description: string
@@ -51,7 +51,13 @@ const Description = ({ description, onEdit }: IDescriptionProps) => {
 					>
 						<IoMdCreate className='hover:text-lg' />
 					</button>
-					<p className='w-full'>{store.user.description}</p>
+					{store.user.description ? (
+						<p className='w-full'>{store.user.description}</p>
+					) : (
+						<p className='w-full text-gray-400'>
+							{'Здесь вы можете рассказать о себе!'}
+						</p>
+					)}
 				</>
 			)}
 		</div>

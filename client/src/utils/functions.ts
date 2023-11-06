@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-export function checkUserRoles(userRoles: string[], routeRoles: string[]) {
+export function checkUserRoles(routeRoles: string[], userRoles: string[]) {
 	return userRoles.some(userRole =>
 		routeRoles.some(routeRole => userRole === routeRole)
 	)

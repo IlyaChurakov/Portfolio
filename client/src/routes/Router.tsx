@@ -20,7 +20,7 @@ const Router = () => {
 					key={route.path}
 					path={route.path}
 					element={
-						route.roles ? (
+						route.roles && store.user.roles ? (
 							checkUserRoles(route.roles, store.user.roles) ? (
 								<route.component />
 							) : (

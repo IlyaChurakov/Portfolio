@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react-lite'
-import { FC, useContext, useEffect, useState } from 'react'
+import { FC, useContext, useEffect } from 'react'
 import { IoMdCreate } from 'react-icons/io'
 import { MdPublishedWithChanges } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../../main'
 import { transformDate } from '../../utils/functions'
-import Description from './Description'
-import useUploadAvatar from './useUploadAvatar'
+import Description from './components/Description'
+import useUploadAvatar from './hooks/useUploadAvatar'
 
 const ProfilePerson: FC = () => {
 	const { store } = useContext(Context)
@@ -26,19 +26,16 @@ const ProfilePerson: FC = () => {
 		}
 	}, [file])
 
-	const [userDescription, setUserDescription] = useState(
-		'Описание пользователя'
-	)
-
 	const handleDescriptionEdit = (editedDescription: string) => {
-		store.changeDescription(+store.user.id, editedDescription)
-		setUserDescription(editedDescription)
+		if (editedDescription !== store.user.description) {
+			store.changeDescription(+store.user.id, editedDescription)
+		}
 	}
 
 	return (
 		<div className='flex flex-col p-10'>
-			<div className='w-full bg-white p-5 grid grid-cols-[10rem_1fr] gap-10 shadow-xl rounded-sm'>
-				<div className='w-40'>
+			<div className='w-full bg-white p-5 grid grid-cols-[10rem_1fr] gap-10 shadow-xl rounded-lg'>
+				<div className='w-40 max-h-60'>
 					<div className='relative h-full w-full'>
 						<label htmlFor='select_avatar' className='cursor-pointer'>
 							<input
@@ -61,17 +58,6 @@ const ProfilePerson: FC = () => {
 							) : (
 								<div className='h-full w-full bg-gray-300'></div>
 							)}
-
-							{/* {file ? (
-								<div className='flex flex-col'>
-									<span className='text-white'>{file.name}</span>
-									<span className='text-gray-300'>
-										{(file.size / 1024).toFixed(2)} KB
-									</span>
-								</div>
-							) : (
-								'Выберите файл'
-							)} */}
 						</label>
 					</div>
 				</div>
@@ -84,7 +70,7 @@ const ProfilePerson: FC = () => {
 					</h2>
 					<div>
 						<Description
-							description={store.user.description || userDescription}
+							description={store.user.description}
 							onEdit={handleDescriptionEdit}
 						/>
 					</div>

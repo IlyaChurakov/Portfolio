@@ -2,7 +2,13 @@ import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
 import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
 import { Context } from '../../main'
-import Menu from './menu/Menu'
+import Menu from './components/menu/Menu'
+
+interface IHeaderSettings {
+	headerBgColor: string
+	headerTextColor: string
+	text: string
+}
 
 const ProfileUsers: FC = () => {
 	const { store } = useContext(Context)
@@ -13,25 +19,28 @@ const ProfileUsers: FC = () => {
 
 	const roles = ['admin', 'user', 'developer']
 
+	const headerSettings: IHeaderSettings[] = [
+		{ headerBgColor: '#393D61', headerTextColor: '#fff', text: 'Id' },
+		{ headerBgColor: '#6767AA', headerTextColor: '#fff', text: 'Email' },
+		{ headerBgColor: '#A9A9CC', headerTextColor: '#000', text: 'Name' },
+		{ headerBgColor: '#F2E0D0', headerTextColor: '#000', text: 'isActivated' },
+		{ headerBgColor: '#D6A47C', headerTextColor: '#000', text: 'Roles' },
+		{ headerBgColor: '#B88156', headerTextColor: '#fff', text: 'Actions' },
+	]
+
 	return (
 		<div className='p-5'>
 			<table className='w-full bg-white '>
 				<thead>
 					<tr className='border-none h-10'>
-						<th className='border-none font-normal bg-[#393D61] text-white'>
-							Id
-						</th>
-						<th className='border-none font-normal bg-[#6767AA] text-white'>
-							Email
-						</th>
-						<th className='border-none font-normal bg-[#A9A9CC]'>Name</th>
-						<th className='border-none font-normal bg-[#F2E0D0]'>
-							isActivated
-						</th>
-						<th className='border-none font-normal bg-[#D6A47C]'>Roles</th>
-						<th className='border-none font-normal bg-[#B88156] text-white'>
-							Actions
-						</th>
+						{headerSettings.map(cell => (
+							<th
+								key={cell.headerBgColor}
+								className={`border-none font-normal bg-[${cell.headerBgColor}] text-[${cell.headerTextColor}]`}
+							>
+								{cell.text}
+							</th>
+						))}
 					</tr>
 				</thead>
 				<tbody>
@@ -91,7 +100,7 @@ const ProfileUsers: FC = () => {
 											Delete
 										</button>
 									) : (
-										<div className='text-green-500'>Текущий</div>
+										<div className='text-green-500'>Вы</div>
 									)}
 								</td>
 							</tr>
