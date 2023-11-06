@@ -2,12 +2,12 @@ import { observer } from 'mobx-react-lite'
 import { FC, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import Container from '../../layouts/Container'
 import { Context } from '../../main'
 
 type Inputs = {
 	name: string
-	email: string
-	password: string
+	content: object
 }
 
 const AddProject: FC = () => {
@@ -15,44 +15,139 @@ const AddProject: FC = () => {
 
 	const navigate = useNavigate()
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<Inputs>({
+	const content = {
+		sections: [
+			{
+				background:
+					'url(https://dalectricotraining.files.wordpress.com/2018/09/cabezote.jpg)',
+				blocks: [
+					{
+						type: 'h1',
+						text: 'PersonalTrainer',
+						color: '#fff',
+					},
+					{
+						type: 'h2',
+						text: 'Приложение для ведения тренировок в зале',
+						color: '#fff',
+					},
+				],
+			},
+			{
+				bgColor: 'white',
+				blocks: [
+					{
+						type: 'h2',
+						text: 'Идея',
+					},
+					{
+						type: 'p',
+						text: 'Разработка была основана на интересе создать действительно полезное и удобное приложение для занятий в зале, которым я буду пользоваться сам, а так как создавать приложение только для себя смысла мало - оно стало доступным для всех',
+					},
+					{
+						type: 'p',
+						text: 'Стек технологий был в голове изначально - это те технологии, в которых я хотел попрактиковаться',
+					},
+					{
+						type: 'p',
+						text: 'Mobx был выбран в качестве стейт менеджера потому что он удобен для небольших приложений. По сравнению с тем же redux, чтобы создать стор не нужно писать много бойлерплейта',
+					},
+					{
+						type: 'p',
+						text: 'В качестве ORM была выбрана Prisma по нескольким причинам:',
+					},
+					{
+						type: 'list',
+						items: ['Удобство использования', 'Популярность'],
+					},
+				],
+			},
+		],
+	}
+
+	const { register, control, handleSubmit, watch, setValue } = useForm<Inputs>({
 		mode: 'onChange',
 	})
 
-	const onSubmit: SubmitHandler<Inputs> = async ({ name }: Inputs) => {
+	const onSubmit: SubmitHandler<Inputs> = async ({ name, content }: Inputs) => {
 		try {
-			await projectStore.createProject(name)
+			console.log(name, content)
+			// await projectStore.createProject(name, content)
 		} catch (e) {
 			console.log(e)
 		}
 	}
 
+	const fields = watch('fields', [])
+
+	const addField = fieldType => {
+		const newField = { type: fieldType, value: '' }
+		setValue('fields', [...fields, newField])
+	}
+
+	const removeField = index => {
+		const updatedFields = [...fields]
+		updatedFields.splice(index, 1)
+		setValue('fields', updatedFields)
+	}
+
 	return (
 		<form
-			className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96  bg-[#595961] flex flex-col p-5 rounded-lg'
 			onSubmit={handleSubmit(onSubmit)}
+			className='grid grid-cols-[1fr_250px]'
 		>
-			<input
-				type='text'
-				defaultValue=''
-				placeholder='Name'
-				{...register('name', { required: 'Name is required' })}
-				className='mb-5 bg-transparent border-b-[1px] border-[#D6A47C] p-1 outline-0 text-[#D6A47C] placeholder:text-gray-300'
-			/>
-			{errors.name && <p className='text-red-500'>{errors?.name?.message}</p>}
-
-			<div className='grid grid-rows-2 items-center justify-items-center'>
-				<button
-					type='submit'
-					className='w-full bg-transparent border border-[#D6A47C] rounded-sm text-white hover:text-[#595961] hover:bg-[#D6A47C]'
-				>
-					Create project
-				</button>
+			<div>
+				{content.sections.map(section => {
+					return (
+						<section
+							className={`py-10 bg-[${section.background || section.bgColor}]`}
+						>
+							<Container>
+								{section.blocks.map(block => {
+									if (block.type == 'h1') {
+										return (
+											<h1
+												className={`text-[${block.color}] text-4xl font-bold mb-5`}
+											>
+												{block.text}
+											</h1>
+										)
+									} else if (block.type == 'h2') {
+										return (
+											<h2 className={`text-[${block.color}] text-xl font-bold`}>
+												{block.text}
+											</h2>
+										)
+									} else if (block.type == 'p') {
+										return <p className='py-2'>{block.text}</p>
+									} else if (block.type == 'list') {
+										return (
+											<ul className='list-disc pl-5'>
+												{block.items.map(item => (
+													<li>{item}</li>
+												))}
+											</ul>
+										)
+									}
+								})}
+							</Container>
+						</section>
+					)
+				})}
 			</div>
+			<nav className='bg-gray-400 p-5'>
+				<div>
+					<button type='button' onClick={() => addField('text')}>
+						Добавить текстовое поле
+					</button>
+					<button type='button' onClick={() => addField('number')}>
+						Добавить числовое поле
+					</button>
+				</div>
+				<button type='submit' className='block m-auto'>
+					Сохранить
+				</button>
+			</nav>
 		</form>
 	)
 }
