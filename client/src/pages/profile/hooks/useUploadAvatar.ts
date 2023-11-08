@@ -8,7 +8,7 @@ const useUploadAvatar = () => {
 
 	const upload = async (id: number) => {
 		const formData = new FormData()
-		formData.append('img', file)
+		formData.append('img', file as File)
 
 		store.uploadAvatar(id, formData)
 	}

@@ -169,8 +169,24 @@ const AddProject: FC = () => {
 		setContent(newContent)
 	}
 
+	const changeBlock = (sectionId: string, blockId: string, text: string) => {
+		const newContent = { ...content }
+
+		newContent.sections.forEach(section => {
+			if (section.id === sectionId) {
+				section.blocks?.forEach(block => {
+					if (block.id == blockId) {
+						block.text = text
+					}
+				})
+			}
+		})
+		console.log(newContent)
+
+		setContent(newContent)
+	}
+
 	const deleteBlock = (sectionId: string, blockId: string) => {
-		console.log(sectionId, blockId)
 		const newContent = { ...content }
 
 		newContent.sections.forEach(section => {
@@ -246,6 +262,7 @@ const AddProject: FC = () => {
 							name={section.name}
 							blocks={section.blocks}
 							addText={() => addText(section.id, prompt())}
+							changeBlock={changeBlock}
 						/>
 					))}
 				</div>

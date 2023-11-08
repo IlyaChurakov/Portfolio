@@ -9,6 +9,7 @@ const Section = ({
 	onDeleteSection,
 	onDeleteBlock,
 	addText,
+	changeBlock,
 }: ISection) => {
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 
@@ -29,7 +30,9 @@ const Section = ({
 					{blocks?.map(block => {
 						return (
 							<div className='ml-5 flex justify-between'>
-								<div>{block.type}</div>{' '}
+								<div onClick={() => changeBlock(id, block.id, prompt())}>
+									{block.type}
+								</div>
 								<div
 									className='text-red-500'
 									onClick={() => onDeleteBlock(id, block.id)}
