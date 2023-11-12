@@ -30,10 +30,8 @@ class ProjectController {
 		}
 	}
 	async saveProject(req, res, next) {
-		console.log('fsdfsdf')
 		try {
 			const { project: newProject } = req.body
-
 			const project = await ProjectService.saveProject(newProject)
 			res.json(project)
 		} catch (err) {

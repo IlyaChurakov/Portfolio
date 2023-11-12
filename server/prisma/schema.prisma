@@ -41,7 +41,7 @@ model Project {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   name     String   @unique
-  content  String   @default("{sections: []}")
+  content  String   @default("{\"sections\": []}")
   archived Boolean?
 }
 

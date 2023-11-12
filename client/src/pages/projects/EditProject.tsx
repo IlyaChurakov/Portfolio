@@ -22,14 +22,14 @@ const EditProject = () => {
 	}
 
 	const addSection = (name: string | null) => {
-		console.log(projectStore.project.content)
 		if (typeof name == 'string') {
 			const project = { ...(projectStore.project as IProject) }
-
+			console.log(project)
 			project.content.sections.push({
 				id: uuidv4(),
 				name,
 			})
+			console.log(project)
 
 			projectStore.setProject(project)
 		}
@@ -103,7 +103,10 @@ const EditProject = () => {
 			<div>
 				{projectStore.project.content?.sections?.map(section => {
 					return (
-						<section className={`py-10 bg-[${section.background}]`}>
+						<section
+							key={section.id}
+							className={`py-10 bg-[${section.background}]`}
+						>
 							<Container>
 								{section.blocks?.map(block => {
 									if (block.type == 'h1') {
@@ -133,8 +136,8 @@ const EditProject = () => {
 									} else if (block.type == 'list') {
 										return (
 											<ul className='list-disc pl-5' key={block.id}>
-												{block.items?.map(item => (
-													<li>{item}</li>
+												{block.items?.map((item, key) => (
+													<li key={key}>{item}</li>
 												))}
 											</ul>
 										)

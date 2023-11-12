@@ -19,10 +19,12 @@ export default class ProjectStore {
 
 	async createProject(name: string) {
 		try {
-			const newProject = await ProjectService.createProject(name)
+			const { data } = await ProjectService.createProject(name)
+			this.setProject(data)
+
 			const projectList = await this.getProjectList()
 			this.setProjectList(projectList)
-			return newProject
+			return data
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}
@@ -32,6 +34,7 @@ export default class ProjectStore {
 			const { data } = await ProjectService.getProjectList()
 			this.setProjectList(data)
 			console.log(data)
+
 			return data
 		} catch (err) {
 			throw new Error((err as Error).message)
@@ -41,6 +44,8 @@ export default class ProjectStore {
 		try {
 			const { data } = await ProjectService.getProject(id)
 			this.setProject(data)
+			console.log(data)
+
 			return data
 		} catch (err) {
 			throw new Error((err as Error).message)
@@ -48,8 +53,7 @@ export default class ProjectStore {
 	}
 	async saveProject() {
 		try {
-			const { data } = await ProjectService.saveProject(this.project)
-			console.log(data)
+			await ProjectService.saveProject(this.project)
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}

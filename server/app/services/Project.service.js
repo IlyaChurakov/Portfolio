@@ -2,14 +2,25 @@ import { prisma } from '../utils/prisma.js'
 
 class ProjectService {
 	async createProject(name) {
-		return await prisma.project.create({
+		const project = await prisma.project.create({
 			data: {
-				name
+				name,
+				content: JSON.stringify({ sections: [] })
 			}
 		})
+
+		project.content = JSON.parse(project.content)
+
+		return project
 	}
 	async getProjectList() {
-		return await prisma.project.findMany()
+		const projects = await prisma.project.findMany()
+
+		projects.forEach(project => {
+			project.content = JSON.parse(project.content)
+		})
+
+		return projects
 	}
 	async getProject(id) {
 		const project = await prisma.project.findUnique({
@@ -17,17 +28,24 @@ class ProjectService {
 				id
 			}
 		})
+
+		project.content = JSON.parse(project.content)
+
 		return project
 	}
 	async saveProject(project) {
-		return await prisma.project.update({
+		const savedProject = await prisma.project.update({
 			where: {
 				id: project.id
 			},
 			data: {
-				content: project.content
+				content: JSON.stringify(project.content)
 			}
 		})
+
+		savedProject.content = JSON.parse(savedProject.content)
+
+		return savedProject
 	}
 	async deleteAllProjects() {
 		return await prisma.project.deleteMany()
