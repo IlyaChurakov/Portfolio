@@ -52,9 +52,11 @@ const Description = ({ description, onEdit }: IDescriptionProps) => {
 						<IoMdCreate className='hover:text-lg' />
 					</button>
 					{store.user.description ? (
-						<p className='w-full'>{store.user.description}</p>
+						<p className='w-full' onClick={handleEdit}>
+							{store.user.description}
+						</p>
 					) : (
-						<p className='w-full text-gray-400'>
+						<p className='w-full text-gray-400' onClick={handleEdit}>
 							{'Здесь вы можете рассказать о себе!'}
 						</p>
 					)}

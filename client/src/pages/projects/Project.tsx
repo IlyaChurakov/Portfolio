@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '../../layouts/Container'
 import ProjectService from '../../services/Project.service'
@@ -11,12 +12,16 @@ const Project = () => {
 		queryFn: () => ProjectService.getProject(id),
 	})
 
+	useEffect(() => {
+		console.log(data)
+	}, [data])
+
 	return (
 		<>
 			<section className='w-full bg-[url(https://dalectricotraining.files.wordpress.com/2018/09/cabezote.jpg)] bg-cover bg-center py-10 min-h-[40vh]'>
 				<Container>
 					<h1 className='text-white text-4xl font-bold mb-5'>
-						{data?.data.name}
+						{data?.data?.name}
 					</h1>
 					<h2 className='text-white text-lg'>
 						Приложение для ведения тренировок в зале

@@ -24,6 +24,12 @@ const ProjectList: FC = () => {
 						)
 					})}
 				</div>
+				<button
+					onClick={projectStore.deleteAllProjects}
+					className='w-full mb-5 text-red-500 m-auto bg-white rounded-sm px-2 py-1 hover:text-white hover:bg-red-500'
+				>
+					delete all projects
+				</button>
 			</Container>
 		</section>
 	)

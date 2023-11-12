@@ -1,9 +1,10 @@
 import { makeAutoObservable } from 'mobx'
-import { IProject } from '../models/IProject'
 import ProjectService from '../services/Project.service'
+import { IProject } from './../models/IProject'
 
 export default class ProjectStore {
 	projectList = [] as IProject[]
+	project = {} as IProject
 
 	constructor() {
 		makeAutoObservable(this)
@@ -11,6 +12,9 @@ export default class ProjectStore {
 
 	setProjectList(projects: IProject[]) {
 		this.projectList = projects
+	}
+	setProject(project: IProject) {
+		this.project = project
 	}
 
 	async createProject(name: string) {
@@ -27,15 +31,33 @@ export default class ProjectStore {
 		try {
 			const { data } = await ProjectService.getProjectList()
 			this.setProjectList(data)
+			console.log(data)
 			return data
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}
 	}
-	async getProject(id: number) {
+	async getProject(id: string) {
 		try {
 			const { data } = await ProjectService.getProject(id)
+			this.setProject(data)
 			return data
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
+	async saveProject() {
+		try {
+			const { data } = await ProjectService.saveProject(this.project)
+			console.log(data)
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
+	async deleteAllProjects() {
+		try {
+			await ProjectService.deleteAllProjects()
+			this.setProjectList([])
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}

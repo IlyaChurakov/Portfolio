@@ -7,5 +7,7 @@ const router = new Router()
 router.get('/', projectController.getProjectList)
 router.get('/:id', projectController.getProject)
 router.post('/:name', AuthMiddleware, projectController.createProject)
+router.post('/save', AuthMiddleware, projectController.saveProject)
+router.delete('/', AuthMiddleware, projectController.deleteAllProjects)
 
 export default router

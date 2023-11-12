@@ -40,7 +40,9 @@ model Project {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name String @unique
+  name     String   @unique
+  content  String   @default("{sections: []}")
+  archived Boolean?
 }
 
 model Article {

@@ -12,11 +12,25 @@ class ProjectService {
 		return await prisma.project.findMany()
 	}
 	async getProject(id) {
-		return await prisma.project.findUnique({
+		const project = await prisma.project.findUnique({
 			where: {
 				id
 			}
 		})
+		return project
+	}
+	async saveProject(project) {
+		return await prisma.project.update({
+			where: {
+				id: project.id
+			},
+			data: {
+				content: project.content
+			}
+		})
+	}
+	async deleteAllProjects() {
+		return await prisma.project.deleteMany()
 	}
 }
 

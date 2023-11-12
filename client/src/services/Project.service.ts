@@ -9,13 +9,15 @@ export default class ProjectService {
 	static async getProjectList(): Promise<AxiosResponse<IProject[]>> {
 		return $axios.get(`/projects`)
 	}
-	static async getProject(
-		id: string | undefined
-	): Promise<AxiosResponse<IProject> | null> {
-		if (typeof id == 'string') {
-			return $axios.get(`/projects/${id}`)
-		} else {
-			return null
-		}
+	static async getProject(id: string): Promise<AxiosResponse<IProject>> {
+		return $axios.get(`/projects/${id}`)
+	}
+	static async saveProject(
+		project: IProject
+	): Promise<AxiosResponse<IProject[]>> {
+		return $axios.post<IProject[]>(`/projects/save`, { project })
+	}
+	static async deleteAllProjects(): Promise<AxiosResponse<IProject[]>> {
+		return $axios.delete<IProject[]>(`/projects`)
 	}
 }

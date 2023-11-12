@@ -16,8 +16,11 @@ const ProfilePerson: FC = () => {
 	const { selectFile, file, upload } = useUploadAvatar()
 
 	async function deleteAccount() {
-		await store.deleteAccount()
-		navigate('/login')
+		const agree = confirm('Вы действительно хотите удалить свой аккаунт?')
+		if (agree) {
+			await store.deleteAccount()
+			navigate('/login')
+		}
 	}
 
 	useEffect(() => {
