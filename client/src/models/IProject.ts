@@ -4,6 +4,9 @@ export interface IProject {
 	updatedAt: Date
 	createdAt: Date
 	content: IContent
+	previewImage?: string
+	archived?: boolean
+	labels?: string[]
 }
 
 export interface IContent {

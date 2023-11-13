@@ -1,3 +1,5 @@
-const content = '{"sections": []}'
+const content = JSON.stringify({ sections: [] })
 
-console.log(JSON.parse(content))
+const content2 = '{ "sections": [] }'
+console.log(content)
+console.log(content2)

@@ -1,21 +1,31 @@
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect } from 'react'
+import { TbDownload } from 'react-icons/tb'
 import { useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import Container from '../../layouts/Container'
 import { Context } from '../../main'
 import { IProject } from '../../models/IProject'
+import useUploadFile from '../profile/hooks/useUploadFile'
 import Section from './components/Section'
 
 const EditProject = () => {
 	const { projectStore } = useContext(Context)
 	const { id } = useParams()
 
+	const { selectFile, file, upload } = useUploadFile()
+
 	useEffect(() => {
 		if (id) {
 			projectStore.getProject(id)
 		}
 	}, [])
+
+	useEffect(() => {
+		if (file) {
+			upload(projectStore.project.id)
+		}
+	}, [file])
 
 	const saveProject = () => {
 		projectStore.saveProject()
@@ -148,8 +158,37 @@ const EditProject = () => {
 					)
 				})}
 			</div>
-			<nav className='bg-gray-400 p-5'>
+			<nav className='bg-gray-400 p-5 overflow-y-auto'>
 				<div>
+					<div className='relative w-36 h-36 m-auto bg-white rounded-lg'>
+						<label htmlFor='select_avatar' className='cursor-pointer'>
+							<input
+								id='select_avatar'
+								type='file'
+								onChange={e => selectFile(e)}
+								className='h-0 w-0 absolute block -z-10 opacity-0'
+							/>
+
+							<div className='h-full w-full cursor-pointer rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 flex justify-center items-center hover:bg-black hover:bg-opacity-50 z-50'>
+								<TbDownload className='text-2xl' />
+							</div>
+
+							{projectStore.project.previewImage ? (
+								<img
+									src={`http://localhost:7001/${projectStore.project.previewImage}`}
+									alt='avatar'
+									className='w-full h-full object-cover rounded-lg hover:opacity-30'
+								/>
+							) : (
+								<div className='h-full w-full bg-gray-300'></div>
+							)}
+
+							<div className='absolute bottom-2 left-2 text-white z-40 font-bold'>
+								{projectStore.project.name}
+							</div>
+						</label>
+					</div>
+
 					<button type='button' onClick={() => addSection(prompt())}>
 						Добавить {'<section>'}
 					</button>

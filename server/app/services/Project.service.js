@@ -14,7 +14,11 @@ class ProjectService {
 		return project
 	}
 	async getProjectList() {
-		const projects = await prisma.project.findMany()
+		const projects = await prisma.project.findMany({
+			orderBy: {
+				createdAt: 'desc'
+			}
+		})
 
 		projects.forEach(project => {
 			project.content = JSON.parse(project.content)
@@ -46,6 +50,20 @@ class ProjectService {
 		savedProject.content = JSON.parse(savedProject.content)
 
 		return savedProject
+	}
+	async uploadPreview(id, image) {
+		const project = await prisma.project.update({
+			where: {
+				id
+			},
+			data: {
+				previewImage: image
+			}
+		})
+
+		project.content = JSON.parse(project.content)
+
+		return project
 	}
 	async deleteAllProjects() {
 		return await prisma.project.deleteMany()

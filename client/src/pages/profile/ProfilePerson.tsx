@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom'
 import { Context } from '../../main'
 import { transformDate } from '../../utils/functions'
 import Description from './components/Description'
-import useUploadAvatar from './hooks/useUploadAvatar'
+import useUploadFile from './hooks/useUploadFile'
 
 const ProfilePerson: FC = () => {
 	const { store } = useContext(Context)
 	const navigate = useNavigate()
 
-	const { selectFile, file, upload } = useUploadAvatar()
+	const { selectFile, file, upload } = useUploadFile()
 
 	async function deleteAccount() {
 		const agree = confirm('Вы действительно хотите удалить свой аккаунт?')
@@ -25,7 +25,7 @@ const ProfilePerson: FC = () => {
 
 	useEffect(() => {
 		if (file) {
-			upload(+store.user.id)
+			upload(+store.user.id, store.uploadAvatar)
 		}
 	}, [file])
 

@@ -36,7 +36,7 @@ const Projects: FC = () => {
 			{pathname !== '/projects/new' && (
 				<section className='bg-[#595961] py-2 px-5'>
 					<Container>
-						{pathname.indexOf('new') == -1 && (
+						{!pathname.includes('/new') && (
 							<Link
 								to={'/projects/new'}
 								className='mr-5 text-[#A7ACB0]  hover:text-white'
@@ -45,7 +45,7 @@ const Projects: FC = () => {
 								Добавить проект
 							</Link>
 						)}
-						{id && (
+						{!pathname.includes('/edit') && id && (
 							<Link
 								to={`/projects/${id}/edit`}
 								className='mr-5 text-[#A7ACB0]  hover:text-white'

@@ -17,6 +17,12 @@ export default class ProjectService {
 	): Promise<AxiosResponse<IProject>> {
 		return $axios.post<IProject>(`/projects/save`, { project })
 	}
+	static async uploadPreview(
+		id: string,
+		image: FormData
+	): Promise<AxiosResponse<IProject>> {
+		return $axios.post(`/projects/upload-preview/${id}`, image)
+	}
 	static async deleteAllProjects(): Promise<AxiosResponse<IProject[]>> {
 		return $axios.delete<IProject[]>(`/projects`)
 	}

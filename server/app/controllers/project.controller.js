@@ -1,3 +1,5 @@
+import path from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import ProjectService from '../services/Project.service.js'
 
 class ProjectController {
@@ -34,6 +36,22 @@ class ProjectController {
 			const { project: newProject } = req.body
 			const project = await ProjectService.saveProject(newProject)
 			res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async uploadPreview(req, res, next) {
+		try {
+			const { id } = req.params
+			const { img } = req.files
+
+			const fileName = uuidv4() + '.jpg'
+
+			img.mv(path.resolve('static', fileName))
+
+			const project = await ProjectService.uploadPreview(id, fileName)
+			console.log(project)
+			return res.json(project)
 		} catch (err) {
 			next(err)
 		}

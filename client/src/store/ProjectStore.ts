@@ -33,7 +33,6 @@ export default class ProjectStore {
 		try {
 			const { data } = await ProjectService.getProjectList()
 			this.setProjectList(data)
-			console.log(data)
 
 			return data
 		} catch (err) {
@@ -44,7 +43,6 @@ export default class ProjectStore {
 		try {
 			const { data } = await ProjectService.getProject(id)
 			this.setProject(data)
-			console.log(data)
 
 			return data
 		} catch (err) {
@@ -54,6 +52,15 @@ export default class ProjectStore {
 	async saveProject() {
 		try {
 			await ProjectService.saveProject(this.project)
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
+	async uploadPreview(id: string, image: FormData) {
+		try {
+			const { data } = await ProjectService.uploadPreview(id, image)
+
+			this.setProject(data)
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}
