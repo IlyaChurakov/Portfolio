@@ -29,7 +29,7 @@ const Section = ({
 				<>
 					{blocks?.map(block => {
 						return (
-							<div className='ml-5 flex justify-between'>
+							<div key={block.id} className='ml-5 flex justify-between'>
 								<div onClick={() => changeBlock(id, block.id, prompt())}>
 									{block.type}
 								</div>

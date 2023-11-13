@@ -2,21 +2,71 @@ import { prisma } from '../utils/prisma.js'
 
 class ProjectService {
 	async createProject(name) {
-		return await prisma.project.create({
+		const project = await prisma.project.create({
 			data: {
-				name
+				name,
+				content: JSON.stringify({ sections: [] })
 			}
 		})
+
+		project.content = JSON.parse(project.content)
+
+		return project
 	}
 	async getProjectList() {
-		return await prisma.project.findMany()
+		const projects = await prisma.project.findMany({
+			orderBy: {
+				createdAt: 'desc'
+			}
+		})
+
+		projects.forEach(project => {
+			project.content = JSON.parse(project.content)
+		})
+
+		return projects
 	}
 	async getProject(id) {
-		return await prisma.project.findUnique({
+		const project = await prisma.project.findUnique({
 			where: {
 				id
 			}
 		})
+
+		project.content = JSON.parse(project.content)
+
+		return project
+	}
+	async saveProject(project) {
+		const savedProject = await prisma.project.update({
+			where: {
+				id: project.id
+			},
+			data: {
+				content: JSON.stringify(project.content)
+			}
+		})
+
+		savedProject.content = JSON.parse(savedProject.content)
+
+		return savedProject
+	}
+	async uploadPreview(id, image) {
+		const project = await prisma.project.update({
+			where: {
+				id
+			},
+			data: {
+				previewImage: image
+			}
+		})
+
+		project.content = JSON.parse(project.content)
+
+		return project
+	}
+	async deleteAllProjects() {
+		return await prisma.project.deleteMany()
 	}
 }
 
