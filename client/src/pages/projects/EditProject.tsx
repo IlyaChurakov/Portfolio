@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect } from 'react'
+import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
@@ -158,9 +159,19 @@ const EditProject = () => {
 					)
 				})}
 			</div>
-			<nav className='bg-gray-400 p-5 overflow-y-auto'>
+			<nav className='bg-gray-400 p-5 overflow-y-auto relative'>
 				<div>
-					<div className='relative w-36 h-36 m-auto bg-white rounded-lg'>
+					<MdDelete
+						fill='#C24D51'
+						className='mr-1 text-xl absolute top-5 right-5'
+						title='Удалить проект'
+					/>
+					<MdArchive
+						fill='#C24D51'
+						className='mr-1 text-xl absolute top-14 right-5'
+						title='Добавить проект в архив'
+					/>
+					<div className='relative w-36 h-36 m-auto mb-5 bg-white rounded-lg'>
 						<label htmlFor='select_avatar' className='cursor-pointer'>
 							<input
 								id='select_avatar'
@@ -180,7 +191,7 @@ const EditProject = () => {
 									className='w-full h-full object-cover rounded-lg hover:opacity-30'
 								/>
 							) : (
-								<div className='h-full w-full bg-gray-300'></div>
+								<div className='h-full w-full bg-gray-300 rounded-lg'></div>
 							)}
 
 							<div className='absolute bottom-2 left-2 text-white z-40 font-bold'>
@@ -189,11 +200,7 @@ const EditProject = () => {
 						</label>
 					</div>
 
-					<button type='button' onClick={() => addSection(prompt())}>
-						Добавить {'<section>'}
-					</button>
-
-					<div className='w-full h-[2px] bg-black'></div>
+					{/* <div className='w-full h-[2px] bg-black'></div> */}
 
 					{projectStore.project.content?.sections?.map(section => (
 						<Section
@@ -207,9 +214,16 @@ const EditProject = () => {
 							key={section.id}
 						/>
 					))}
+
+					<button
+						className='bg-gray-600 mb-2 rounded-lg w-full text-white'
+						onClick={() => addSection(prompt())}
+					>
+						Добавить {'<section>'}
+					</button>
 				</div>
 
-				<button onClick={saveProject} className='block m-auto'>
+				<button onClick={saveProject} className='block m-auto text-white'>
 					Сохранить
 				</button>
 			</nav>
