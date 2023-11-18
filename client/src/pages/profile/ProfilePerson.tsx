@@ -4,10 +4,10 @@ import { IoMdCreate } from 'react-icons/io'
 import { MdPublishedWithChanges } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
+import useUploadFile from '../../hooks/useUploadFile'
 import { Context } from '../../main'
 import { transformDate } from '../../utils/functions'
 import Description from './components/Description'
-import useUploadFile from './hooks/useUploadFile'
 
 const ProfilePerson: FC = () => {
 	const { store } = useContext(Context)

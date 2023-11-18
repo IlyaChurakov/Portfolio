@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useState } from 'react'
-import { Context } from '../../../main'
+import { Context } from '../main'
 
 const useUploadFile = () => {
 	const { store } = useContext(Context)
