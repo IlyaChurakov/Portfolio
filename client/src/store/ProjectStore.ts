@@ -5,6 +5,7 @@ import { IProject } from './../models/IProject'
 export default class ProjectStore {
 	projectList = [] as IProject[]
 	project = {} as IProject
+	saved: boolean = true
 
 	constructor() {
 		makeAutoObservable(this)
@@ -15,6 +16,10 @@ export default class ProjectStore {
 	}
 	setProject(project: IProject) {
 		this.project = project
+		this.setSaved(false)
+	}
+	setSaved(bool: boolean) {
+		this.saved = bool
 	}
 
 	async createProject(name: string) {
@@ -43,6 +48,8 @@ export default class ProjectStore {
 		try {
 			const { data } = await ProjectService.getProject(id)
 			this.setProject(data)
+			// эта функция срабатывает при первой загрузке редактирования проекта, поэтому ставим сохранение в true, при всех остальных вариантах будет false
+			this.setSaved(true)
 
 			return data
 		} catch (err) {
@@ -52,6 +59,7 @@ export default class ProjectStore {
 	async saveProject() {
 		try {
 			await ProjectService.saveProject(this.project)
+			this.setSaved(true)
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}

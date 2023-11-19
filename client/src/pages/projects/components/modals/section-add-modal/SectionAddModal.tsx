@@ -1,26 +1,23 @@
 import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
-import { modalData } from '../block-editor/modal.data'
 
-export type Inputs = {
-	type: string
-	text: string
-	color: string
+type Inputs = {
+	name: string
+	background: string
+	paddings: string
 }
 
 interface IBlockAddProps {
-	sectionId: string
 	isVisible: boolean
 	closeHandler: Function
-	addBlock: Function
+	addSection: Function
 }
 
-const BlockAddModal: FC<IBlockAddProps> = ({
-	sectionId,
+const SectionAddModal: FC<IBlockAddProps> = ({
 	isVisible,
 	closeHandler,
-	addBlock,
+	addSection,
 }) => {
 	const {
 		register,
@@ -30,7 +27,7 @@ const BlockAddModal: FC<IBlockAddProps> = ({
 	} = useForm<Inputs>()
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
-		await addBlock(sectionId, data)
+		await addSection(data)
 		reset()
 		closeHandler()
 	}
@@ -51,47 +48,34 @@ const BlockAddModal: FC<IBlockAddProps> = ({
 				</button>
 
 				<div>
-					<h2 className='text-white mb-5 text-center'>Тип</h2>
-					<select
+					<h2 className='text-white mb-5 text-center'>Название секции</h2>
+					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-						defaultValue={'Основной текст'}
-						{...register('type', { required: true })}
-					>
-						{modalData.types.map(type => {
-							return (
-								<option value={type} className='text-black'>
-									{type}
-								</option>
-							)
-						})}
-					</select>
-
-					<h2 className='text-white mb-5 text-center mt-5'>Текст</h2>
-					<div className='w-full'>
-						<textarea
-							className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-							defaultValue={''}
-							{...register('text', { required: true })}
-						/>
-					</div>
-					{errors.text && (
+						placeholder='Название секции'
+						defaultValue={''}
+						{...register('name', { required: true })}
+					/>
+					{errors.name && (
 						<span className=' text-red-500'>Заполните это поле</span>
 					)}
 
-					<h2 className='text-white mb-5 text-center mt-5'>Цвет текста</h2>
-					<select
+					<h2 className='text-white mb-5 text-center mt-5'>
+						Фоновое изображение
+					</h2>
+					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-						defaultValue={'#000'}
-						{...register('color', { required: true })}
-					>
-						{modalData.textColors.map(color => {
-							return (
-								<option value={color} className='text-black'>
-									{color}
-								</option>
-							)
-						})}
-					</select>
+						placeholder='Вставьте ссылку на изображение'
+						defaultValue={''}
+						{...register('background')}
+					/>
+
+					<h2 className='text-white mb-5 text-center mt-5'>Отступы</h2>
+					<input
+						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+						placeholder='20px 0px 20px 0px'
+						defaultValue={''}
+						{...register('paddings')}
+					/>
 				</div>
 
 				<div className='flex justify-end'>
@@ -107,4 +91,4 @@ const BlockAddModal: FC<IBlockAddProps> = ({
 	)
 }
 
-export default BlockAddModal
+export default SectionAddModal

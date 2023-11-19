@@ -58,19 +58,29 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 
 		project.content.sections.forEach(section => {
 			if (section.id === sectionId) {
-				section.blocks?.push({
-					id: uuidv4(),
-					type: textTypes[data.type],
-					text: data.text,
-					color: data.color,
-				})
+				if (section.blocks) {
+					section.blocks.push({
+						id: uuidv4(),
+						type: textTypes[data.type],
+						text: data.text,
+						color: data.color,
+					})
+				} else {
+					section.blocks = []
+					section.blocks.push({
+						id: uuidv4(),
+						type: textTypes[data.type],
+						text: data.text,
+						color: data.color,
+					})
+				}
 			}
 		})
 
 		projectStore.setProject(project)
 	}
 
-	const deleteBlock = (sectionId: string, blockId: string) => {
+	const deleteBlock = async (sectionId: string, blockId: string) => {
 		const project = { ...(projectStore.project as IProject) }
 
 		project.content.sections.forEach(section => {
@@ -115,13 +125,11 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 	// 	projectStore.setProject(project)
 	// }
 
-	const openBlockEditorModal = (id: string) => {
-		setEditingBlockId(id)
-	}
+	const openBlockEditorModal = (id: string) => setEditingBlockId(id)
+	const closeBlockEditorModal = () => setEditingBlockId('')
 
-	const closeBlockEditorModal = () => {
-		setEditingBlockId('')
-	}
+	const openBlockAddModal = () => setIsVisibleBlockAddModal(true)
+	const closeBlockAddModal = () => setIsVisibleBlockAddModal(false)
 
 	return (
 		<>
@@ -186,12 +194,12 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 						<BlockAddModal
 							sectionId={id}
 							isVisible={isVisibleBlockAddModal}
-							closeHandler={() => setIsVisibleBlockAddModal(false)}
+							closeHandler={closeBlockAddModal}
 							addBlock={addBlock}
 						/>
 
 						<button
-							onClick={() => setIsVisibleBlockAddModal(true)}
+							onClick={openBlockAddModal}
 							className='pl-5 hover:bg-gray-500 w-full text-start rounded-lg text-white'
 						>
 							Добавить элемент

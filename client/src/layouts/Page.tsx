@@ -11,9 +11,9 @@ const Page: FC<Props> = ({ children }) => {
 	const { pathname } = useLocation()
 
 	return (
-		<div className='flex flex-col min-h-screen '>
+		<div className='flex flex-col min-h-screen'>
 			{pathname !== '/login' && pathname !== '/register' && <Header />}
-			<div className='flex-1 bg-[#DDDDDD]'>{children}</div>
+			<div className='flex-1 bg-[#DDDDDD] relative'>{children}</div>
 			{pathname !== '/login' && pathname !== '/register' && <Footer />}
 		</div>
 	)

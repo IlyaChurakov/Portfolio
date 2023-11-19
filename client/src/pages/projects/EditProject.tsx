@@ -16,7 +16,7 @@ const EditProject = () => {
 	}, [])
 
 	return (
-		<div className='grid grid-cols-[1fr_350px]'>
+		<div>
 			<div>
 				{projectStore.project.content?.sections?.map(section => {
 					return (

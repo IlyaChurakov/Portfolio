@@ -1,4 +1,5 @@
-import { useContext, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useContext, useEffect, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { v4 as uuidv4 } from 'uuid'
@@ -6,10 +7,14 @@ import useUploadFile from '../../../hooks/useUploadFile'
 import { Context } from '../../../main'
 import { IProject } from '../../../models/IProject'
 import Section from '../components/Section'
+import SectionAddModal from './modals/section-add-modal/SectionAddModal'
 
 const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
 	const { selectFile, file, upload } = useUploadFile()
+
+	const [isVisibleSectionAddModal, setIsVisibleSectionAddModal] =
+		useState<boolean>(false)
 
 	useEffect(() => {
 		if (file) {
@@ -17,22 +22,21 @@ const NavPageMap = () => {
 		}
 	}, [file])
 
-	const saveProject = () => {
-		projectStore.saveProject()
+	const saveProject = async () => {
+		await projectStore.saveProject()
 	}
 
-	const addSection = (name: string | null) => {
-		if (typeof name == 'string') {
-			const project = { ...(projectStore.project as IProject) }
-			console.log(project)
-			project.content.sections.push({
-				id: uuidv4(),
-				name,
-			})
-			console.log(project)
+	const addSection = (data: object) => {
+		const project = { ...(projectStore.project as IProject) }
 
-			projectStore.setProject(project)
-		}
+		project.content.sections.push({
+			id: uuidv4(),
+			name: data.name,
+			background: data.background,
+		})
+
+		projectStore.setProject(project)
+		// projectStore.setSaved(false)
 	}
 
 	// const addBackground = (id: string, textLink: string | null) => {
@@ -130,8 +134,16 @@ const NavPageMap = () => {
 	// 	projectStore.setProject(project)
 	// }
 
+	const openSectionAddModal = () => {
+		setIsVisibleSectionAddModal(true)
+	}
+
+	const closeSectionAddModal = () => {
+		setIsVisibleSectionAddModal(false)
+	}
+
 	return (
-		<nav className='bg-gray-400 p-5 overflow-y-auto'>
+		<nav className='w-[350px] top-0 bg-gray-400 p-5 overflow-y-auto absolute h-full right-0'>
 			<div>
 				<div className='flex justify-end'>
 					<MdDelete
@@ -184,19 +196,34 @@ const NavPageMap = () => {
 					/>
 				))}
 
+				<SectionAddModal
+					isVisible={isVisibleSectionAddModal}
+					addSection={addSection}
+					closeHandler={closeSectionAddModal}
+				/>
+
 				<button
 					className='bg-gray-600 mb-2 rounded-lg w-full text-white'
-					onClick={() => addSection(prompt())}
+					onClick={openSectionAddModal}
 				>
 					Добавить {'<section>'}
 				</button>
 			</div>
 
-			<button onClick={saveProject} className='block m-auto text-white'>
+			<button
+				onClick={saveProject}
+				className={`block m-auto w-full h-10 rounded-lg bg-transparent`}
+				style={{
+					border: `1px solid ${
+						projectStore.saved ? 'rgb(0, 178, 23)' : '#C24D51'
+					}`,
+					color: `${projectStore.saved ? 'rgb(0, 178, 23)' : '#C24D51'}`,
+				}}
+			>
 				Сохранить
 			</button>
 		</nav>
 	)
 }
 
-export default NavPageMap
+export default observer(NavPageMap)
