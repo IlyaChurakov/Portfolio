@@ -12,7 +12,9 @@ const Page: FC<Props> = ({ children }) => {
 
 	return (
 		<div className='flex flex-col min-h-screen'>
-			{pathname !== '/login' && pathname !== '/register' && <Header />}
+			{pathname !== '/login' &&
+				pathname !== '/register' &&
+				pathname !== '/' && <Header />}
 			<div className='flex-1 bg-[#DDDDDD] relative'>{children}</div>
 			{pathname !== '/login' && pathname !== '/register' && <Footer />}
 		</div>

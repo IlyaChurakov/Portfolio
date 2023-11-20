@@ -10,7 +10,7 @@ export default {
 				beige: '#F4EDDD',
 			},
 			fontFamily: {
-				sans: ['IBM Plex Sans', 'Segoe UI', 'Roboto', 'sans-serif'],
+				sans: ['Rubik', 'sans-serif'],
 			},
 		},
 	},
