@@ -111,7 +111,7 @@ const Menu: FC = () => {
 
 			<div
 				className={`text-[#6F7680] flex items-center ${
-					isVisible ? 'justify-start px-12' : 'flex-col justify-center pb-5'
+					isVisible ? 'justify-center px-12' : 'flex-col justify-center pb-5'
 				}`}
 			>
 				<FaGithub

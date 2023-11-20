@@ -5,28 +5,12 @@ import Container from '../layouts/Container'
 const Home: FC = () => {
 	return (
 		<div className='flex flex-col'>
-			{/* <section className='bg-[#595961] py-2 px-5'>
-				<Container>
-					<Link
-						to={'/profile'}
-						className='mr-5 text-[#A7ACB0]  hover:text-white'
-					>
-						Профиль
-					</Link>
-					<Link
-						to={'/projects'}
-						className='mr-5 text-[#A7ACB0]  hover:text-white'
-					>
-						Проекты
-					</Link>
-				</Container>
-			</section> */}
-			<section className='bg-[#595961] p-10 '>
+			<section className='bg-[#232426] p-10 '>
 				<Container>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Илья Чураков
 					</h1>
-					<h2 className='text-[#D6A47C] text-xl font-extrabold'>
+					<h2 className='text-[#9255E8] text-xl font-extrabold'>
 						Портфолио <span className='text-2xl text-gray-300'>front-end</span>{' '}
 						разработчика
 					</h2>
