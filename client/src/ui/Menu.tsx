@@ -32,7 +32,7 @@ const Menu: FC = () => {
 		<nav
 			className={`bg-[#171717] transition-all duration-50 ${
 				isVisible ? 'w-[300px]' : 'w-[60px]'
-			} h-full absolute top-0 left-0 z-50 grid grid-rows-[70px_1fr_70px] `}
+			} h-full fixed top-0 left-0 z-50 grid grid-rows-[70px_1fr_70px] `}
 		>
 			<div
 				className={`flex ${
@@ -114,12 +114,16 @@ const Menu: FC = () => {
 					isVisible ? 'justify-center px-12' : 'flex-col justify-center pb-5'
 				}`}
 			>
-				<FaGithub
-					className={`hover:text-white text-2xl cursor-pointer ${
-						isVisible ? 'mr-5' : 'mb-2'
-					}`}
-				/>
-				<FaTelegram className='hover:text-white text-2xl cursor-pointer' />
+				<Link to={'https://github.com/IlyaChurakov'}>
+					<FaGithub
+						className={`hover:text-white text-2xl cursor-pointer ${
+							isVisible ? 'mr-5' : 'mb-2'
+						}`}
+					/>
+				</Link>
+				<Link to={'https://t.me/ilyachurakov18'}>
+					<FaTelegram className='hover:text-white text-2xl cursor-pointer' />
+				</Link>
 			</div>
 		</nav>
 	)
