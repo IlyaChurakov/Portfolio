@@ -39,7 +39,6 @@ const Header: FC = () => {
 						<GoArrowLeft
 							className=' text-xl cursor-pointer'
 							onClick={() => {
-								console.log(pathname)
 								if (pathname.includes('edit')) {
 									navigate(pathname.split('/edit')[0])
 								}

@@ -4,6 +4,7 @@ import { IProject } from './../models/IProject'
 
 export default class ProjectStore {
 	projectList = [] as IProject[]
+	lastProjects = [] as IProject[]
 	project = {} as IProject
 	saved: boolean = true
 
@@ -13,6 +14,9 @@ export default class ProjectStore {
 
 	setProjectList(projects: IProject[]) {
 		this.projectList = projects
+	}
+	setLastProjects(projects: IProject[]) {
+		this.lastProjects = projects
 	}
 	setProject(project: IProject) {
 		this.project = project
@@ -38,6 +42,16 @@ export default class ProjectStore {
 		try {
 			const { data } = await ProjectService.getProjectList()
 			this.setProjectList(data)
+
+			return data
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
+	async getLastProjects(count: number) {
+		try {
+			const { data } = await ProjectService.getLastProjects(count)
+			this.setLastProjects(data)
 
 			return data
 		} catch (err) {

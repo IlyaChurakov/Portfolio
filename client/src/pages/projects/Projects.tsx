@@ -1,4 +1,5 @@
 import { FC, useContext } from 'react'
+import { GoArrowLeft } from 'react-icons/go'
 import {
 	Link,
 	Outlet,
@@ -9,10 +10,12 @@ import {
 import Container from '../../layouts/Container'
 import { Context } from '../../main'
 
+// TODO: проверка защиты роутов, убрать кнопки у неавторизованных пользователей и пользователей без админки
+
 const Projects: FC = () => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
-	const { projectStore } = useContext(Context)
+	const { projectStore, store } = useContext(Context)
 	const navigate = useNavigate()
 
 	const addProject = async (e: React.SyntheticEvent) => {
@@ -34,25 +37,43 @@ const Projects: FC = () => {
 	return (
 		<div>
 			{pathname !== '/projects/new' && (
-				<section className='bg-[#595961] py-2 px-5'>
+				<section className='bg-gray-dark p-5 text-sm'>
 					<Container>
-						{!pathname.includes('/new') && (
-							<Link
-								to={'/projects/new'}
-								className='mr-5 text-[#A7ACB0]  hover:text-white'
-								onClick={e => addProject(e)}
-							>
-								Добавить проект
-							</Link>
-						)}
-						{!pathname.includes('/edit') && id && (
-							<Link
-								to={`/projects/${id}/edit`}
-								className='mr-5 text-[#A7ACB0]  hover:text-white'
-							>
-								Редактировать проект
-							</Link>
-						)}
+						<div className='flex'>
+							<GoArrowLeft
+								className='text-xl cursor-pointer text-gray hover:text-white mr-5'
+								onClick={() => {
+									if (pathname.includes('/edit')) {
+										if (!projectStore.saved) {
+											alert('Проект не сохранен')
+										} else {
+											navigate(pathname.split('/edit')[0])
+										}
+									} else {
+										navigate(
+											pathname.includes('/projects/') ? '/projects' : '/'
+										)
+									}
+								}}
+							/>
+							{!pathname.includes('/new') && (
+								<Link
+									to={'/projects/new'}
+									className='mr-5 text-gray hover:text-white'
+									onClick={e => addProject(e)}
+								>
+									Добавить проект
+								</Link>
+							)}
+							{!pathname.includes('/edit') && id && (
+								<Link
+									to={`/projects/${id}/edit`}
+									className='mr-5 text-gray hover:text-white'
+								>
+									Редактировать проект
+								</Link>
+							)}
+						</div>
 					</Container>
 				</section>
 			)}

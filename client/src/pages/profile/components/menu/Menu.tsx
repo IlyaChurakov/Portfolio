@@ -13,7 +13,7 @@ const Menu = ({ id, roles }: IMenu) => {
 	return (
 		<div className='w-full ' ref={ref}>
 			{roles.length ? (
-				<button onClick={() => setIsShow(!isShow)} className='text-gray-400'>
+				<button onClick={() => setIsShow(!isShow)} className='text-gray'>
 					{isShow ? 'Закрыть' : 'Добавить роль'}
 				</button>
 			) : null}

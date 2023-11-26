@@ -21,6 +21,14 @@ class ProjectController {
 			next(err)
 		}
 	}
+	async getLastProjects(req, res, next) {
+		try {
+			const projects = await ProjectService.getLastProjects(+req.params.count)
+			res.json(projects)
+		} catch (err) {
+			next(err)
+		}
+	}
 	async getProject(req, res, next) {
 		try {
 			const { id } = req.params

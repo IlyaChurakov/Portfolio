@@ -26,6 +26,14 @@ class ProjectService {
 
 		return projects
 	}
+	async getLastProjects(count) {
+		return await prisma.project.findMany({
+			orderBy: {
+				createdAt: 'desc'
+			},
+			take: count
+		})
+	}
 	async getProject(id) {
 		const project = await prisma.project.findUnique({
 			where: {

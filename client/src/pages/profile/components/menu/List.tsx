@@ -14,11 +14,11 @@ const List = ({ id, isShow, roles }: IList) => {
 	if (!isShow) return null
 
 	return (
-		<nav className='bg-gray-100 absolute w-full  shadow-xl  z-10 border-none'>
+		<nav className='bg-white absolute w-full text-black  shadow-xl  z-10 border-none'>
 			<ul>
 				{roles.map(role => (
 					<li key={role}>
-						<div className='px-5 grid grid-cols-[1fr_20px] justify-items-center items-center hover:bg-gray-200 '>
+						<div className='px-5 grid grid-cols-[1fr_20px] justify-items-center items-center hover:bg-gray '>
 							<div>{role}</div>
 							<GoPlus
 								fill='green'

@@ -1,11 +1,19 @@
 import { observer } from 'mobx-react-lite'
-import { FC } from 'react'
+import { FC, useContext, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Container from '../layouts/Container'
+import { Context } from '../main'
 
 const Home: FC = () => {
+	const { projectStore } = useContext(Context)
+
+	useEffect(() => {
+		projectStore.getLastProjects(4)
+	}, [])
+
 	return (
 		<div className='flex flex-col'>
-			<section className='bg-[rgb(35,36,38)] px-10 '>
+			<section className='bg-gray-dark px-10 '>
 				<Container>
 					<div className='grid grid-cols-[1fr_0.8fr] items-center'>
 						<div>
@@ -14,7 +22,7 @@ const Home: FC = () => {
 							</h1>
 							<h2 className='text-[#9255E8] text-3xl font-extrabold flex flex-col'>
 								<span>Портфолио</span>
-								<span className='my-1 text-4xl text-gray-300'>front-end</span>
+								<span className='my-1 text-4xl text-white'>front-end</span>
 								<span>разработчика</span>
 							</h2>
 						</div>
@@ -38,37 +46,42 @@ const Home: FC = () => {
 				</Container>
 			</section>
 
-			<section className=' bg-[#DDDDDD] p-5'>
+			<section className=' bg-gray-dark p-5'>
 				<Container>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Новости
 					</h1>
-					<div className='flex align-middle overflow-hidden'>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white mr-4'></div>
-						<div className='h-40 w-96 bg-white'></div>
+					<div className='grid grid-cols-4 gap-5 justify-items-center'>
+						<div className='h-40 w-full bg-gray flex justify-center items-center'>
+							Новость 1
+						</div>
+						<div className='h-40 w-full bg-gray flex justify-center items-center'>
+							Новость 2
+						</div>
+						<div className='h-40 w-full bg-gray flex justify-center items-center'>
+							Новость 3
+						</div>
+						<div className='h-40 w-full bg-gray flex justify-center items-center'>
+							Новость 4
+						</div>
 					</div>
 				</Container>
 			</section>
 			<section className='p-5'>
 				<Container>
-					<h1 className='text-black text-4xl font-extrabold mb-5 p-0'>
+					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Проекты
 					</h1>
 					<div className='grid grid-cols-4 gap-5 justify-items-center'>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
-						<div className='h-48 w-48 bg-gray-100'></div>
+						{projectStore.lastProjects &&
+							projectStore.lastProjects.map(project => (
+								<Link
+									to={`/projects/${project.id}`}
+									className='w-full bg-gray aspect-square flex justify-center items-center'
+								>
+									{project.name}
+								</Link>
+							))}
 					</div>
 				</Container>
 			</section>

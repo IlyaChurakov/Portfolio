@@ -1,27 +1,34 @@
 import { observer } from 'mobx-react-lite'
 import { FC, useContext } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { GoArrowLeft } from 'react-icons/go'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Container from '../../layouts/Container'
 import { Context } from '../../main'
 
 const Profile: FC = () => {
 	const { store } = useContext(Context)
+	const navigate = useNavigate()
 
 	return (
 		<>
-			<section className='bg-[#595961] py-2 px-5'>
+			<section className='bg-gray-dark p-5 text-sm'>
 				<Container>
-					<Link
-						to={'/profile'}
-						className='mr-5 text-[#A7ACB0]  hover:text-white'
-					>
-						Профиль
-					</Link>
-					{store.user.roles.includes('admin') && (
-						<Link to={'users'} className='mr-5 text-[#A7ACB0] hover:text-white'>
-							Список пользователей
+					<div className='flex'>
+						<GoArrowLeft
+							className='text-xl cursor-pointer text-gray hover:text-white mr-5'
+							onClick={() => {
+								navigate('/')
+							}}
+						/>
+						<Link to={'/profile'} className='mr-5 text-gray  hover:text-white'>
+							Профиль
 						</Link>
-					)}
+						{store.user.roles.includes('admin') && (
+							<Link to={'users'} className='mr-5 text-gray hover:text-white'>
+								Список пользователей
+							</Link>
+						)}
+					</div>
 				</Container>
 			</section>
 			<section>

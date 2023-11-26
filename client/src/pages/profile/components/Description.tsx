@@ -35,7 +35,7 @@ const Description = ({ description, onEdit }: IDescriptionProps) => {
 						className='self-start mt-[3px] h-5 w-5 flex justify-center items-center'
 						onClick={handleSave}
 					>
-						<RiSave3Fill className='hover:text-lg' />
+						<RiSave3Fill className='hover:text-lg text-white' />
 					</button>
 					<textarea
 						value={editedDescription}
@@ -49,14 +49,14 @@ const Description = ({ description, onEdit }: IDescriptionProps) => {
 						className='self-start mt-[3px] h-5 w-5 flex justify-center items-center'
 						onClick={handleEdit}
 					>
-						<IoMdCreate className='hover:text-lg' />
+						<IoMdCreate className='hover:text-lg text-white' />
 					</button>
 					{store.user.description ? (
-						<p className='w-full' onClick={handleEdit}>
+						<p className='w-full text-white' onClick={handleEdit}>
 							{store.user.description}
 						</p>
 					) : (
-						<p className='w-full text-gray-400' onClick={handleEdit}>
+						<p className='w-full text-white' onClick={handleEdit}>
 							{'Здесь вы можете рассказать о себе!'}
 						</p>
 					)}

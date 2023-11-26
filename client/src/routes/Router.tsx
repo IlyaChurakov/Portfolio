@@ -13,7 +13,9 @@ const Router = () => {
 
 	function renderRoutes(routes: IRoute[]) {
 		return routes.map(route => {
-			if (route.isAuth && !store.isAuth) return false
+			if (route.isAuth && !store.isAuth) {
+				return null
+			}
 
 			return (
 				<Route

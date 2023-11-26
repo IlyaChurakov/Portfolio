@@ -4,12 +4,6 @@ import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
 import { Context } from '../../main'
 import Menu from './components/menu/Menu'
 
-interface IHeaderSettings {
-	headerBgColor: string
-	headerTextColor: string
-	text: string
-}
-
 const ProfileUsers: FC = () => {
 	const { store } = useContext(Context)
 
@@ -19,26 +13,40 @@ const ProfileUsers: FC = () => {
 
 	const roles = ['admin', 'user', 'developer']
 
-	const headerSettings: IHeaderSettings[] = [
-		{ headerBgColor: '#393D61', headerTextColor: '#fff', text: 'Id' },
-		{ headerBgColor: '#6767AA', headerTextColor: '#fff', text: 'Email' },
-		{ headerBgColor: '#A9A9CC', headerTextColor: '#000', text: 'Name' },
-		{ headerBgColor: '#F2E0D0', headerTextColor: '#000', text: 'isActivated' },
-		{ headerBgColor: '#D6A47C', headerTextColor: '#000', text: 'Roles' },
-		{ headerBgColor: '#B88156', headerTextColor: '#fff', text: 'Actions' },
+	const names: string[] = [
+		'Id',
+		'Email',
+		'Имя',
+		'Активация аккаунта',
+		'Роли',
+		'Действия',
 	]
 
 	return (
 		<div className='p-5'>
-			<table className='w-full bg-white '>
+			<table
+				className='w-full bg-black text-white rounded-lg'
+				style={{
+					boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
+					borderRadius: '0 0 10px 10px ',
+				}}
+			>
 				<thead>
 					<tr className='border-none h-10'>
-						{headerSettings.map(cell => (
+						{names.map((text, index) => (
 							<th
-								key={cell.headerBgColor}
-								className={`border-none font-normal bg-[${cell.headerBgColor}] text-[${cell.headerTextColor}]`}
+								key={text}
+								className={`border-none bg-violet font-normal text-white`}
+								style={{
+									borderRadius:
+										index == 0
+											? '10px 0 0 0'
+											: index == names.length - 1
+											? '0 10px 0 0'
+											: '',
+								}}
 							>
-								{cell.text}
+								{text}
 							</th>
 						))}
 					</tr>
@@ -48,16 +56,16 @@ const ProfileUsers: FC = () => {
 						return (
 							<tr
 								key={item.id}
-								className='border-b border-dotted border-gray-300'
+								className='border-b border-dotted border-gray-300 last:border-none'
 							>
 								<td className='h-5 text-center font-bold'>{item.id}</td>
 								<td className='h-5 text-center'>{item.email}</td>
 								<td className='h-5 text-center'>{item.name}</td>
 								<td className='h-5 '>
 									{item.isActivated ? (
-										<GoCheckCircleFill fill='green' className='m-auto' />
+										<GoCheckCircleFill className='m-auto text-green' />
 									) : (
-										<GoXCircleFill fill='red' className='m-auto' />
+										<GoXCircleFill className='text-red m-auto' />
 									)}
 								</td>
 								<td className='h-5 text-center'>
@@ -65,13 +73,13 @@ const ProfileUsers: FC = () => {
 										return (
 											<div
 												key={role}
-												className='grid grid-cols-[1fr_25px] justify-items-center bg-gray-200 m-2 rounded-sm hover:bg-gray-300'
+												className='grid grid-cols-[1fr_25px] justify-items-center bg-white m-2 rounded-sm hover:bg-gray-300 text-black'
 											>
 												<div>{role}</div>
 												<button
 													onClick={() => store.removeRoleById(+item.id, role)}
 												>
-													<GoX fill='red' />
+													<GoX className='text-red' />
 												</button>
 											</div>
 										)
@@ -95,12 +103,12 @@ const ProfileUsers: FC = () => {
 													store.deleteAccount(+item.id)
 												}
 											}}
-											className='text-red-500'
+											className='text-red'
 										>
 											Delete
 										</button>
 									) : (
-										<div className='text-green-500'>Вы</div>
+										<div className='text-green'>Вы</div>
 									)}
 								</td>
 							</tr>
