@@ -17,6 +17,9 @@ export default class ProjectService {
 	static async getProject(id: string): Promise<AxiosResponse<IProject>> {
 		return $axios.get(`/projects/${id}`)
 	}
+	static async deleteProjectById(id: string): Promise<AxiosResponse<IProject>> {
+		return $axios.delete(`/projects/${id}`)
+	}
 	static async saveProject(
 		project: IProject
 	): Promise<AxiosResponse<IProject>> {

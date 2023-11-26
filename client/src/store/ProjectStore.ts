@@ -70,6 +70,18 @@ export default class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
+	async deleteProjectById(id: string) {
+		try {
+			const { data } = await ProjectService.deleteProjectById(id)
+
+			const projects = await this.getProjectList()
+			this.setProjectList(projects)
+
+			return data
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
 	async saveProject() {
 		try {
 			await ProjectService.saveProject(this.project)

@@ -7,6 +7,7 @@ const router = new Router()
 router.get('/', projectController.getProjectList)
 router.get('/last/:count', projectController.getLastProjects)
 router.get('/:id', projectController.getProject)
+router.delete('/:id', projectController.deleteProjectById)
 
 router.post('/upload-preview/:id', projectController.uploadPreview)
 router.post('/save', AuthMiddleware, projectController.saveProject)

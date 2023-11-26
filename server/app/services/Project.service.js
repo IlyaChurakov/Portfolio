@@ -73,6 +73,13 @@ class ProjectService {
 
 		return project
 	}
+	async deleteProjectById(id) {
+		return await prisma.project.delete({
+			where: {
+				id
+			}
+		})
+	}
 	async deleteAllProjects() {
 		return await prisma.project.deleteMany()
 	}

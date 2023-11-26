@@ -64,6 +64,14 @@ class ProjectController {
 			next(err)
 		}
 	}
+	async deleteProjectById(req, res, next) {
+		try {
+			const project = await ProjectService.deleteProjectById(req.params.id)
+			res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
 	async deleteAllProjects(req, res, next) {
 		try {
 			const projects = await ProjectService.deleteAllProjects()

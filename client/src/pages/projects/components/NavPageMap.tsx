@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
+import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import useUploadFile from '../../../hooks/useUploadFile'
 import { Context } from '../../../main'
@@ -12,6 +13,8 @@ import SectionAddModal from './modals/section-add-modal/SectionAddModal'
 const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
 	const { selectFile, file, upload } = useUploadFile()
+	const { id } = useParams()
+	const navigate = useNavigate()
 
 	const [isVisibleSectionAddModal, setIsVisibleSectionAddModal] =
 		useState<boolean>(false)
@@ -142,6 +145,15 @@ const NavPageMap = () => {
 		setIsVisibleSectionAddModal(false)
 	}
 
+	const deleteProject = async () => {
+		if (id) {
+			if (confirm('Вы действительно хотите удалить проект?')) {
+				projectStore.deleteProjectById(id)
+				navigate('/projects')
+			}
+		}
+	}
+
 	return (
 		<nav className='w-[350px] top-0 bg-gray-400 p-5 overflow-y-auto absolute h-full right-0'>
 			<div>
@@ -150,6 +162,7 @@ const NavPageMap = () => {
 						fill='#C24D51'
 						className='mr-1 text-xl'
 						title='Удалить проект'
+						onClick={deleteProject}
 					/>
 					<MdArchive
 						fill='#C24D51'
