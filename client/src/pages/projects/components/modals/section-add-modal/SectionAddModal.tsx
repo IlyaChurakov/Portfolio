@@ -35,13 +35,21 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 	if (!isVisible) return null
 
 	return (
-		<div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black bg-opacity-80 border-2 border-gray-500 rounded-lg'>
+		<div
+			className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black  rounded-lg'
+			style={{
+				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
+			}}
+		>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className='relative w-full h-full p-5 grid grid-rows-[1fr_30px]'
 			>
 				<button
-					onClick={() => closeHandler()}
+					onClick={() => {
+						reset()
+						closeHandler()
+					}}
 					className='text-white absolute top-2 right-2'
 				>
 					<IoIosClose fill='#fff' className='text-3xl' />
@@ -55,9 +63,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 						defaultValue={''}
 						{...register('name', { required: true })}
 					/>
-					{errors.name && (
-						<span className=' text-red-500'>Заполните это поле</span>
-					)}
+					{errors.name && <span className='text-red'>Заполните это поле</span>}
 
 					<h2 className='text-white mb-5 text-center mt-5'>
 						Фоновое изображение

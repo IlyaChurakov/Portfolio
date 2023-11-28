@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import ProjectItem from '../components/ProjectItem'
 import Container from '../layouts/Container'
 import { Context } from '../main'
 
@@ -46,42 +46,15 @@ const Home: FC = () => {
 				</Container>
 			</section>
 
-			<section className=' bg-gray-dark p-5'>
-				<Container>
-					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
-						Новости
-					</h1>
-					<div className='grid grid-cols-4 gap-5 justify-items-center'>
-						<div className='h-40 w-full bg-gray flex justify-center items-center'>
-							Новость 1
-						</div>
-						<div className='h-40 w-full bg-gray flex justify-center items-center'>
-							Новость 2
-						</div>
-						<div className='h-40 w-full bg-gray flex justify-center items-center'>
-							Новость 3
-						</div>
-						<div className='h-40 w-full bg-gray flex justify-center items-center'>
-							Новость 4
-						</div>
-					</div>
-				</Container>
-			</section>
 			<section className='p-5'>
 				<Container>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Проекты
 					</h1>
 					<div className='grid grid-cols-4 gap-5 justify-items-center'>
-						{projectStore.lastProjects &&
-							projectStore.lastProjects.map(project => (
-								<Link
-									to={`/projects/${project.id}`}
-									className='w-full bg-gray aspect-square flex justify-center items-center'
-								>
-									{project.name}
-								</Link>
-							))}
+						{projectStore.lastProjects?.map(project => (
+							<ProjectItem key={project.id} project={project} />
+						))}
 					</div>
 				</Container>
 			</section>

@@ -56,23 +56,28 @@ const Projects: FC = () => {
 									}
 								}}
 							/>
-							{!pathname.includes('/new') && (
-								<Link
-									to={'/projects/new'}
-									className='mr-5 text-gray hover:text-white'
-									onClick={e => addProject(e)}
-								>
-									Добавить проект
-								</Link>
-							)}
-							{!pathname.includes('/edit') && id && (
-								<Link
-									to={`/projects/${id}/edit`}
-									className='mr-5 text-gray hover:text-white'
-								>
-									Редактировать проект
-								</Link>
-							)}
+							{store.isAuth &&
+								store.user.roles?.includes('admin') &&
+								!pathname.includes('/new') && (
+									<Link
+										to={'/projects/new'}
+										className='mr-5 text-gray hover:text-white'
+										onClick={e => addProject(e)}
+									>
+										Добавить проект
+									</Link>
+								)}
+							{store.isAuth &&
+								store.user.roles?.includes('admin') &&
+								!pathname.includes('/edit') &&
+								id && (
+									<Link
+										to={`/projects/${id}/edit`}
+										className='mr-5 text-gray hover:text-white'
+									>
+										Редактировать проект
+									</Link>
+								)}
 						</div>
 					</Container>
 				</section>
