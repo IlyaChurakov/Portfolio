@@ -1,4 +1,4 @@
-import { useOnClickOutside } from './useOnClickOutside.js'
+import { useOnClickOutside } from './useOnClickOutside.ts'
 
 import List from './List.js'
 

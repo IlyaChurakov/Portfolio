@@ -44,7 +44,10 @@ const Register: FC = () => {
 	return (
 		<div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96'>
 			<form
-				className='w-full h-full relative bg-gray-dark flex flex-col p-5 rounded-lg'
+				className='w-full h-full relative bg-black flex flex-col p-5 rounded-lg'
+				style={{
+					boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
+				}}
 				onSubmit={handleSubmit(onSubmit)}
 			>
 				<input

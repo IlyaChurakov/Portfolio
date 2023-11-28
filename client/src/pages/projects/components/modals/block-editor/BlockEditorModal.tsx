@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
+import { IBlock } from '../../../../../models/IProject'
 import { modalData } from './modal.data'
 
 export type Inputs = {
@@ -11,7 +12,7 @@ export type Inputs = {
 
 interface IBlockEditorProps {
 	sectionId: string
-	blockId: string
+	block: IBlock
 	isShow: boolean
 	closeHandler: Function
 	editBlock: Function
@@ -20,7 +21,7 @@ interface IBlockEditorProps {
 
 const BlockEditorModal: FC<IBlockEditorProps> = ({
 	sectionId,
-	blockId,
+	block,
 	isShow,
 	closeHandler,
 	editBlock,
@@ -33,13 +34,14 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 	} = useForm<Inputs>()
 
 	const onSubmit: SubmitHandler<Inputs> = data => {
-		editBlock(sectionId, blockId, data)
+		editBlock(sectionId, block.id, data)
+		closeHandler()
 	}
 
 	if (!isShow) return null
 
 	return (
-		<div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black bg-opacity-80 border-2 border-gray-500 rounded-lg'>
+		<div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black rounded-lg'>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className='relative w-full h-full p-5 grid grid-rows-[1fr_30px]'
@@ -55,7 +57,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 					<h2 className='text-white mb-5 text-center'>Тип</h2>
 					<select
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-						defaultValue={'Основной текст'}
+						defaultValue={block.type || 'Основной текст'}
 						{...register('type', { required: true })}
 					>
 						{modalData.types.map(type => {
@@ -71,7 +73,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 					<div className='w-full'>
 						<textarea
 							className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-							defaultValue={''}
+							defaultValue={block.text || ''}
 							{...register('text', { required: true })}
 						/>
 					</div>
@@ -82,7 +84,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 					<h2 className='text-white mb-5 text-center mt-5'>Цвет текста</h2>
 					<select
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-						defaultValue={'#000'}
+						defaultValue={block.color || '#000'}
 						{...register('color', { required: true })}
 					>
 						{modalData.textColors.map(color => {

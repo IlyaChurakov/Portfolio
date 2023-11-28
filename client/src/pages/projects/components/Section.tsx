@@ -14,6 +14,7 @@ interface ISectionProps {
 	id: string
 	name: string
 	blocks: IBlock[]
+	openHandler: Function
 }
 
 type StringObject = {
@@ -25,7 +26,7 @@ const textTypes: StringObject = {
 	'Основной текст': 'p',
 }
 
-const Section = ({ id, name, blocks }: ISectionProps) => {
+const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 	const { projectStore } = useContext(Context)
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
@@ -109,22 +110,6 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 		projectStore.setProject(newProject)
 	}
 
-	// const editSection = (sectionId: string, blockId: string) => {
-	// 	const project = { ...(projectStore.project as IProject) }
-
-	// 	project.content.sections.forEach(section => {
-	// 		if (section.id === sectionId) {
-	// 			section.blocks?.forEach(block => {
-	// 				if (block.id == blockId) {
-	// 					block.text = text
-	// 				}
-	// 			})
-	// 		}
-	// 	})
-
-	// 	projectStore.setProject(project)
-	// }
-
 	const openBlockEditorModal = (id: string) => setEditingBlockId(id)
 	const closeBlockEditorModal = () => setEditingBlockId('')
 
@@ -133,15 +118,26 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 
 	return (
 		<>
-			<div className='bg-gray-600 mb-2 p-2 rounded-lg'>
-				<div className='flex justify-between ' onClick={openSection}>
-					<div className='cursor-pointer text-white flex items-center'>
+			<div className='bg-gray-600 mb-2 p-2 border-l-[1px] border-l-gray'>
+				<div className='flex justify-between'>
+					<div className='cursor-pointer flex items-center'>
 						{isVisible ? (
-							<BiSolidDownArrow fill='#fff' className='mr-1 text-xs' />
+							<BiSolidDownArrow
+								className='mr-1 text-xs text-gray hover:text-white'
+								onClick={openSection}
+							/>
 						) : (
-							<BiSolidRightArrow fill='#fff' className='mr-1 text-xs' />
+							<BiSolidRightArrow
+								className='mr-1 text-xs text-gray hover:text-white'
+								onClick={openSection}
+							/>
 						)}
-						{name}
+						<span
+							className='text-gray hover:text-white'
+							onClick={() => openHandler(id)}
+						>
+							{name}
+						</span>
 					</div>
 					<div
 						className='text-red-500 cursor-pointer flex items-center'
@@ -163,15 +159,15 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 											text: block.text || '',
 											color: block.color || '#000',
 										}}
-										blockId={block.id}
+										block={block}
 										isShow={editingBlockId == block.id}
 										closeHandler={closeBlockEditorModal}
 										editBlock={editBlock}
 									/>
 
-									<div className='pl-5 flex justify-between hover:bg-gray-500 mb-1 rounded-lg'>
+									<div className='pl-5 pt-2 flex justify-between hover:bg-gray-500 rounded-lg'>
 										<div
-											className='cursor-pointer text-white'
+											className='cursor-pointer text-gray hover:text-white'
 											onClick={() => {
 												if (!editingBlockId) {
 													openBlockEditorModal(block.id)
@@ -200,7 +196,7 @@ const Section = ({ id, name, blocks }: ISectionProps) => {
 
 						<button
 							onClick={openBlockAddModal}
-							className='pl-5 hover:bg-gray-500 w-full text-start rounded-lg text-white'
+							className='pl-5 pt-2 hover:bg-gray-500 w-full text-start rounded-lg text-gray hover:text-white'
 						>
 							Добавить элемент
 						</button>

@@ -1,31 +1,34 @@
 import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
+import { ISection } from '../../../../../models/IProject'
 import { useOnClickOutside } from '../../../../profile/components/menu/useOnClickOutside'
 
-type Inputs = {
+export type SectionInputs = {
 	name: string
 	background: string
 	paddings: string
 }
 
-interface IBlockAddProps {
+interface IBlockEditorProps {
+	section: ISection
 	isVisible: boolean
 	closeHandler: Function
-	addSection: Function
+	editSection: Function
 }
 
-const SectionAddModal: FC<IBlockAddProps> = ({
+const SectionEditorModal: FC<IBlockEditorProps> = ({
+	section,
 	isVisible,
 	closeHandler,
-	addSection,
+	editSection,
 }) => {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		reset,
-	} = useForm<Inputs>()
+	} = useForm<SectionInputs>()
 
 	const { isShow, ref, setIsShow } = useOnClickOutside(false)
 
@@ -37,9 +40,8 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 		if (!isShow) closeHandler()
 	}, [isShow])
 
-	const onSubmit: SubmitHandler<Inputs> = async data => {
-		await addSection(data)
-		console.log(data)
+	const onSubmit: SubmitHandler<SectionInputs> = async data => {
+		editSection(section.id, data)
 		reset()
 		setIsShow(false)
 		closeHandler()
@@ -49,7 +51,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 
 	return (
 		<div
-			className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black  rounded-lg'
+			className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black rounded-lg'
 			style={{
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
@@ -75,7 +77,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						placeholder='Название секции'
-						defaultValue={''}
+						defaultValue={section.name || ''}
 						{...register('name', { required: true })}
 					/>
 					{errors.name && <span className='text-red'>Заполните это поле</span>}
@@ -86,7 +88,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						placeholder='Вставьте ссылку на изображение'
-						defaultValue={''}
+						defaultValue={section.background || ''}
 						{...register('background')}
 					/>
 
@@ -94,7 +96,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						placeholder='Верхний Правый Нижний Левый'
-						defaultValue={''}
+						defaultValue={section.paddings || ''}
 						{...register('paddings')}
 					/>
 				</div>
@@ -112,4 +114,4 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 	)
 }
 
-export default SectionAddModal
+export default SectionEditorModal

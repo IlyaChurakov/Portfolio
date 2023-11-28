@@ -1,6 +1,7 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
+import { useOnClickOutside } from '../../../../profile/components/menu/useOnClickOutside'
 import { modalData } from '../block-editor/modal.data'
 
 export type Inputs = {
@@ -29,22 +30,40 @@ const BlockAddModal: FC<IBlockAddProps> = ({
 		reset,
 	} = useForm<Inputs>()
 
+	const { isShow, ref, setIsShow } = useOnClickOutside(false)
+
+	useEffect(() => {
+		if (isVisible) setIsShow(true)
+	}, [isVisible])
+
+	useEffect(() => {
+		if (!isShow) closeHandler()
+	}, [isShow])
+
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		await addBlock(sectionId, data)
 		reset()
+		setIsShow(false)
 		closeHandler()
 	}
 
-	if (!isVisible) return null
+	if (!isShow) return null
 
 	return (
-		<div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black bg-opacity-80 border-2 border-gray-500 rounded-lg'>
+		<div
+			className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black rounded-lg'
+			ref={ref}
+		>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
 				className='relative w-full h-full p-5 grid grid-rows-[1fr_30px]'
 			>
 				<button
-					onClick={() => closeHandler()}
+					onClick={() => {
+						reset()
+						setIsShow(false)
+						closeHandler()
+					}}
 					className='text-white absolute top-2 right-2'
 				>
 					<IoIosClose fill='#fff' className='text-3xl' />

@@ -22,9 +22,9 @@ const EditProject = () => {
 					return (
 						<section
 							key={section.id}
-							className={`py-10`}
 							style={{
 								background: `url(${section.background})`,
+								padding: section.paddings ?? '2.5rem 0',
 							}}
 						>
 							<Container>
