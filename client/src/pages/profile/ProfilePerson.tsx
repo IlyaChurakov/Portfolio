@@ -4,10 +4,10 @@ import { IoMdCreate } from 'react-icons/io'
 import { MdPublishedWithChanges } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
+import useUploadFile from '../../hooks/useUploadFile'
 import { Context } from '../../main'
 import { transformDate } from '../../utils/functions'
 import Description from './components/Description'
-import useUploadFile from './hooks/useUploadFile'
 
 const ProfilePerson: FC = () => {
 	const { store } = useContext(Context)
@@ -37,7 +37,13 @@ const ProfilePerson: FC = () => {
 
 	return (
 		<div className='flex flex-col p-10'>
-			<div className='w-full bg-white p-5 grid grid-cols-[10rem_1fr] gap-10 shadow-xl rounded-lg'>
+			<div
+				className='w-full bg-black p-5 grid grid-cols-[10rem_1fr] gap-10'
+				style={{
+					boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
+					borderRadius: '10px',
+				}}
+			>
 				<div className='w-40 max-h-60'>
 					<div className='relative h-full w-full'>
 						<label htmlFor='select_avatar' className='cursor-pointer'>
@@ -59,29 +65,28 @@ const ProfilePerson: FC = () => {
 									className='w-full h-full object-cover rounded-lg hover:opacity-30'
 								/>
 							) : (
-								<div className='h-full w-full bg-gray-300'></div>
+								<div className='h-full w-full bg-gray'></div>
 							)}
 						</label>
 					</div>
 				</div>
 				<div>
-					<h1 className='text-start text-3xl font-bold mb-3'>
+					<h1 className='text-start text-3xl text-white font-bold mb-3'>
 						{store.user.name}
 					</h1>
-					<h2 className=' text-start text-[#D6A47C] mb-3'>
-						{store.user.email}
-					</h2>
 					<div>
 						<Description
 							description={store.user.description}
 							onEdit={handleDescriptionEdit}
 						/>
 					</div>
-					<p className='flex items-center text-start text-[#D6A47C] mb-3'>
+					<h2 className=' text-start text-violet mb-3'>{store.user.email}</h2>
+
+					<p className='flex items-center text-start text-violet mb-3'>
 						<MdPublishedWithChanges title='Дата регистрации' className='mr-2' />
 						{transformDate(store.user.createdAt)}
 					</p>
-					<p className='flex items-center text-start text-[#D6A47C] mb-3'>
+					<p className='flex items-center text-start text-violet mb-3'>
 						<IoMdCreate
 							title='Дата последнего изменения профиля'
 							className='mr-2'
@@ -89,10 +94,10 @@ const ProfilePerson: FC = () => {
 						{transformDate(store.user.updatedAt)}
 					</p>
 					{!store.user.isActivated && (
-						<p className='text-start mb-3'>Подтвердите аккаунт</p>
+						<p className='text-start mb-3 text-white'>Подтвердите аккаунт</p>
 					)}
 					<button
-						className='text-red-500 m-auto bg-white rounded-sm px-2 py-1 hover:text-white hover:bg-red-500'
+						className='text-white m-auto bg-red rounded-sm px-2 py-1'
 						onClick={deleteAccount}
 					>
 						Delete account

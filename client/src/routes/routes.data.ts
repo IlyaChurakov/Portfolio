@@ -50,7 +50,12 @@ export const routes: IRoute[] = [
 		nestedRoutes: [
 			{ path: '', component: ProjectList },
 			{ path: ':id', component: Project },
-			{ path: ':id/edit', component: EditProject, roles: [Roles.Admin] },
+			{
+				path: ':id/edit',
+				isAuth: true,
+				component: EditProject,
+				roles: [Roles.Admin],
+			},
 		],
 	},
 ]

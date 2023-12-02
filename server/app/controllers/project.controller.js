@@ -21,6 +21,14 @@ class ProjectController {
 			next(err)
 		}
 	}
+	async getLastProjects(req, res, next) {
+		try {
+			const projects = await ProjectService.getLastProjects(+req.params.count)
+			res.json(projects)
+		} catch (err) {
+			next(err)
+		}
+	}
 	async getProject(req, res, next) {
 		try {
 			const { id } = req.params
@@ -52,6 +60,14 @@ class ProjectController {
 			const project = await ProjectService.uploadPreview(id, fileName)
 			console.log(project)
 			return res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async deleteProjectById(req, res, next) {
+		try {
+			const project = await ProjectService.deleteProjectById(req.params.id)
+			res.json(project)
 		} catch (err) {
 			next(err)
 		}

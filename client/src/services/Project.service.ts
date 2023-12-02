@@ -9,8 +9,16 @@ export default class ProjectService {
 	static async getProjectList(): Promise<AxiosResponse<IProject[]>> {
 		return $axios.get(`/projects`)
 	}
+	static async getLastProjects(
+		count: number
+	): Promise<AxiosResponse<IProject[]>> {
+		return $axios.get(`/projects/last/${count}`)
+	}
 	static async getProject(id: string): Promise<AxiosResponse<IProject>> {
 		return $axios.get(`/projects/${id}`)
+	}
+	static async deleteProjectById(id: string): Promise<AxiosResponse<IProject>> {
+		return $axios.delete(`/projects/${id}`)
 	}
 	static async saveProject(
 		project: IProject

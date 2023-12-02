@@ -4,13 +4,15 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				gold: '#D6A47C',
-				'gray-dark': '#595961',
-				'gray-light': '#DDDDDD',
-				beige: '#F4EDDD',
+				violet: '#9255E8',
+				gray: '#6F7680',
+				'gray-dark': 'rgb(35,36,38)',
+				black: '#171717',
+				red: '#C24D51',
+				green: 'rgb(65, 155, 65)',
 			},
 			fontFamily: {
-				sans: ['IBM Plex Sans', 'Segoe UI', 'Roboto', 'sans-serif'],
+				sans: ['Rubik', 'sans-serif'],
 			},
 		},
 	},

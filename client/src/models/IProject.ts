@@ -18,6 +18,7 @@ export interface ISection {
 	name: string
 	background?: string
 	blocks?: IBlock[]
+	paddings?: string
 }
 
 export interface IBlock {

@@ -4,6 +4,7 @@ import Page from './layouts/Page'
 import { Context } from './main'
 import Router from './routes/Router'
 import './tailwind.css'
+import Menu from './ui/Menu'
 
 const App: FC = () => {
 	const { store } = useContext(Context)
@@ -16,6 +17,7 @@ const App: FC = () => {
 
 	return (
 		<>
+			<Menu />
 			<Page>
 				<Router />
 			</Page>

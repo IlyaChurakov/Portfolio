@@ -26,6 +26,14 @@ class ProjectService {
 
 		return projects
 	}
+	async getLastProjects(count) {
+		return await prisma.project.findMany({
+			orderBy: {
+				createdAt: 'desc'
+			},
+			take: count
+		})
+	}
 	async getProject(id) {
 		const project = await prisma.project.findUnique({
 			where: {
@@ -64,6 +72,13 @@ class ProjectService {
 		project.content = JSON.parse(project.content)
 
 		return project
+	}
+	async deleteProjectById(id) {
+		return await prisma.project.delete({
+			where: {
+				id
+			}
+		})
 	}
 	async deleteAllProjects() {
 		return await prisma.project.deleteMany()
