@@ -10,6 +10,7 @@ const useUploadFile = () => {
 	const upload = async (id: number | string) => {
 		const formData = new FormData()
 		formData.append('img', file as File)
+		console.log(file)
 
 		if (typeof id === 'number') {
 			store.uploadAvatar(id, formData)

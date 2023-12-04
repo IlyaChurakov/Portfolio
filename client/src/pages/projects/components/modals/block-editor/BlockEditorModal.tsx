@@ -1,6 +1,7 @@
-import { FC } from 'react'
+import { FC, useContext, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
+import { Context } from '../../../../../main'
 import { IBlock } from '../../../../../models/IProject'
 import { modalData } from './modal.data'
 
@@ -8,6 +9,7 @@ export type Inputs = {
 	type: string
 	text: string
 	color: string
+	image: File
 }
 
 interface IBlockEditorProps {
@@ -27,16 +29,35 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 	editBlock,
 	defaultValues,
 }) => {
+	const { projectStore } = useContext(Context)
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		watch,
 	} = useForm<Inputs>()
 
-	const onSubmit: SubmitHandler<Inputs> = data => {
-		editBlock(sectionId, block.id, data)
+	const elementType = watch('type')
+	const image = watch('image')
+
+	const onSubmit: SubmitHandler<Inputs> = async data => {
+		const formData = new FormData()
+
+		const file = data.image[0]
+
+		formData.append('img', file as File)
+
+		const imgPath = await projectStore.uploadImage(formData)
+
+		console.log(imgPath)
+
+		editBlock(sectionId, block.id, data, imgPath)
 		closeHandler()
 	}
+
+	useEffect(() => {
+		console.log(image)
+	}, [image])
 
 	if (!isShow) return null
 
@@ -69,27 +90,53 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 						})}
 					</select>
 
-					<h2 className='text-white mb-5 text-center mt-5'>Текст</h2>
-					<div className='w-full'>
-						<textarea
-							className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-							defaultValue={block.text || ''}
-							{...register('text', { required: true })}
-						/>
-					</div>
-					{errors.text && (
-						<span className=' text-red-500'>Заполните это поле</span>
+					{elementType === 'Основной текст' && (
+						<>
+							<h2 className='text-white mb-5 text-center mt-5'>Текст</h2>
+							<div className='w-full'>
+								<textarea
+									className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+									defaultValue={block.text || ''}
+									{...register('text', { required: true })}
+								/>
+							</div>
+							{errors.text && (
+								<span className='text-red'>Заполните это поле</span>
+							)}
+						</>
+					)}
+
+					{elementType === 'Изображение' && (
+						<>
+							<h2 className='text-white mb-5 text-center mt-5'>
+								Загрузите изображение
+							</h2>
+							<div className='w-full'>
+								<input
+									type='file'
+									className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+									{...register('image', { required: true })}
+								/>
+							</div>
+							{errors.image && (
+								<span className='text-red'>Изображение не загружено</span>
+							)}
+						</>
 					)}
 
 					<h2 className='text-white mb-5 text-center mt-5'>Цвет текста</h2>
 					<select
-						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+						className='w-full border-b-2 border-white bg-gradient-to-r from-purple-500 to-pink-500 text-white outline-none'
 						defaultValue={block.color || '#000'}
 						{...register('color', { required: true })}
 					>
 						{modalData.textColors.map(color => {
 							return (
-								<option value={color} className='text-black'>
+								<option
+									value={color}
+									className='bg-gradient-to-r from-purple-500 to-pink-500'
+									style={{ color: color }}
+								>
 									{color}
 								</option>
 							)

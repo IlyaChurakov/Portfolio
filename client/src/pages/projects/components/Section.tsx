@@ -24,6 +24,7 @@ type StringObject = {
 const textTypes: StringObject = {
 	Заголовок: 'h1',
 	'Основной текст': 'p',
+	Изображение: 'img',
 }
 
 const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
@@ -36,7 +37,12 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 	const [isVisibleBlockAddModal, setIsVisibleBlockAddModal] =
 		useState<boolean>(false)
 
-	const editBlock = (sectionId: string, blockId: string, data: Inputs) => {
+	const editBlock = (
+		sectionId: string,
+		blockId: string,
+		data: Inputs,
+		imgPath: string
+	) => {
 		const project = { ...(projectStore.project as IProject) }
 
 		project.content.sections.forEach(section => {
@@ -46,6 +52,7 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 						block.text = data.text
 						block.type = textTypes[data.type]
 						block.color = data.color
+						block.imgPath = imgPath
 					}
 				})
 			}

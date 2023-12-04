@@ -72,6 +72,15 @@ const EditProject = () => {
 													))}
 												</ul>
 											)
+										case 'img':
+											console.log(block)
+											return (
+												<img
+													className='w-48 h-48'
+													src={`http://localhost:7001/${block.imgPath}`}
+													alt='img'
+												/>
+											)
 									}
 								})}
 							</Container>

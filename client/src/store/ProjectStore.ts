@@ -122,6 +122,17 @@ export default class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
+	async uploadImage(image: FormData) {
+		try {
+			this.setLoading(true)
+			const { data } = await ProjectService.uploadImage(image)
+			this.setLoading(false)
+
+			return data
+		} catch (err) {
+			throw new Error((err as Error).message)
+		}
+	}
 	async deleteAllProjects() {
 		try {
 			this.setLoading(true)

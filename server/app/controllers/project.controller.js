@@ -64,6 +64,19 @@ class ProjectController {
 			next(err)
 		}
 	}
+	async uploadImage(req, res, next) {
+		try {
+			const { img } = req.files
+
+			const fileName = uuidv4() + '.jpg'
+
+			img.mv(path.resolve('static', fileName))
+
+			return res.json(fileName)
+		} catch (err) {
+			next(err)
+		}
+	}
 	async deleteProjectById(req, res, next) {
 		try {
 			const project = await ProjectService.deleteProjectById(req.params.id)
