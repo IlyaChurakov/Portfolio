@@ -16,12 +16,14 @@
     "dayjs": "^1.11.10",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
+    "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0",
     "sass": "^1.69.5",
+    "url": "^0.11.3",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

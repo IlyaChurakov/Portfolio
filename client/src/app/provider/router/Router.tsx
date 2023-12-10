@@ -1,12 +1,13 @@
+import NotFound from '@pages/NotFound.tsx'
+import { routerConfig } from '@shared/config/index.ts'
+import { IRoute } from '@shared/config/router/types.ts'
 import { observer } from 'mobx-react-lite'
-import { useContext } from 'react'
+import { Suspense, useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Context } from '../main.tsx'
-import NotFound from '../pages/NotFound.tsx'
-import { checkUserRoles } from '../utils/functions.ts'
-import { IRoute, routes } from './routes.data.ts'
+import { Context } from '../../../main.tsx'
+import { checkUserRoles } from '../../../utils/functions.ts'
 
-const Router = () => {
+export const Router = observer(() => {
 	const { store } = useContext(Context)
 
 	if (store.isLoading) return <div>Loading...</div>
@@ -41,12 +42,12 @@ const Router = () => {
 
 	return (
 		<>
-			<Routes>
-				{renderRoutes(routes)}
-				<Route path='*' element={<NotFound />} />
-			</Routes>
+			<Suspense fallback={<div>Loading...</div>}>
+				<Routes>
+					{renderRoutes(routerConfig)}
+					<Route path='*' element={<NotFound />} />
+				</Routes>
+			</Suspense>
 		</>
 	)
-}
-
-export default observer(Router)
+})

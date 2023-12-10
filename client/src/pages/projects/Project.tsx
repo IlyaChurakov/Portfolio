@@ -129,6 +129,14 @@ const Project = () => {
 													))}
 												</ul>
 											)
+										case 'img':
+											return (
+												<img
+													className='w-48 h-48 m-auto'
+													src={`http://localhost:7001/${block.imgPath}`}
+													alt='img'
+												/>
+											)
 									}
 								})}
 							</Container>

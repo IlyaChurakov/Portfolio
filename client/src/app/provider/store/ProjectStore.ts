@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx'
-import ProjectService from '../services/Project.service'
-import { IProject } from './../models/IProject'
+import ProjectService from '../../../services/Project.service'
+import { IProject } from './types/project.types'
 
-export default class ProjectStore {
+export class ProjectStore {
 	projectList = [] as IProject[]
 	lastProjects = [] as IProject[]
 	project = {} as IProject

@@ -1,12 +1,12 @@
 import { makeAutoObservable } from 'mobx'
-import $axios from '../http'
-import { IUser } from '../models/IUser'
-import { AuthResponse } from '../models/response/AuthResponse'
-import { UserResponse } from '../models/response/UsersResponse'
-import AuthService from '../services/Auth.service'
-import UserService from '../services/User.service'
+import AuthService from '../../../services/Auth.service'
+import UserService from '../../../services/User.service'
+import { $axios } from '../http/axios'
+import { AuthResponse } from './types/response/AuthResponse.types'
+import { UserResponse } from './types/response/UserResponse.types'
+import { IUser } from './types/user.types'
 
-export default class UserStore {
+export class UserStore {
 	user = {} as IUser
 	isAuth = false
 	isLoading = false

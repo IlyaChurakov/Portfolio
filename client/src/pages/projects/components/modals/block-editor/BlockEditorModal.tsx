@@ -10,6 +10,7 @@ export type Inputs = {
 	text: string
 	color: string
 	image: File
+	imgDescr: string
 }
 
 interface IBlockEditorProps {
@@ -30,6 +31,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 	defaultValues,
 }) => {
 	const { projectStore } = useContext(Context)
+
 	const {
 		register,
 		handleSubmit,
@@ -48,8 +50,6 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 		formData.append('img', file as File)
 
 		const imgPath = await projectStore.uploadImage(formData)
-
-		console.log(imgPath)
 
 		editBlock(sectionId, block.id, data, imgPath)
 		closeHandler()
@@ -108,9 +108,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 
 					{elementType === 'Изображение' && (
 						<>
-							<h2 className='text-white mb-5 text-center mt-5'>
-								Загрузите изображение
-							</h2>
+							<h2 className='text-white mb-5 text-center mt-5'>Изображение</h2>
 							<div className='w-full'>
 								<input
 									type='file'
@@ -121,22 +119,28 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 							{errors.image && (
 								<span className='text-red'>Изображение не загружено</span>
 							)}
+
+							<h2 className='text-white mb-5 text-center mt-5'>Описание</h2>
+							<div className='w-full'>
+								<input
+									type='text'
+									className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+									defaultValue={block.imgDescr || ''}
+									{...register('imgDescr', { required: true })}
+								/>
+							</div>
 						</>
 					)}
 
 					<h2 className='text-white mb-5 text-center mt-5'>Цвет текста</h2>
 					<select
-						className='w-full border-b-2 border-white bg-gradient-to-r from-purple-500 to-pink-500 text-white outline-none'
+						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						defaultValue={block.color || '#000'}
 						{...register('color', { required: true })}
 					>
 						{modalData.textColors.map(color => {
 							return (
-								<option
-									value={color}
-									className='bg-gradient-to-r from-purple-500 to-pink-500'
-									style={{ color: color }}
-								>
+								<option value={color} style={{ color: color }}>
 									{color}
 								</option>
 							)

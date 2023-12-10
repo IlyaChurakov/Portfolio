@@ -1,6 +1,6 @@
+import { IProject } from '@app/provider/store/types/project.types'
 import { AxiosResponse } from 'axios'
-import $axios from '../http'
-import { IProject } from '../models/IProject'
+import { $axios } from '../app/provider/http/axios'
 
 export default class ProjectService {
 	static async createProject(name: string): Promise<AxiosResponse<IProject>> {

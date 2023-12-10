@@ -1,16 +1,16 @@
 import axios from 'axios'
 
-const $axios = axios.create({
+export const $static = axios.create({
 	withCredentials: true,
-	baseURL: import.meta.env.VITE_API_URL,
+	baseURL: import.meta.env.VITE_API_STATIC_URL,
 })
 
-$axios.interceptors.request.use(config => {
+$static.interceptors.request.use(config => {
 	config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
 	return config
 })
 
-$axios.interceptors.response.use(
+$static.interceptors.response.use(
 	config => config,
 	async error => {
 		const originalRequest = error.config
@@ -36,5 +36,3 @@ $axios.interceptors.response.use(
 		throw error
 	}
 )
-
-export default $axios

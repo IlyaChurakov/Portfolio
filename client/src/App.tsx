@@ -1,8 +1,8 @@
+import { Router } from '@app/provider'
 import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
 import Page from './layouts/Page'
 import { Context } from './main'
-import Router from './routes/Router'
 import './tailwind.css'
 import Menu from './ui/Menu'
 

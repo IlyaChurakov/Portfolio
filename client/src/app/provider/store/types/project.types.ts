@@ -28,4 +28,5 @@ export interface IBlock {
 	color?: string
 	items?: string[]
 	imgPath?: string
+	imgDescr?: string
 }
