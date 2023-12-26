@@ -4,7 +4,7 @@ import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
 import { Context } from '../../main'
 import Menu from './components/menu/Menu'
 
-const ProfileUsers: FC = () => {
+export const ProfileUsers: FC = observer(() => {
 	const { store } = useContext(Context)
 
 	useEffect(() => {
@@ -118,6 +118,4 @@ const ProfileUsers: FC = () => {
 			</table>
 		</div>
 	)
-}
-
-export default observer(ProfileUsers)
+})

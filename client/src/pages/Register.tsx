@@ -10,7 +10,7 @@ type Inputs = {
 	password: string
 }
 
-const Register: FC = () => {
+export const Register: FC = observer(() => {
 	const { store } = useContext(Context)
 
 	const navigate = useNavigate()
@@ -106,6 +106,4 @@ const Register: FC = () => {
 			</form>
 		</div>
 	)
-}
-
-export default observer(Register)
+})

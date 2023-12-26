@@ -9,7 +9,7 @@ type Inputs = {
 	password: string
 }
 
-const Login: FC = () => {
+export const Login: FC = observer(() => {
 	const {
 		register,
 		handleSubmit,
@@ -91,6 +91,4 @@ const Login: FC = () => {
 			</form>
 		</div>
 	)
-}
-
-export default observer(Login)
+})

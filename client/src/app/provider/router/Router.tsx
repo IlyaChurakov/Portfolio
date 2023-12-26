@@ -1,4 +1,4 @@
-import NotFound from '@pages/NotFound.tsx'
+import { NotFound } from '@pages/NotFound.tsx'
 import { routerConfig } from '@shared/config/index.ts'
 import { IRoute } from '@shared/config/router/types.ts'
 import { observer } from 'mobx-react-lite'

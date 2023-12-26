@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
-import { useOnClickOutside } from '../../../../profile/components/menu/useOnClickOutside'
+import { useOnClickOutside } from '../../../../../hooks/useOnClickOutside'
 
 type Inputs = {
 	name: string

@@ -1,7 +1,7 @@
 import { UserResponse } from '@app/provider/store/types/response/UserResponse.types'
 import { IUser } from '@app/provider/store/types/user.types'
 import { AxiosResponse } from 'axios'
-import { $axios } from '../app/provider/http/axios'
+import { $axios } from '../shared/config/http/axios'
 
 export default class UserService {
 	static async getUsersList(): Promise<AxiosResponse<UserResponse[]>> {

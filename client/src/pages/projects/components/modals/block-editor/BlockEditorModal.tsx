@@ -1,8 +1,8 @@
-import { FC, useContext, useEffect } from 'react'
+import { FC, useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
 import { Context } from '../../../../../main'
-import { IBlock } from '../../../../../models/IProject'
+import { EditingBlock } from '../../Section'
 import { modalData } from './modal.data'
 
 export type Inputs = {
@@ -15,21 +15,21 @@ export type Inputs = {
 
 interface IBlockEditorProps {
 	sectionId: string
-	block: IBlock
-	isShow: boolean
+	block: EditingBlock
 	closeHandler: Function
 	editBlock: Function
-	defaultValues: Inputs
 }
+
+// TODO: defaultValue of select
 
 const BlockEditorModal: FC<IBlockEditorProps> = ({
 	sectionId,
 	block,
-	isShow,
 	closeHandler,
 	editBlock,
-	defaultValues,
 }) => {
+	if (!block) return null
+
 	const { projectStore } = useContext(Context)
 
 	const {
@@ -40,7 +40,6 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 	} = useForm<Inputs>()
 
 	const elementType = watch('type')
-	const image = watch('image')
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		const formData = new FormData()
@@ -54,12 +53,6 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 		editBlock(sectionId, block.id, data, imgPath)
 		closeHandler()
 	}
-
-	useEffect(() => {
-		console.log(image)
-	}, [image])
-
-	if (!isShow) return null
 
 	return (
 		<div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black rounded-lg'>
@@ -77,8 +70,8 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 				<div>
 					<h2 className='text-white mb-5 text-center'>Тип</h2>
 					<select
+						defaultValue={block.type}
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-						defaultValue={block.type || 'Основной текст'}
 						{...register('type', { required: true })}
 					>
 						{modalData.types.map(type => {
@@ -90,13 +83,14 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 						})}
 					</select>
 
-					{elementType === 'Основной текст' && (
+					{(elementType === 'Основной текст' ||
+						elementType === 'Заголовок') && (
 						<>
 							<h2 className='text-white mb-5 text-center mt-5'>Текст</h2>
 							<div className='w-full'>
 								<textarea
+									defaultValue={block.text}
 									className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-									defaultValue={block.text || ''}
 									{...register('text', { required: true })}
 								/>
 							</div>
@@ -125,7 +119,6 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 								<input
 									type='text'
 									className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-									defaultValue={block.imgDescr || ''}
 									{...register('imgDescr', { required: true })}
 								/>
 							</div>
@@ -135,7 +128,6 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 					<h2 className='text-white mb-5 text-center mt-5'>Цвет текста</h2>
 					<select
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-						defaultValue={block.color || '#000'}
 						{...register('color', { required: true })}
 					>
 						{modalData.textColors.map(color => {

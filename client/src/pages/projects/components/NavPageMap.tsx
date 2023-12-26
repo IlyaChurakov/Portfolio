@@ -1,3 +1,4 @@
+import { IProject, ISection } from '@app/provider/store/types/project.types'
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
@@ -6,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import useUploadFile from '../../../hooks/useUploadFile'
 import { Context } from '../../../main'
-import { IProject, ISection } from '../../../models/IProject'
 import Section from '../components/Section'
 import SectionAddModal from './modals/section-add-modal/SectionAddModal'
 import SectionEditorModal, {
@@ -29,10 +29,6 @@ const NavPageMap = () => {
 		}
 	}, [file])
 
-	const saveProject = async () => {
-		await projectStore.saveProject()
-	}
-
 	const addSection = (data: ISection) => {
 		const project = { ...(projectStore.project as IProject) }
 
@@ -44,23 +40,7 @@ const NavPageMap = () => {
 		})
 
 		projectStore.setProject(project)
-		// projectStore.setSaved(false)
 	}
-
-	// const addBackground = (id: string, textLink: string | null) => {
-	// 	const project = { ...(projectStore.project as IProject) }
-
-	// 	project.content.sections.forEach(section => {
-	// 		if (section.id === id) {
-	// 			if (textLink) {
-	// 				section.background = textLink
-	// 			}
-	// 			console.log(project)
-	// 		}
-	// 	})
-
-	// 	projectStore.setProject(project)
-	// }
 
 	const editSection = (sectionId: String, data: SectionInputs) => {
 		const project = { ...(projectStore.project as IProject) }

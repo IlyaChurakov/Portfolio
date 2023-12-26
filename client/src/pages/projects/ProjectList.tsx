@@ -4,7 +4,7 @@ import ProjectItem from '../../components/ProjectItem'
 import Container from '../../layouts/Container'
 import { Context } from '../../main'
 
-const ProjectList: FC = () => {
+export const ProjectList: FC = observer(() => {
 	const { projectStore } = useContext(Context)
 
 	useEffect(() => {
@@ -22,6 +22,4 @@ const ProjectList: FC = () => {
 			</Container>
 		</section>
 	)
-}
-
-export default observer(ProjectList)
+})

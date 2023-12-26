@@ -4,7 +4,7 @@ import ProjectItem from '../components/ProjectItem'
 import Container from '../layouts/Container'
 import { Context } from '../main'
 
-const Home: FC = () => {
+export const Home: FC = observer(() => {
 	const { projectStore } = useContext(Context)
 
 	useEffect(() => {
@@ -60,6 +60,4 @@ const Home: FC = () => {
 			</section>
 		</div>
 	)
-}
-
-export default observer(Home)
+})

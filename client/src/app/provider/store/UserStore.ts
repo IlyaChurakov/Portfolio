@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import AuthService from '../../../services/Auth.service'
 import UserService from '../../../services/User.service'
-import { $axios } from '../http/axios'
+import { $axios } from '../../../shared/config/http/axios'
 import { AuthResponse } from './types/response/AuthResponse.types'
 import { UserResponse } from './types/response/UserResponse.types'
 import { IUser } from './types/user.types'
@@ -119,6 +119,7 @@ export class UserStore {
 	}
 	async uploadAvatar(id: number, avatar: FormData) {
 		try {
+			console.log(id, avatar)
 			const { data } = await UserService.uploadAvatar(id, avatar)
 			this.setUser(data)
 		} catch (err) {

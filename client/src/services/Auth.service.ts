@@ -1,6 +1,6 @@
 import { AuthResponse } from '@app/provider/store/types/response/AuthResponse.types'
 import { AxiosResponse } from 'axios'
-import { $axios } from '../app/provider/http/axios'
+import { $axios } from '../shared/config/http/axios'
 
 export default class AuthService {
 	static async login(

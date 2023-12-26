@@ -2,14 +2,14 @@ import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
 import { IoMdCreate } from 'react-icons/io'
 import { MdPublishedWithChanges } from 'react-icons/md'
-import { TbDownload } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
 import useUploadFile from '../../hooks/useUploadFile'
 import { Context } from '../../main'
 import { transformDate } from '../../utils/functions'
 import Description from './components/Description'
+import PictureUploader from './components/PictureUploader'
 
-const ProfilePerson: FC = () => {
+export const ProfilePerson: FC = observer(() => {
 	const { store } = useContext(Context)
 	const navigate = useNavigate()
 
@@ -25,7 +25,7 @@ const ProfilePerson: FC = () => {
 
 	useEffect(() => {
 		if (file) {
-			upload(+store.user.id, store.uploadAvatar)
+			upload(+store.user.id)
 		}
 	}, [file])
 
@@ -38,38 +38,18 @@ const ProfilePerson: FC = () => {
 	return (
 		<div className='flex flex-col p-10'>
 			<div
-				className='w-full bg-black p-5 grid grid-cols-[10rem_1fr] gap-10'
+				className='w-full bg-black p-5 grid grid-cols-[10rem_1fr] gap-10 rounded-[10px]'
 				style={{
 					boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
-					borderRadius: '10px',
 				}}
 			>
-				<div className='w-40 max-h-60'>
-					<div className='relative h-full w-full'>
-						<label htmlFor='select_avatar' className='cursor-pointer'>
-							<input
-								id='select_avatar'
-								type='file'
-								onChange={e => selectFile(e)}
-								className='h-0 w-0 absolute block -z-10 opacity-0'
-							/>
-
-							<div className='h-full w-full cursor-pointer rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 flex justify-center items-center hover:bg-black hover:bg-opacity-50'>
-								<TbDownload className='text-2xl' />
-							</div>
-
-							{store.user.avatar ? (
-								<img
-									src={`http://localhost:7001/${store.user.avatar}`}
-									alt='avatar'
-									className='w-full h-full object-cover rounded-lg hover:opacity-30'
-								/>
-							) : (
-								<div className='h-full w-full bg-gray'></div>
-							)}
-						</label>
-					</div>
+				<div className='relative w-40 max-h-60'>
+					<PictureUploader
+						onFileChange={selectFile}
+						path={`http://localhost:7001/${store.user.avatar}`}
+					/>
 				</div>
+
 				<div>
 					<h1 className='text-start text-3xl text-white font-bold mb-3'>
 						{store.user.name}
@@ -80,8 +60,8 @@ const ProfilePerson: FC = () => {
 							onEdit={handleDescriptionEdit}
 						/>
 					</div>
-					<h2 className=' text-start text-violet mb-3'>{store.user.email}</h2>
 
+					<h2 className=' text-start text-violet mb-3'>{store.user.email}</h2>
 					<p className='flex items-center text-start text-violet mb-3'>
 						<MdPublishedWithChanges title='Дата регистрации' className='mr-2' />
 						{transformDate(store.user.createdAt)}
@@ -96,6 +76,7 @@ const ProfilePerson: FC = () => {
 					{!store.user.isActivated && (
 						<p className='text-start mb-3 text-white'>Подтвердите аккаунт</p>
 					)}
+
 					<button
 						className='text-white m-auto bg-red rounded-sm px-2 py-1'
 						onClick={deleteAccount}
@@ -106,6 +87,4 @@ const ProfilePerson: FC = () => {
 			</div>
 		</div>
 	)
-}
-
-export default observer(ProfilePerson)
+})

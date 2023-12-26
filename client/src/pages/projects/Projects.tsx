@@ -14,7 +14,7 @@ import { Context } from '../../main'
 
 // TODO: проверка защиты роутов, убрать кнопки у неавторизованных пользователей и пользователей без админки
 
-const Projects: FC = () => {
+export const Projects: FC = observer(() => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
 	const { projectStore, store } = useContext(Context)
@@ -108,6 +108,4 @@ const Projects: FC = () => {
 			<Outlet />
 		</div>
 	)
-}
-
-export default observer(Projects)
+})

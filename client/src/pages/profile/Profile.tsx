@@ -5,7 +5,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Container from '../../layouts/Container'
 import { Context } from '../../main'
 
-const Profile: FC = () => {
+export const Profile: FC = observer(() => {
 	const { store } = useContext(Context)
 	const navigate = useNavigate()
 
@@ -20,9 +20,11 @@ const Profile: FC = () => {
 								navigate('/')
 							}}
 						/>
+
 						<Link to={'/profile'} className='mr-5 text-gray  hover:text-white'>
 							Профиль
 						</Link>
+
 						{store.user.roles.includes('admin') && (
 							<Link to={'users'} className='mr-5 text-gray hover:text-white'>
 								Список пользователей
@@ -31,6 +33,7 @@ const Profile: FC = () => {
 					</div>
 				</Container>
 			</section>
+
 			<section>
 				<Container>
 					<Outlet />
@@ -38,6 +41,4 @@ const Profile: FC = () => {
 			</section>
 		</>
 	)
-}
-
-export default observer(Profile)
+})

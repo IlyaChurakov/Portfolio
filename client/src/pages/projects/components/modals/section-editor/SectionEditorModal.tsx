@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
+import { useOnClickOutside } from '../../../../../hooks/useOnClickOutside'
 import { ISection } from '../../../../../models/IProject'
-import { useOnClickOutside } from '../../../../profile/components/menu/useOnClickOutside'
 
 export type SectionInputs = {
 	name: string

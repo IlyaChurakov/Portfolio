@@ -19,7 +19,7 @@ const Description = ({ description, onEdit }: IDescriptionProps) => {
 	}
 
 	const handleSave = () => {
-		onEdit(editedDescription) // Отправьте изменения на сервер
+		onEdit(editedDescription)
 		setIsEditing(false)
 	}
 

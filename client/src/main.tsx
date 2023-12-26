@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React, { createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -19,21 +18,11 @@ export const Context = createContext<State>({
 	projectStore,
 })
 
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			refetchOnWindowFocus: false,
-		},
-	},
-})
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Context.Provider value={{ store, projectStore }}>
-				<QueryClientProvider client={queryClient}>
-					<App />
-				</QueryClientProvider>
+				<App />
 			</Context.Provider>
 		</BrowserRouter>
 	</React.StrictMode>

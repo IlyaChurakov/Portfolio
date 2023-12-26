@@ -1,13 +1,14 @@
-import Home from '@pages/Home'
-import Login from '@pages/Login'
-import Register from '@pages/Register'
-import Profile from '@pages/profile/Profile'
-import ProfilePerson from '@pages/profile/ProfilePerson'
-import ProfileUsers from '@pages/profile/ProfileUsers'
-import EditProject from '@pages/projects/EditProject'
-import Project from '@pages/projects/Project'
-import ProjectList from '@pages/projects/ProjectList'
-import Projects from '@pages/projects/Projects'
+import { Home } from '@pages/Home'
+import { Login } from '@pages/Login'
+import { Register } from '@pages/Register'
+import { Test } from '@pages/Test'
+import { Profile } from '@pages/profile/Profile'
+import { ProfilePerson } from '@pages/profile/ProfilePerson'
+import { ProfileUsers } from '@pages/profile/ProfileUsers'
+import { EditProject } from '@pages/projects/EditProject'
+import { ProjectList } from '@pages/projects/ProjectList'
+import { Projects } from '@pages/projects/Projects'
+import { SingleProject } from '@pages/projects/SingleProject'
 import { IRoute, Roles } from './types'
 
 export const routerConfig: IRoute[] = [
@@ -37,7 +38,7 @@ export const routerConfig: IRoute[] = [
 		component: Projects,
 		nestedRoutes: [
 			{ path: '', component: ProjectList },
-			{ path: ':id', component: Project },
+			{ path: ':id', component: SingleProject },
 			{
 				path: ':id/edit',
 				isAuth: true,
@@ -45,5 +46,9 @@ export const routerConfig: IRoute[] = [
 				roles: [Roles.Admin],
 			},
 		],
+	},
+	{
+		path: '/test',
+		component: Test,
 	},
 ]
