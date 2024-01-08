@@ -130,7 +130,7 @@ const NavPageMap = () => {
 					</div>
 
 					{projectStore.project.content?.sections?.map(section => (
-						<>
+						<div key={section.id}>
 							<SectionEditorModal
 								editSection={editSection}
 								section={section}
@@ -138,13 +138,12 @@ const NavPageMap = () => {
 								closeHandler={closeSectionEditorModal}
 							/>
 							<Section
-								key={section.id}
 								openHandler={openSectionEditorModal}
 								id={section.id}
 								name={section.name}
 								blocks={section.blocks || []}
 							/>
-						</>
+						</div>
 					))}
 
 					<button

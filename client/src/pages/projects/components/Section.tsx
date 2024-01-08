@@ -1,14 +1,16 @@
-import { IBlock, IProject } from '@app/provider/store/types/project.types'
+import {
+	BlockTypes,
+	IBlock,
+	IProject,
+	Inputs,
+} from '@app/provider/store/types/project.types'
 import { observer } from 'mobx-react-lite'
 import { useContext, useState } from 'react'
 import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { MdDelete } from 'react-icons/md'
 import { v4 as uuidv4 } from 'uuid'
 import { Context } from '../../../main'
-import BlockAddModal from './modals/block-add-modal/BlockAddModal'
-import BlockEditorModal, {
-	Inputs,
-} from './modals/block-editor/BlockEditorModal'
+import BlockModal from './modals/BlockModal'
 
 // TODO: вынести типы в types.ts
 // TODO: вынести блоки в отдельные компоненты
@@ -16,16 +18,12 @@ import BlockEditorModal, {
 type StringObject = {
 	[key: string]: string
 }
-
-// TODO: Создать справочник с типами
-
+// TODO: убрать
 const textTypes: StringObject = {
 	Заголовок: 'h1',
 	'Основной текст': 'p',
 	Изображение: 'img',
 }
-
-export type EditingBlock = IBlock | null
 
 interface ISectionProps {
 	id: string
@@ -37,16 +35,10 @@ interface ISectionProps {
 const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 	const { projectStore } = useContext(Context)
 
-	// Раскрытие секции
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const openSection = () => setIsVisible(isVisible ? false : true)
 
-	// Редактируемый блок
-	const [editingBlock, setEditingBlock] = useState<EditingBlock>(null)
-
-	// Открытие модалки добавления нового блока
-	const [isVisibleBlockAddModal, setIsVisibleBlockAddModal] =
-		useState<boolean>(false)
+	const [editingBlock, setEditingBlock] = useState<IBlock | null | object>(null)
 
 	// Сохранение проекта после добавления или редактирования блока
 	const editBlock = (
@@ -130,12 +122,17 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 		projectStore.setProject(newProject)
 	}
 
-	// Открытие и закрытие модалок блоков
-	const openBlockEditorModal = (block: IBlock) => setEditingBlock(block)
-	const closeBlockEditorModal = () => setEditingBlock(null)
+	const openBlockModal = (block?: IBlock) => {
+		if (block) {
+			// редактирование блока
+			setEditingBlock(block)
+		} else {
+			// добавление блока
+			setEditingBlock({})
+		}
+	}
 
-	const openBlockAddModal = () => setIsVisibleBlockAddModal(true)
-	const closeBlockAddModal = () => setIsVisibleBlockAddModal(false)
+	const closeBlockModal = () => setEditingBlock(null)
 
 	return (
 		<>
@@ -178,7 +175,7 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 											className='cursor-pointer text-gray hover:text-white'
 											onClick={() => {
 												if (!editingBlock) {
-													openBlockEditorModal(block)
+													openBlockModal(block)
 												}
 											}}
 										>
@@ -194,26 +191,20 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 								</div>
 							)
 						})}
-
 						<button
-							onClick={openBlockAddModal}
+							onClick={() => openBlockModal()}
 							className='pl-5 pt-2 hover:bg-gray-500 w-full text-start rounded-lg text-gray hover:text-white'
 						>
 							Добавить элемент
 						</button>
 
-						<BlockAddModal
-							sectionId={id}
-							isVisible={isVisibleBlockAddModal}
-							closeHandler={closeBlockAddModal}
-							addBlock={addBlock}
-						/>
-
-						<BlockEditorModal
+						<BlockModal
 							sectionId={id}
 							block={editingBlock}
-							closeHandler={closeBlockEditorModal}
+							closeHandler={closeBlockModal}
 							editBlock={editBlock}
+							addBlock={addBlock}
+							defaultType={BlockTypes.h1}
 						/>
 					</>
 				)}

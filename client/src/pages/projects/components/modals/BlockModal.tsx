@@ -1,37 +1,35 @@
-import { FC, useContext } from 'react'
+import {
+	BlockTypes,
+	IBlock,
+	Inputs,
+} from '@app/provider/store/types/project.types'
+import { FC, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
-import { Context } from '../../../../../main'
-import { EditingBlock } from '../../Section'
-import { modalData } from './modal.data'
+import { modalData } from './blockModal.data'
 
-export type Inputs = {
-	type: string
-	text: string
-	color: string
-	image: File
-	imgDescr: string
-}
-
-interface IBlockEditorProps {
+interface IBlockModalProps {
 	sectionId: string
-	block: EditingBlock
+	block: IBlock | null | object
 	closeHandler: Function
 	editBlock: Function
+	addBlock: Function
+	defaultType: BlockTypes
 }
 
-// TODO: defaultValue of select
+// Компонент модального окна для блока
+// Принимает block, если у него есть свойства - окно редактирования блока
+// Если block - пустой объект - окно добавления блока
+// Для закрытия окна - block должен быть равен null
 
-const BlockEditorModal: FC<IBlockEditorProps> = ({
+const BlockModal: FC<IBlockModalProps> = ({
 	sectionId,
 	block,
 	closeHandler,
 	editBlock,
+	addBlock,
+	defaultType,
 }) => {
-	if (!block) return null
-
-	const { projectStore } = useContext(Context)
-
 	const {
 		register,
 		handleSubmit,
@@ -39,20 +37,36 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 		watch,
 	} = useForm<Inputs>()
 
-	const elementType = watch('type')
+	const [typeState, setTypeState] = useState(
+		block && 'type' in block
+			? BlockTypes[block.type as keyof typeof BlockTypes]
+			: defaultType
+	)
+
+	const typeSelectValue = watch('type')
+
+	useEffect(() => {
+		if (typeSelectValue) setTypeState(typeSelectValue as BlockTypes)
+	}, [typeSelectValue])
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
-		const formData = new FormData()
+		// const formData = new FormData()
 
-		const file = data.image[0]
+		// const file = data.image[0]
 
-		formData.append('img', file as File)
+		// formData.append('img', file as File)
 
-		const imgPath = await projectStore.uploadImage(formData)
+		// const imgPath = await projectStore.uploadImage(formData)
 
-		editBlock(sectionId, block.id, data, imgPath)
+		if (block && 'id' in block) {
+			await editBlock(sectionId, block.id, data)
+		} else {
+			await addBlock(sectionId, data)
+		}
 		closeHandler()
 	}
+
+	if (!block) return null
 
 	return (
 		<div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black rounded-lg'>
@@ -70,26 +84,25 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 				<div>
 					<h2 className='text-white mb-5 text-center'>Тип</h2>
 					<select
-						defaultValue={block.type}
+						defaultValue={typeState}
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						{...register('type', { required: true })}
 					>
 						{modalData.types.map(type => {
 							return (
-								<option value={type} className='text-black'>
+								<option value={type} key={type} className='text-black'>
 									{type}
 								</option>
 							)
 						})}
 					</select>
 
-					{(elementType === 'Основной текст' ||
-						elementType === 'Заголовок') && (
+					{(typeState === 'Заголовок' || typeState === 'Основной текст') && (
 						<>
 							<h2 className='text-white mb-5 text-center mt-5'>Текст</h2>
 							<div className='w-full'>
 								<textarea
-									defaultValue={block.text}
+									defaultValue={(block as IBlock).text || ''}
 									className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 									{...register('text', { required: true })}
 								/>
@@ -100,7 +113,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 						</>
 					)}
 
-					{elementType === 'Изображение' && (
+					{typeState === 'Изображение' && (
 						<>
 							<h2 className='text-white mb-5 text-center mt-5'>Изображение</h2>
 							<div className='w-full'>
@@ -132,7 +145,7 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 					>
 						{modalData.textColors.map(color => {
 							return (
-								<option value={color} style={{ color: color }}>
+								<option value={color} key={color} style={{ color: color }}>
 									{color}
 								</option>
 							)
@@ -153,4 +166,4 @@ const BlockEditorModal: FC<IBlockEditorProps> = ({
 	)
 }
 
-export default BlockEditorModal
+export default BlockModal

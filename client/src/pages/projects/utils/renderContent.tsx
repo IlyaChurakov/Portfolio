@@ -63,6 +63,7 @@ export const renderContent = (content: IContent | undefined) => {
 									<img
 										className='w-[50%] max-h-64 m-auto object-cover'
 										src={`http://localhost:7001/${block.imgPath}`}
+										key={block.id}
 										alt='img'
 									/>
 								)

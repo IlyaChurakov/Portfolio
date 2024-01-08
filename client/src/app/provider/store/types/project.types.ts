@@ -30,3 +30,18 @@ export interface IBlock {
 	imgPath?: string
 	imgDescr?: string
 }
+
+export enum BlockTypes {
+	h1 = 'Заголовок',
+	p = 'Основной текст',
+	img = 'Изображение',
+	list = 'Список',
+}
+
+export type Inputs = {
+	type: string
+	text: string
+	color: string
+	image: File
+	imgDescr: string
+}

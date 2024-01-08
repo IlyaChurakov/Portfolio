@@ -1,8 +1,8 @@
+import { ISection } from '@app/provider/store/types/project.types'
 import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
 import { useOnClickOutside } from '../../../../../hooks/useOnClickOutside'
-import { ISection } from '../../../../../models/IProject'
 
 export type SectionInputs = {
 	name: string
