@@ -9,8 +9,8 @@ import {
 	useNavigate,
 	useParams,
 } from 'react-router-dom'
-import Container from '../../layouts/Container'
 import { Context } from '../../main'
+import Container from '../../shared/layouts/Container'
 
 // TODO: проверка защиты роутов, убрать кнопки у неавторизованных пользователей и пользователей без админки
 

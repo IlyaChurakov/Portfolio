@@ -1,23 +1,22 @@
-import { FC, useEffect } from 'react'
+import {
+	ISection,
+	SectionInputs,
+} from '@app/provider/store/types/project.types'
+import { FC } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IoIosClose } from 'react-icons/io'
-import { useOnClickOutside } from '../../../../../hooks/useOnClickOutside'
 
-type Inputs = {
-	name: string
-	background: string
-	paddings: string
-}
-
-interface IBlockAddProps {
-	isVisible: boolean
+interface IBlockEditorProps {
+	section: ISection | null | object
 	closeHandler: Function
+	editSection: Function
 	addSection: Function
 }
 
-const SectionAddModal: FC<IBlockAddProps> = ({
-	isVisible,
+const SectionModal: FC<IBlockEditorProps> = ({
+	section,
 	closeHandler,
+	editSection,
 	addSection,
 }) => {
 	const {
@@ -25,35 +24,27 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 		handleSubmit,
 		formState: { errors },
 		reset,
-	} = useForm<Inputs>()
+	} = useForm<SectionInputs>()
 
-	const { isShow, ref, setIsShow } = useOnClickOutside(false)
+	const onSubmit: SubmitHandler<SectionInputs> = async data => {
+		if (section && 'id' in section) {
+			await editSection(section.id, data)
+		} else {
+			await addSection(data)
+		}
 
-	useEffect(() => {
-		if (isVisible) setIsShow(true)
-	}, [isVisible])
-
-	useEffect(() => {
-		if (!isShow) closeHandler()
-	}, [isShow])
-
-	const onSubmit: SubmitHandler<Inputs> = async data => {
-		await addSection(data)
-		console.log(data)
 		reset()
-		setIsShow(false)
 		closeHandler()
 	}
 
-	if (!isShow) return null
+	if (!section) return null
 
 	return (
 		<div
-			className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black  rounded-lg'
+			className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-black rounded-lg'
 			style={{
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
-			ref={ref}
 		>
 			<form
 				onSubmit={handleSubmit(onSubmit)}
@@ -62,7 +53,6 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 				<button
 					onClick={() => {
 						reset()
-						setIsShow(false)
 						closeHandler()
 					}}
 					className='text-white absolute top-2 right-2'
@@ -75,7 +65,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						placeholder='Название секции'
-						defaultValue={''}
+						defaultValue={(section as ISection).name ?? ''}
 						{...register('name', { required: true })}
 					/>
 					{errors.name && <span className='text-red'>Заполните это поле</span>}
@@ -86,7 +76,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						placeholder='Вставьте ссылку на изображение'
-						defaultValue={''}
+						defaultValue={(section as ISection).background ?? ''}
 						{...register('background')}
 					/>
 
@@ -94,7 +84,7 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 					<input
 						className='w-full border-b-2 border-white bg-transparent text-white outline-none'
 						placeholder='Верхний Правый Нижний Левый'
-						defaultValue={''}
+						defaultValue={(section as ISection).paddings ?? ''}
 						{...register('paddings')}
 					/>
 				</div>
@@ -112,4 +102,4 @@ const SectionAddModal: FC<IBlockAddProps> = ({
 	)
 }
 
-export default SectionAddModal
+export default SectionModal

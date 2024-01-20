@@ -7,7 +7,7 @@ import { IoClose, IoMenu } from 'react-icons/io5'
 import { SlLayers } from 'react-icons/sl'
 import { TbHome } from 'react-icons/tb'
 import { Link, useNavigate } from 'react-router-dom'
-import { Context } from '../main'
+import { Context } from '../../main'
 
 const Menu: FC = () => {
 	const { store } = useContext(Context)

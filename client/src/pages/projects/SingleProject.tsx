@@ -15,7 +15,6 @@ export const SingleProject = observer(() => {
 	return (
 		<div>
 			<div>{renderContent(projectStore?.project?.content)}</div>
-			{/* {store.isAuth && store.user.roles.includes('admin') && <NavPageMap />} */}
 		</div>
 	)
 })

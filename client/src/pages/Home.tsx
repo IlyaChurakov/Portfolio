@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
-import ProjectItem from '../components/ProjectItem'
-import Container from '../layouts/Container'
 import { Context } from '../main'
+import Container from '../shared/layouts/Container'
+import ProjectItem from '../shared/ui/ProjectItem'
 
 export const Home: FC = observer(() => {
 	const { projectStore } = useContext(Context)

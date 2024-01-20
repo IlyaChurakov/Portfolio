@@ -1,5 +1,5 @@
 import { IContent } from '@app/provider/store/types/project.types'
-import Container from '../../../layouts/Container'
+import Container from '../../../shared/layouts/Container'
 
 const defaultSectionPaddings = '2.5rem 0'
 

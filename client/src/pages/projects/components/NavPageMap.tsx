@@ -1,17 +1,18 @@
-import { IProject, ISection } from '@app/provider/store/types/project.types'
+import {
+	IProject,
+	ISection,
+	SectionInputs,
+} from '@app/provider/store/types/project.types'
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
-import useUploadFile from '../../../hooks/useUploadFile'
 import { Context } from '../../../main'
+import useUploadFile from '../../../shared/hooks/useUploadFile'
+import SectionModal from '../../../shared/ui/modals/SectionModal'
 import Section from '../components/Section'
-import SectionAddModal from './modals/section-add-modal/SectionAddModal'
-import SectionEditorModal, {
-	SectionInputs,
-} from './modals/section-editor/SectionEditorModal'
 
 const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
@@ -19,9 +20,9 @@ const NavPageMap = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
 
-	const [editingSectionId, setEditingSectionId] = useState<string>('')
-	const [isVisibleSectionAddModal, setIsVisibleSectionAddModal] =
-		useState<boolean>(false)
+	const [editingSection, setEditingSection] = useState<
+		ISection | null | object
+	>(null)
 
 	useEffect(() => {
 		if (file) {
@@ -29,14 +30,14 @@ const NavPageMap = () => {
 		}
 	}, [file])
 
-	const addSection = (data: ISection) => {
+	const addSection = (section: ISection) => {
 		const project = { ...(projectStore.project as IProject) }
 
 		project.content.sections.push({
 			id: uuidv4(),
-			name: data.name,
-			background: data.background,
-			paddings: data.paddings,
+			name: section.name,
+			background: section.background,
+			paddings: section.paddings,
 		})
 
 		projectStore.setProject(project)
@@ -56,16 +57,14 @@ const NavPageMap = () => {
 		projectStore.setProject(project)
 	}
 
-	const openSectionEditorModal = (id: string) => setEditingSectionId(id)
-	const closeSectionEditorModal = () => setEditingSectionId('')
-
-	const openSectionAddModal = () => {
-		setIsVisibleSectionAddModal(true)
+	const openSectionModal = (section?: ISection) => {
+		if (section) {
+			setEditingSection(section)
+		} else {
+			setEditingSection({})
+		}
 	}
-
-	const closeSectionAddModal = () => {
-		setIsVisibleSectionAddModal(false)
-	}
+	const closeSectionModal = () => setEditingSection(null)
 
 	const deleteProject = async () => {
 		if (id) {
@@ -78,10 +77,11 @@ const NavPageMap = () => {
 
 	return (
 		<>
-			<SectionAddModal
-				isVisible={isVisibleSectionAddModal}
+			<SectionModal
+				editSection={editSection}
 				addSection={addSection}
-				closeHandler={closeSectionAddModal}
+				section={editingSection}
+				closeHandler={closeSectionModal}
 			/>
 
 			<nav className='fixed top-0 right-0 w-[350px] h-screen bg-black p-5 overflow-y-auto flex flex-col'>
@@ -131,15 +131,9 @@ const NavPageMap = () => {
 
 					{projectStore.project.content?.sections?.map(section => (
 						<div key={section.id}>
-							<SectionEditorModal
-								editSection={editSection}
-								section={section}
-								isVisible={editingSectionId === section.id}
-								closeHandler={closeSectionEditorModal}
-							/>
 							<Section
-								openHandler={openSectionEditorModal}
-								id={section.id}
+								openHandler={openSectionModal}
+								section={section}
 								name={section.name}
 								blocks={section.blocks || []}
 							/>
@@ -148,7 +142,7 @@ const NavPageMap = () => {
 
 					<button
 						className='bg-gray-600 mb-2 rounded-lg w-full text-gray hover:text-white'
-						onClick={openSectionAddModal}
+						onClick={() => openSectionModal()}
 					>
 						Добавить {'<section>'}
 					</button>

@@ -2,6 +2,7 @@ import {
 	BlockTypes,
 	IBlock,
 	IProject,
+	ISection,
 	Inputs,
 } from '@app/provider/store/types/project.types'
 import { observer } from 'mobx-react-lite'
@@ -10,7 +11,7 @@ import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { MdDelete } from 'react-icons/md'
 import { v4 as uuidv4 } from 'uuid'
 import { Context } from '../../../main'
-import BlockModal from './modals/BlockModal'
+import BlockModal from '../../../shared/ui/modals/BlockModal'
 
 // TODO: вынести типы в types.ts
 // TODO: вынести блоки в отдельные компоненты
@@ -26,13 +27,13 @@ const textTypes: StringObject = {
 }
 
 interface ISectionProps {
-	id: string
+	section: ISection
 	name: string
 	blocks: IBlock[]
 	openHandler: Function
 }
 
-const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
+const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	const { projectStore } = useContext(Context)
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
@@ -152,14 +153,14 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 						)}
 						<span
 							className='text-gray hover:text-white'
-							onClick={() => openHandler(id)}
+							onClick={() => openHandler(section)}
 						>
 							{name}
 						</span>
 					</div>
 					<div
 						className='text-red-500 cursor-pointer flex items-center'
-						onClick={() => deleteSection(id)}
+						onClick={() => deleteSection(section.id)}
 					>
 						<MdDelete fill='#C24D51' className='mr-1 text-lg' />
 					</div>
@@ -183,7 +184,7 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 										</div>
 										<div
 											className='text-red-500 cursor-pointer flex items-center'
-											onClick={() => deleteBlock(id, block.id)}
+											onClick={() => deleteBlock(section.id, block.id)}
 										>
 											<MdDelete fill='#C24D51' className='mr-1 text-lg' />
 										</div>
@@ -199,7 +200,7 @@ const Section = ({ id, name, blocks, openHandler }: ISectionProps) => {
 						</button>
 
 						<BlockModal
-							sectionId={id}
+							sectionId={section.id}
 							block={editingBlock}
 							closeHandler={closeBlockModal}
 							editBlock={editBlock}

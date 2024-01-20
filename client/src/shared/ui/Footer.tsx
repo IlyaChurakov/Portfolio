@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { Context } from '../../main'
 import Container from '../layouts/Container'
-import { Context } from '../main'
 
 const Footer: FC = () => {
 	const { store } = useContext(Context)

@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite'
 import { FC, useContext } from 'react'
 import { GoArrowLeft } from 'react-icons/go'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import Container from '../../layouts/Container'
 import { Context } from '../../main'
+import Container from '../../shared/layouts/Container'
 
 export const Profile: FC = observer(() => {
 	const { store } = useContext(Context)

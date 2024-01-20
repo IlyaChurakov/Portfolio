@@ -1,10 +1,10 @@
 import { Router } from '@app/provider'
 import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
-import Page from './layouts/Page'
 import { Context } from './main'
+import Page from './shared/layouts/Page'
+import Menu from './shared/ui/Menu'
 import './tailwind.css'
-import Menu from './ui/Menu'
 
 const App: FC = () => {
 	const { store } = useContext(Context)

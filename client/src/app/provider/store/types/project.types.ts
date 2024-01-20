@@ -38,10 +38,26 @@ export enum BlockTypes {
 	list = 'Список',
 }
 
+export enum ColorTypes {
+	white = '#FFF',
+	black = '#171717',
+	purple = '#9255E8',
+	red = '#C24D51',
+	green = '#419B41',
+	grey = '#6F7680',
+	'grey-dark' = '#232426',
+}
+
 export type Inputs = {
 	type: string
 	text: string
 	color: string
 	image: File
 	imgDescr: string
+}
+
+export type SectionInputs = {
+	name: string
+	background: string
+	paddings: string
 }

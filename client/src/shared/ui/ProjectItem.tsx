@@ -1,7 +1,7 @@
+import { IProject } from '@app/provider/store/types/project.types'
 import React from 'react'
 import { PiImageSquareFill } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
-import { IProject } from '../models/IProject'
 
 interface IProjectItemProps {
 	project: IProject

@@ -1,6 +1,6 @@
 import { ChangeEvent, useContext, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Context } from '../main'
+import { Context } from '../../main'
 
 const editRegex = /\/edit$/
 const profileRegex = /\/profile$/

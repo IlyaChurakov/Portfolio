@@ -3,8 +3,8 @@ import { FC, useContext } from 'react'
 import { GoArrowLeft, GoPerson } from 'react-icons/go'
 import { MdLogout } from 'react-icons/md'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Context } from '../../main'
 import Container from '../layouts/Container'
-import { Context } from '../main'
 
 const Header: FC = () => {
 	const { store } = useContext(Context)

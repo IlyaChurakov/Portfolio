@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import { createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
@@ -19,11 +19,11 @@ export const Context = createContext<State>({
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<Context.Provider value={{ store, projectStore }}>
-				<App />
-			</Context.Provider>
-		</BrowserRouter>
-	</React.StrictMode>
+	// <React.StrictMode>
+	<BrowserRouter>
+		<Context.Provider value={{ store, projectStore }}>
+			<App />
+		</Context.Provider>
+	</BrowserRouter>
+	// </React.StrictMode>
 )
