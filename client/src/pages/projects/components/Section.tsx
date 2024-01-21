@@ -1,5 +1,6 @@
 import {
 	BlockTypes,
+	BlockTypesText,
 	IBlock,
 	IProject,
 	ISection,
@@ -19,12 +20,6 @@ import BlockModal from '../../../shared/ui/modals/BlockModal'
 type StringObject = {
 	[key: string]: string
 }
-// TODO: убрать
-const textTypes: StringObject = {
-	Заголовок: 'h1',
-	'Основной текст': 'p',
-	Изображение: 'img',
-}
 
 interface ISectionProps {
 	section: ISection
@@ -32,6 +27,8 @@ interface ISectionProps {
 	blocks: IBlock[]
 	openHandler: Function
 }
+
+type projectData = Inputs & IBlock & { sectionId: string } & { imgPath: string }
 
 const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	const { projectStore } = useContext(Context)
@@ -42,22 +39,18 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	const [editingBlock, setEditingBlock] = useState<IBlock | null | object>(null)
 
 	// Сохранение проекта после добавления или редактирования блока
-	const editBlock = (
-		sectionId: string,
-		blockId: string,
-		data: Inputs,
-		imgPath: string
-	) => {
+	const editBlock = (data: projectData) => {
 		const project: IProject = { ...(projectStore.project as IProject) }
 
 		project.content.sections.forEach(section => {
-			if (section.id === sectionId) {
+			if (section.id === data.sectionId) {
 				section.blocks?.forEach(block => {
-					if (block.id == blockId) {
+					if (block.id == data.id) {
 						block.text = data.text
-						block.type = textTypes[data.type]
+						block.type =
+							BlockTypesText[data.type as keyof typeof BlockTypesText]
 						block.color = data.color
-						block.imgPath = imgPath
+						block.imgPath = data.imgPath
 					}
 				})
 			}
@@ -65,27 +58,28 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 
 		projectStore.setProject(project)
 	}
-
 	// TODO: возможно перенести в модалку
-	const addBlock = (sectionId: string, data: Inputs) => {
+	const addBlock = (data: projectData) => {
 		const project = { ...(projectStore.project as IProject) }
 
 		project.content.sections.forEach(section => {
-			if (section.id === sectionId) {
+			if (section.id === data.sectionId) {
 				if (section.blocks) {
 					section.blocks.push({
 						id: uuidv4(),
-						type: textTypes[data.type],
+						type: BlockTypesText[data.type as keyof typeof BlockTypesText],
 						text: data.text,
 						color: data.color,
+						imgPath: data.imgPath,
 					})
 				} else {
 					section.blocks = []
 					section.blocks.push({
 						id: uuidv4(),
-						type: textTypes[data.type],
+						type: BlockTypesText[data.type as keyof typeof BlockTypesText],
 						text: data.text,
 						color: data.color,
+						imgPath: data.imgPath,
 					})
 				}
 			}
@@ -132,7 +126,6 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 			setEditingBlock({})
 		}
 	}
-
 	const closeBlockModal = () => setEditingBlock(null)
 
 	return (

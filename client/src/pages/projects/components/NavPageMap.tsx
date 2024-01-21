@@ -42,7 +42,6 @@ const NavPageMap = () => {
 
 		projectStore.setProject(project)
 	}
-
 	const editSection = (sectionId: String, data: SectionInputs) => {
 		const project = { ...(projectStore.project as IProject) }
 

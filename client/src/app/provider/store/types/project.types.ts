@@ -38,6 +38,13 @@ export enum BlockTypes {
 	list = 'Список',
 }
 
+export enum BlockTypesText {
+	Заголовок = 'h1',
+	'Основной текст' = 'p',
+	Изображение = 'img',
+	Список = 'list',
+}
+
 export enum ColorTypes {
 	white = '#FFF',
 	black = '#171717',
@@ -52,7 +59,7 @@ export type Inputs = {
 	type: string
 	text: string
 	color: string
-	image: File
+	image: FileList
 	imgDescr: string
 }
 

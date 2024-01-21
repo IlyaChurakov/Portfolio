@@ -61,19 +61,26 @@ const BlockModal: FC<IBlockModalProps> = ({
 	const typeSelectValue = watch('type')
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
-		// TODO: загрузка изображения, делает запрос на undefined
 		const formData = new FormData()
 
-		const file = data.image[0]
+		let imgPath: string | undefined
 
-		formData.append('img', file as File)
+		if (data.image) {
+			formData.append('img', data.image[0])
+			imgPath = (await projectStore.uploadImage(formData)) as unknown as string
+		}
 
-		const imgPath = await projectStore.uploadImage(formData)
+		const blockData = {
+			sectionId,
+			...block,
+			...data,
+			imgPath,
+		}
 
 		if (block && 'id' in block) {
-			await editBlock(sectionId, block.id, data)
+			await editBlock(blockData)
 		} else {
-			await addBlock(sectionId, data)
+			await addBlock(blockData)
 		}
 
 		reset()
