@@ -51,6 +51,7 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 							BlockTypesText[data.type as keyof typeof BlockTypesText]
 						block.color = data.color
 						block.imgPath = data.imgPath
+						block.imgDescr = data.imgDescr
 					}
 				})
 			}
@@ -71,6 +72,7 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 						text: data.text,
 						color: data.color,
 						imgPath: data.imgPath,
+						imgDescr: data.imgDescr,
 					})
 				} else {
 					section.blocks = []
@@ -80,6 +82,7 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 						text: data.text,
 						color: data.color,
 						imgPath: data.imgPath,
+						imgDescr: data.imgDescr,
 					})
 				}
 			}

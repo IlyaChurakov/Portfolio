@@ -55,17 +55,20 @@ const BlockModal: FC<IBlockModalProps> = ({
 	useEffect(() => {
 		if (block && 'type' in block) {
 			setValue('type', BlockTypes[block.type as keyof typeof BlockTypes])
+			setValue('color', block.color ?? '#fff')
+			setValue('imgDescr', block.imgDescr ?? '')
 		}
 	}, [block])
 
 	const typeSelectValue = watch('type')
+	const colorSelectValue = watch('color')
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		const formData = new FormData()
 
 		let imgPath: string | undefined
 
-		if (data.image) {
+		if (data.image[0]) {
 			formData.append('img', data.image[0])
 			imgPath = (await projectStore.uploadImage(formData)) as unknown as string
 		}
@@ -111,8 +114,8 @@ const BlockModal: FC<IBlockModalProps> = ({
 						register={{ ...register('type', { required: true }) }}
 					/>
 
-					{(typeSelectValue === BlockTypes.h1 ||
-						typeSelectValue === BlockTypes.p) && (
+					{((typeSelectValue || defaultType) === BlockTypes.h1 ||
+						(typeSelectValue || defaultType) === BlockTypes.p) && (
 						<>
 							<h2 className='text-white mb-5 text-center mt-5'>Текст</h2>
 
@@ -145,9 +148,10 @@ const BlockModal: FC<IBlockModalProps> = ({
 							<h2 className='text-white mb-5 text-center mt-5'>Описание</h2>
 
 							<input
+								defaultValue={(block as IBlock).imgDescr ?? ''}
 								type='text'
 								className='w-full border-b-2 border-white bg-transparent text-white outline-none'
-								{...register('imgDescr', { required: true })}
+								{...register('imgDescr')}
 							/>
 						</>
 					)}
@@ -156,6 +160,7 @@ const BlockModal: FC<IBlockModalProps> = ({
 
 					<ColorModalSelect
 						values={valuesForColorSelect}
+						textColor={(colorSelectValue as ColorTypes) || ColorTypes.white}
 						register={{ ...register('color', { required: true }) }}
 					/>
 				</div>
