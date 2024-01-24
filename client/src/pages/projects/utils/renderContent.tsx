@@ -60,12 +60,22 @@ export const renderContent = (content: IContent | undefined) => {
 								)
 							case 'img':
 								return (
-									<img
-										className='w-[50%] max-h-64 m-auto object-cover'
-										src={`http://localhost:7001/${block.imgPath}`}
-										key={block.id}
-										alt='img'
-									/>
+									<>
+										<img
+											className='w-[50%] max-h-64 m-auto my-5 object-cover'
+											src={`http://localhost:7001/${block.imgPath}`}
+											key={block.id}
+											alt='img'
+										/>
+										{block.imgDescr && (
+											<p
+												className='m-auto flex justify-center'
+												style={{ color: block.color }}
+											>
+												{block.imgDescr}
+											</p>
+										)}
+									</>
 								)
 						}
 					})}

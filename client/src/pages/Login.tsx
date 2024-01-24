@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { FC, useContext, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -14,6 +15,7 @@ export const Login: FC = observer(() => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		setError,
 	} = useForm<Inputs>({
 		mode: 'onChange',
 	})
@@ -35,7 +37,21 @@ export const Login: FC = observer(() => {
 		try {
 			await store.login(email, password)
 		} catch (e) {
-			console.log(e)
+			const err = e as AxiosError
+
+			if (err.response?.status === 404) {
+				setError('email', {
+					type: 'value',
+					message: 'Неверный логин',
+				})
+			} else if (err.response?.status === 401) {
+				setError('password', {
+					type: 'value',
+					message: 'Неверный пароль',
+				})
+			} else {
+				console.log(`Неизвестная ошибка ${err.status}: ${err.message}`)
+			}
 		}
 	}
 
@@ -55,11 +71,7 @@ export const Login: FC = observer(() => {
 					{...register('email', { required: 'Email is required' })}
 					className='mt-5 bg-transparent border-[1px] border-violet p-1 pl-2 outline-0 text-violet placeholder:text-violet placeholder:text-sm rounded-lg'
 				/>
-				{errors.email ? (
-					<p className='text-red h-3'>{errors?.email?.message}</p>
-				) : (
-					<p className='text-red h-3'></p>
-				)}
+				{errors.email && <p className='text-red h-3'>{errors.email.message}</p>}
 
 				<input
 					type='password'
@@ -68,10 +80,8 @@ export const Login: FC = observer(() => {
 					{...register('password', { required: 'Password is required' })}
 					className='mt-5 bg-transparent border-[1px] border-violet p-1 pl-2 outline-0 text-violet placeholder:text-violet placeholder:text-sm rounded-lg'
 				/>
-				{errors.password ? (
-					<p className='text-red h-3'>{errors?.password?.message}</p>
-				) : (
-					<p className='text-red h-3'></p>
+				{errors.password && (
+					<p className='text-red h-3'>{errors.password.message}</p>
 				)}
 
 				<div className='grid grid-rows-2 items-center justify-items-center mt-5'>

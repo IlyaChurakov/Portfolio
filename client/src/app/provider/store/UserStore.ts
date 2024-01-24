@@ -31,25 +31,20 @@ export class UserStore {
 
 	// Основные методы авторизации
 	async register(email: string, password: string, name: string) {
-		try {
-			const response = await AuthService.register(email, password, name)
-			localStorage.setItem('token', response.data.accessToken)
-			this.setAuth(true)
-			this.setUser(response.data.user)
-		} catch (err) {
-			throw new Error((err as Error).message)
-		}
+		const response = await AuthService.register(email, password, name)
+
+		localStorage.setItem('token', response.data.accessToken)
+
+		this.setAuth(true)
+		this.setUser(response.data.user)
 	}
 	async login(email: string, password: string) {
-		try {
-			const response = await AuthService.login(email, password)
-			localStorage.setItem('token', response.data.accessToken)
-			console.log(response.data.user)
-			this.setAuth(true)
-			this.setUser(response.data.user)
-		} catch (err) {
-			throw new Error((err as Error).message)
-		}
+		const response = await AuthService.login(email, password)
+
+		localStorage.setItem('token', response.data.accessToken)
+
+		this.setAuth(true)
+		this.setUser(response.data.user)
 	}
 	async logout() {
 		try {
