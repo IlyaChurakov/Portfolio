@@ -48,17 +48,13 @@ class ProjectController {
 			next(err)
 		}
 	}
-	async uploadPreview(req, res, next) {
+	async assignPreview(req, res, next) {
 		try {
 			const { id } = req.params
-			const { img } = req.files
+			const { fileName } = req.body
 
-			const fileName = uuidv4() + '.jpg'
+			const project = await ProjectService.assignPreview(id, fileName)
 
-			img.mv(path.resolve('static', fileName))
-
-			const project = await ProjectService.uploadPreview(id, fileName)
-			console.log(project)
 			return res.json(project)
 		} catch (err) {
 			next(err)
@@ -72,7 +68,7 @@ class ProjectController {
 
 			img.mv(path.resolve('static', fileName))
 
-			return res.json(fileName)
+			res.json(fileName)
 		} catch (err) {
 			next(err)
 		}

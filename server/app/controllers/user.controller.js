@@ -1,5 +1,3 @@
-import path from 'path'
-import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import UserService from '../services/User.service.js'
 
@@ -121,17 +119,13 @@ class UserController {
 		}
 	}
 
-	async uploadAvatar(req, res, next) {
+	async assignAvatar(req, res, next) {
 		try {
 			const { id } = req.params
-			const { img } = req.files
+			const { avatar } = req.body
 
-			const fileName = uuidv4() + '.jpg'
+			const user = await UserService.assignAvatar(id, avatar)
 
-			img.mv(path.resolve('static', fileName))
-
-			const user = await UserService.uploadAvatar(+id, fileName)
-			console.log(user)
 			return res.json(user)
 		} catch (err) {
 			next(err)

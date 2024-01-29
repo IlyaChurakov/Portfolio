@@ -112,10 +112,9 @@ export class UserStore {
 			throw new Error((err as Error).message)
 		}
 	}
-	async uploadAvatar(id: number, avatar: FormData) {
+	async assignAvatar(id: string, avatar: string) {
 		try {
-			console.log(id, avatar)
-			const { data } = await UserService.uploadAvatar(id, avatar)
+			const { data } = await UserService.assignAvatar(id, avatar)
 			this.setUser(data)
 		} catch (err) {
 			throw new Error((err as Error).message)

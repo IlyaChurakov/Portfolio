@@ -9,7 +9,7 @@ router.get('/last/:count', projectController.getLastProjects)
 router.get('/:id', projectController.getProject)
 router.delete('/:id', projectController.deleteProjectById)
 
-router.post('/upload-preview/:id', projectController.uploadPreview)
+router.post('/assign-preview/:id', projectController.assignPreview)
 router.post('/upload-image', projectController.uploadImage)
 router.post('/save', AuthMiddleware, projectController.saveProject)
 router.post('/:name', AuthMiddleware, projectController.createProject)

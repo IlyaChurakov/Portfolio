@@ -170,10 +170,10 @@ class UserService {
 		})
 	}
 
-	async uploadAvatar(id, avatar) {
+	async assignAvatar(id, avatar) {
 		return await prisma.user.update({
 			where: {
-				id
+				id: parseInt(id)
 			},
 			data: {
 				avatar

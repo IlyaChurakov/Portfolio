@@ -22,10 +22,10 @@ export default class UserService {
 	static async deleteRole(id: number, role: string): Promise<void> {
 		return $axios.patch(`/user/delete-role/${id}`, { role })
 	}
-	static async uploadAvatar(
-		id: number,
-		avatar: FormData
+	static async assignAvatar(
+		id: string,
+		avatar: string
 	): Promise<AxiosResponse<IUser>> {
-		return $axios.post(`/user/upload-avatar/${id}`, avatar)
+		return $axios.post(`/user/assign-avatar/${id}`, { avatar })
 	}
 }

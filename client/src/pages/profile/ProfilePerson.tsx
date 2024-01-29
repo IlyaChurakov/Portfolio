@@ -1,19 +1,16 @@
 import { observer } from 'mobx-react-lite'
-import { FC, useContext, useEffect } from 'react'
+import { FC, useContext } from 'react'
 import { IoMdCreate } from 'react-icons/io'
 import { MdPublishedWithChanges } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../../main'
-import useUploadFile from '../../shared/hooks/useUploadFile'
 import { transformDate } from '../../shared/utils/functions'
+import Avatar from './components/Avatar'
 import Description from './components/Description'
-import PictureUploader from './components/PictureUploader'
 
 export const ProfilePerson: FC = observer(() => {
 	const { store } = useContext(Context)
 	const navigate = useNavigate()
-
-	const { selectFile, file, upload } = useUploadFile()
 
 	async function deleteAccount() {
 		const agree = confirm('Вы действительно хотите удалить свой аккаунт?')
@@ -22,12 +19,6 @@ export const ProfilePerson: FC = observer(() => {
 			navigate('/login')
 		}
 	}
-
-	useEffect(() => {
-		if (file) {
-			upload(+store.user.id)
-		}
-	}, [file])
 
 	const handleDescriptionEdit = (editedDescription: string) => {
 		if (editedDescription !== store.user.description) {
@@ -44,10 +35,7 @@ export const ProfilePerson: FC = observer(() => {
 				}}
 			>
 				<div className='relative w-40 max-h-60'>
-					<PictureUploader
-						onFileChange={selectFile}
-						path={`http://localhost:7001/${store.user.avatar}`}
-					/>
+					<Avatar />
 				</div>
 
 				<div>

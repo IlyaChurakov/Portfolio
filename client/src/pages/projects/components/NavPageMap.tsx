@@ -3,32 +3,36 @@ import {
 	ISection,
 	SectionInputs,
 } from '@app/provider/store/types/project.types'
+import useUpload from '@shared/hooks/useUpload'
 import { observer } from 'mobx-react-lite'
-import { useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { Context } from '../../../main'
-import useUploadFile from '../../../shared/hooks/useUploadFile'
 import SectionModal from '../../../shared/ui/modals/SectionModal'
 import Section from '../components/Section'
 
 const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
-	const { selectFile, file, upload } = useUploadFile()
+
 	const { id } = useParams()
 	const navigate = useNavigate()
+	const { selectFile, upload } = useUpload()
 
 	const [editingSection, setEditingSection] = useState<
 		ISection | null | object
 	>(null)
 
-	useEffect(() => {
-		if (file) {
-			upload(projectStore.project.id)
-		}
-	}, [file])
+	const uploadPreview = async (e: ChangeEvent<HTMLInputElement>) => {
+		const file = selectFile(e)
+		if (!file) return
+
+		const fileName = await upload(file)
+
+		await projectStore.assignPreview(projectStore.project.id, fileName)
+	}
 
 	const addSection = (section: ISection) => {
 		const project = { ...(projectStore.project as IProject) }
@@ -104,7 +108,7 @@ const NavPageMap = () => {
 							<input
 								id='select_avatar'
 								type='file'
-								onChange={e => selectFile(e)}
+								onChange={e => uploadPreview(e)}
 								className='h-0 w-0 absolute block -z-10 opacity-0'
 							/>
 

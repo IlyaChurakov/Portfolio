@@ -59,7 +59,7 @@ class ProjectService {
 
 		return savedProject
 	}
-	async uploadPreview(id, image) {
+	async assignPreview(id, image) {
 		const project = await prisma.project.update({
 			where: {
 				id

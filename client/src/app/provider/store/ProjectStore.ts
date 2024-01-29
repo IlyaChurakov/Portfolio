@@ -111,10 +111,10 @@ export class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
-	async uploadPreview(id: string, image: FormData) {
+	async assignPreview(id: string, fileName: string) {
 		try {
 			this.setLoading(true)
-			const { data } = await ProjectService.uploadPreview(id, image)
+			const { data } = await ProjectService.assignPreview(id, fileName)
 			this.setLoading(false)
 
 			this.setProject(data)
