@@ -1,4 +1,5 @@
 import { IContent } from '@app/provider/store/types/project.types'
+import { WithLinks } from '@shared/utils/withLinks'
 import Container from '../../../shared/layouts/Container'
 
 const defaultSectionPaddings = '2.5rem 0'
@@ -39,11 +40,14 @@ export const renderContent = (content: IContent | undefined) => {
 							case 'p':
 								return (
 									<p
+										style={{ color: block.color }}
 										className='py-2'
 										key={block.id}
-										style={{ color: block.color }}
 									>
-										{block.text}
+										<WithLinks
+											text={block.text}
+											linkStyles={{ color: '#3096CE' }}
+										/>
 									</p>
 								)
 							case 'list':
@@ -69,10 +73,13 @@ export const renderContent = (content: IContent | undefined) => {
 										/>
 										{block.imgDescr && (
 											<p
-												className='m-auto flex justify-center'
+												className='m-auto flex justify-center [&>a]:text-blue'
 												style={{ color: block.color }}
 											>
-												{block.imgDescr}
+												<WithLinks
+													text={block.imgDescr}
+													linkStyles={{ color: '#3096CE' }}
+												/>
 											</p>
 										)}
 									</>

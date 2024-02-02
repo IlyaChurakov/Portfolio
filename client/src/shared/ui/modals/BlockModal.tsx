@@ -68,7 +68,7 @@ const BlockModal: FC<IBlockModalProps> = ({
 
 		let imgPath: string | undefined
 
-		if (data.image[0]) {
+		if (data.image && data.image[0]) {
 			formData.append('img', data.image[0])
 			imgPath = (await projectStore.uploadImage(formData)) as unknown as string
 		}
