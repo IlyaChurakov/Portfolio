@@ -33,7 +33,7 @@ const Avatar: React.FC = observer(() => {
 
 			{store.user.avatar ? (
 				<img
-					src={`http://localhost:7001/${store.user.avatar}`}
+					src={`${import.meta.env.VITE_API_STATIC_URL}/${store.user.avatar}`}
 					alt='avatar'
 					className='w-full h-full object-cover rounded-lg hover:opacity-30'
 				/>

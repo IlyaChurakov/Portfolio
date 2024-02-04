@@ -40,11 +40,43 @@ model Project {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  name         String   @unique
-  content      String   @default("{\"sections\": []}")
+  name         String    @unique
   archived     Boolean?
-  previewImage String?  @map("preview_image")
+  previewImage String?   @map("preview_image")
   labels       String[]
+  sections     Section[]
+}
+
+model Section {
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name       String
+  blocks     Block[]
+  background String?
+  paddings   String?
+  Project    Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String?
+}
+
+enum BlockTypes {
+  h1
+  p
+  list
+  img
+}
+
+model Block {
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  Section   Section?   @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sectionId String?
+  color     String
+  text      String
+  type      BlockTypes
 }
 
 model Article {

@@ -1,28 +1,33 @@
 export interface IProject {
 	id: string
-	name: string
 	updatedAt: Date
 	createdAt: Date
-	content: IContent
+
+	name: string
 	previewImage?: string
 	archived?: boolean
 	labels?: string[]
-}
 
-export interface IContent {
 	sections: ISection[]
 }
 
 export interface ISection {
 	id: string
+	updatedAt: Date
+	createdAt: Date
+
 	name: string
 	background?: string
-	blocks?: IBlock[]
 	paddings?: string
+
+	blocks: IBlock[]
 }
 
 export interface IBlock {
 	id: string
+	updatedAt: Date
+	createdAt: Date
+
 	type: string
 	text?: string
 	color?: string

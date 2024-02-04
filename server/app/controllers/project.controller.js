@@ -5,9 +5,24 @@ import ProjectService from '../services/Project.service.js'
 class ProjectController {
 	async createProject(req, res, next) {
 		try {
-			const { name } = req.params
+			const { name, archived, previewImage, labels } = req.params
 
-			const project = await ProjectService.createProject(name)
+			const project = await ProjectService.createProject({
+				name,
+				archived,
+				previewImage,
+				labels
+			})
+
+			res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async getProject(req, res, next) {
+		try {
+			const { id } = req.params
+			const project = await ProjectService.getProject(id)
 			res.json(project)
 		} catch (err) {
 			next(err)
@@ -23,27 +38,35 @@ class ProjectController {
 	}
 	async getLastProjects(req, res, next) {
 		try {
-			const projects = await ProjectService.getLastProjects(+req.params.count)
+			const count = parseInt(req.params.count)
+			const projects = await ProjectService.getLastProjects(count)
 			res.json(projects)
 		} catch (err) {
 			next(err)
 		}
 	}
-	async getProject(req, res, next) {
+	async deleteProjectById(req, res, next) {
 		try {
-			const { id } = req.params
-
-			const project = await ProjectService.getProject(id)
+			const id = req.params.id
+			const project = await ProjectService.deleteProjectById(id)
 			res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async deleteAllProjects(req, res, next) {
+		try {
+			const projects = await ProjectService.deleteAllProjects()
+			res.json(projects)
 		} catch (err) {
 			next(err)
 		}
 	}
 	async saveProject(req, res, next) {
 		try {
-			const { project: newProject } = req.body
-			const project = await ProjectService.saveProject(newProject)
-			res.json(project)
+			const project = req.body.project
+			const savedProject = await ProjectService.saveProject(project)
+			res.json(savedProject)
 		} catch (err) {
 			next(err)
 		}
@@ -69,22 +92,6 @@ class ProjectController {
 			img.mv(path.resolve('static', fileName))
 
 			res.json(fileName)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async deleteProjectById(req, res, next) {
-		try {
-			const project = await ProjectService.deleteProjectById(req.params.id)
-			res.json(project)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async deleteAllProjects(req, res, next) {
-		try {
-			const projects = await ProjectService.deleteAllProjects()
-			res.json(projects)
 		} catch (err) {
 			next(err)
 		}

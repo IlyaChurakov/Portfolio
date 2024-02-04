@@ -121,7 +121,7 @@ const BlockModal: FC<IBlockModalProps> = ({
 
 							<textarea
 								defaultValue={(block as IBlock).text ?? ''}
-								className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+								className='w-full bg-white rounded-sm outline-none p-2 '
 								{...register('text', { required: true })}
 							/>
 

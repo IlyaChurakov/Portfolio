@@ -16,7 +16,7 @@ const TypeModalSelect: React.FC<TypeModalSelectProps> = ({
 	return (
 		<select
 			defaultValue={defaultValue}
-			className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+			className='w-full bg-white h-[30px] rounded-sm outline-none'
 			{...register}
 		>
 			{values.map(value => {

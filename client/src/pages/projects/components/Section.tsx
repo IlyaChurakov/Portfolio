@@ -10,16 +10,11 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useState } from 'react'
 import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { MdDelete } from 'react-icons/md'
-import { v4 as uuidv4 } from 'uuid'
 import { Context } from '../../../main'
 import BlockModal from '../../../shared/ui/modals/BlockModal'
 
 // TODO: вынести типы в types.ts
 // TODO: вынести блоки в отдельные компоненты
-
-type StringObject = {
-	[key: string]: string
-}
 
 interface ISectionProps {
 	section: ISection
@@ -42,7 +37,7 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	const editBlock = (data: projectData) => {
 		const project: IProject = { ...(projectStore.project as IProject) }
 
-		project.content.sections.forEach(section => {
+		project.sections.forEach(section => {
 			if (section.id === data.sectionId) {
 				section.blocks?.forEach(block => {
 					if (block.id == data.id) {
@@ -61,32 +56,20 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	}
 	// TODO: возможно перенести в модалку
 	const addBlock = (data: projectData) => {
-		const project = { ...(projectStore.project as IProject) }
+		const project = { ...projectStore.project }
 
-		project.content.sections.forEach(section => {
-			if (section.id === data.sectionId) {
-				if (section.blocks) {
-					section.blocks.push({
-						id: uuidv4(),
-						type: BlockTypesText[data.type as keyof typeof BlockTypesText],
-						text: data.text,
-						color: data.color,
-						imgPath: data.imgPath,
-						imgDescr: data.imgDescr,
-					})
-				} else {
-					section.blocks = []
-					section.blocks.push({
-						id: uuidv4(),
-						type: BlockTypesText[data.type as keyof typeof BlockTypesText],
-						text: data.text,
-						color: data.color,
-						imgPath: data.imgPath,
-						imgDescr: data.imgDescr,
-					})
-				}
-			}
-		})
+		const section = project.sections.find(
+			section => section.id === data.sectionId
+		)
+		if (!section) return
+
+		section.blocks.push({
+			type: BlockTypesText[data.type as keyof typeof BlockTypesText],
+			text: data.text,
+			color: data.color,
+			imgPath: data.imgPath,
+			imgDescr: data.imgDescr,
+		} as IBlock)
 
 		projectStore.setProject(project)
 	}
@@ -94,13 +77,12 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	const deleteBlock = async (sectionId: string, blockId: string) => {
 		const project = { ...(projectStore.project as IProject) }
 
-		project.content.sections.forEach(section => {
-			if (section.id === sectionId) {
-				section.blocks?.forEach((block, index) => {
-					if (block.id == blockId) {
-						section.blocks?.splice(index, 1)
-					}
-				})
+		const section = project.sections.find(section => section.id === sectionId)
+		if (!section) return
+
+		section.blocks?.forEach((block, index) => {
+			if (block.id == blockId) {
+				section.blocks?.splice(index, 1)
 			}
 		})
 
@@ -108,16 +90,11 @@ const Section = ({ section, name, blocks, openHandler }: ISectionProps) => {
 	}
 
 	const deleteSection = (id: string | number) => {
-		const project = { ...(projectStore.project as IProject) }
+		const project = { ...projectStore.project }
 
-		const newSections = project.content.sections.filter(
-			section => section.id !== id
-		)
+		project.sections = project.sections.filter(section => section.id !== id)
 
-		const newProject = { ...project }
-		newProject.content.sections = newSections
-
-		projectStore.setProject(newProject)
+		projectStore.setProject(project)
 	}
 
 	const openBlockModal = (block?: IBlock) => {

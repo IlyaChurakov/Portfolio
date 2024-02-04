@@ -76,7 +76,7 @@ export class ProjectStore {
 			this.setLoading(true)
 			const { data } = await ProjectService.getProject(id)
 			this.setLoading(false)
-
+			console.log(data)
 			this.setProject(data)
 			// эта функция срабатывает при первой загрузке редактирования проекта, поэтому ставим сохранение в true, при всех остальных вариантах будет false
 			this.setSaved(true)

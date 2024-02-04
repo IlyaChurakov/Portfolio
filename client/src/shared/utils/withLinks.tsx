@@ -4,30 +4,31 @@ export function WithLinks({
 	text,
 	linkStyles,
 }: {
-	text: string | undefined | null
+	text: string | undefined
 	linkStyles?: React.CSSProperties
 }) {
 	if (!text) return null
 
-	const linkRegex = /(\[[^\]]+\])/g
+	const linkRegex = /(\[.*?\]\(.*?\))/g
 
 	const textParts: string[] = text.split(linkRegex)
 
-	const linkedText = textParts.map((item, index) => {
+	function transformStringToLink(item: string, index: number) {
 		if (linkRegex.test(item)) {
-			const clearTextWithSpaces = item.replace(/\[|\]/g, '')
-			const clearText = clearTextWithSpaces.replace(/\s/g, '')
+			const textLink = item.match(/\[([^\]]+)\]/)
+			const url = item.match(/\(([^)]+)\)/)
 
-			const url = `https://${clearText.toLowerCase()}`
-			const prettyLinkText = clearTextWithSpaces.replace(/\.\w+$/g, '')
+			if (!textLink || !url) return item
 
 			return (
-				<a key={item + index} href={url} target='_blank' style={linkStyles}>
-					{prettyLinkText}
+				<a key={item + index} href={url[1]} target='_blank' style={linkStyles}>
+					{textLink[1]}
 				</a>
 			)
 		} else return item
-	})
+	}
 
-	return <>{...linkedText}</>
+	return (
+		<>{textParts.map((item, index) => transformStringToLink(item, index))}</>
+	)
 }

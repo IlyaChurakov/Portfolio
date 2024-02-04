@@ -14,7 +14,13 @@ export const SingleProject = observer(() => {
 
 	return (
 		<div>
-			<div>{renderContent(projectStore?.project?.content)}</div>
+			{projectStore.loading ? (
+				<div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-bold text-2xl'>
+					Загрузка
+				</div>
+			) : (
+				<div>{renderContent(projectStore.project)}</div>
+			)}
 		</div>
 	)
 })

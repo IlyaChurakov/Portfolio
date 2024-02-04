@@ -15,7 +15,7 @@ const ColorModalSelect: React.FC<ColorModalSelectProps> = ({
 }) => {
 	return (
 		<select
-			className='w-full border-b-2 border-white bg-transparent text-white outline-none'
+			className='w-full bg-white h-[30px] rounded-sm outline-none'
 			style={{ color: textColor }}
 			{...register}
 		>

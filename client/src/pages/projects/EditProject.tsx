@@ -17,7 +17,7 @@ export const EditProject = observer(() => {
 
 	return (
 		<div>
-			<div>{renderContent(projectStore?.project?.content)}</div>
+			<div>{renderContent(projectStore.project)}</div>
 			<NavPageMap />
 		</div>
 	)

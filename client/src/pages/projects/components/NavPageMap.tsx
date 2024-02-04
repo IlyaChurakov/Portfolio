@@ -1,5 +1,4 @@
 import {
-	IProject,
 	ISection,
 	SectionInputs,
 } from '@app/provider/store/types/project.types'
@@ -8,8 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { ChangeEvent, useContext, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
-import { useNavigate, useParams } from 'react-router-dom'
-import { v4 as uuidv4 } from 'uuid'
+import { useNavigate } from 'react-router-dom'
 import { Context } from '../../../main'
 import SectionModal from '../../../shared/ui/modals/SectionModal'
 import Section from '../components/Section'
@@ -17,7 +15,6 @@ import Section from '../components/Section'
 const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
 
-	const { id } = useParams()
 	const navigate = useNavigate()
 	const { selectFile, upload } = useUpload()
 
@@ -34,28 +31,27 @@ const NavPageMap = () => {
 		await projectStore.assignPreview(projectStore.project.id, fileName)
 	}
 
-	const addSection = (section: ISection) => {
-		const project = { ...(projectStore.project as IProject) }
+	const addSection = (data: SectionInputs & ISection) => {
+		const project = { ...projectStore.project }
 
-		project.content.sections.push({
-			id: uuidv4(),
-			name: section.name,
-			background: section.background,
-			paddings: section.paddings,
-		})
+		project.sections.push({
+			name: data.name,
+			background: data.background,
+			paddings: data.paddings,
+			blocks: [],
+		} as unknown as ISection)
 
 		projectStore.setProject(project)
 	}
-	const editSection = (sectionId: String, data: SectionInputs) => {
-		const project = { ...(projectStore.project as IProject) }
+	const editSection = (data: SectionInputs & ISection) => {
+		const project = { ...projectStore.project }
 
-		project.content.sections.forEach(section => {
-			if (section.id === sectionId) {
-				section.name = data.name
-				section.background = data.background
-				section.paddings = data.paddings
-			}
-		})
+		const section = project.sections.find(section => section.id === data.id)
+		if (!section) return
+
+		section.name = data.name
+		section.background = data.background
+		section.paddings = data.paddings
 
 		projectStore.setProject(project)
 	}
@@ -70,11 +66,13 @@ const NavPageMap = () => {
 	const closeSectionModal = () => setEditingSection(null)
 
 	const deleteProject = async () => {
-		if (id) {
-			if (confirm('Вы действительно хотите удалить проект?')) {
-				projectStore.deleteProjectById(id)
-				navigate('/projects')
-			}
+		const project = projectStore.project
+
+		const agree = confirm('Вы действительно хотите удалить проект?')
+
+		if (agree) {
+			projectStore.deleteProjectById(project.id)
+			navigate('/projects')
 		}
 	}
 
@@ -132,7 +130,7 @@ const NavPageMap = () => {
 						</label>
 					</div>
 
-					{projectStore.project.content?.sections?.map(section => (
+					{projectStore.project.sections?.map(section => (
 						<div key={section.id}>
 							<Section
 								openHandler={openSectionModal}

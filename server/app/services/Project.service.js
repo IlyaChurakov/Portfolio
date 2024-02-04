@@ -1,30 +1,65 @@
+import { v4 as uuidv4 } from 'uuid'
 import { prisma } from '../utils/prisma.js'
 
 class ProjectService {
-	async createProject(name) {
-		const project = await prisma.project.create({
+	async createProject({ name, archived, previewImage, labels }) {
+		return await prisma.project.create({
 			data: {
 				name,
-				content: JSON.stringify({ sections: [] })
+				archived,
+				previewImage,
+				labels
+			},
+			include: {
+				sections: {
+					include: {
+						blocks: true
+					}
+				}
 			}
 		})
-
-		project.content = JSON.parse(project.content)
-
-		return project
+	}
+	// async createSection({ name, background, paddings, blocks, projectId }) {
+	// 	return await prisma.section.create({
+	// 		data: {
+	// 			projectId,
+	// 			name,
+	// 			background,
+	// 			paddings,
+	// 			blocks
+	// 		}
+	// 	})
+	// }
+	// async createBlock({ sectionId, color, text, type }) {
+	// 	return await prisma.block.create({
+	// 		data: {
+	// 			sectionId,
+	// 			color,
+	// 			text,
+	// 			type
+	// 		}
+	// 	})
+	// }
+	async getProject(id) {
+		return await prisma.project.findUnique({
+			where: {
+				id
+			},
+			include: {
+				sections: {
+					include: {
+						blocks: true
+					}
+				}
+			}
+		})
 	}
 	async getProjectList() {
-		const projects = await prisma.project.findMany({
+		return await prisma.project.findMany({
 			orderBy: {
 				createdAt: 'desc'
 			}
 		})
-
-		projects.forEach(project => {
-			project.content = JSON.parse(project.content)
-		})
-
-		return projects
 	}
 	async getLastProjects(count) {
 		return await prisma.project.findMany({
@@ -33,45 +68,6 @@ class ProjectService {
 			},
 			take: count
 		})
-	}
-	async getProject(id) {
-		const project = await prisma.project.findUnique({
-			where: {
-				id
-			}
-		})
-
-		project.content = JSON.parse(project.content)
-
-		return project
-	}
-	async saveProject(project) {
-		const savedProject = await prisma.project.update({
-			where: {
-				id: project.id
-			},
-			data: {
-				content: JSON.stringify(project.content)
-			}
-		})
-
-		savedProject.content = JSON.parse(savedProject.content)
-
-		return savedProject
-	}
-	async assignPreview(id, image) {
-		const project = await prisma.project.update({
-			where: {
-				id
-			},
-			data: {
-				previewImage: image
-			}
-		})
-
-		project.content = JSON.parse(project.content)
-
-		return project
 	}
 	async deleteProjectById(id) {
 		return await prisma.project.delete({
@@ -82,6 +78,68 @@ class ProjectService {
 	}
 	async deleteAllProjects() {
 		return await prisma.project.deleteMany()
+	}
+	async saveProject({ id, sections, ...projectData }) {
+		return await prisma.project.update({
+			where: {
+				id
+			},
+			data: {
+				...projectData,
+				sections: {
+					upsert: sections.map(
+						({
+							id: sectionId = uuidv4(),
+							blocks = [],
+							name,
+							paddings,
+							background
+						}) => ({
+							where: { id: sectionId },
+							create: { name, paddings, background },
+							update: {
+								name,
+								paddings,
+								background,
+								blocks: {
+									upsert: blocks.map(
+										({ id: blockId = uuidv4(), color, text, type }) => ({
+											where: { id: blockId },
+											create: { color, text, type },
+											update: { color, text, type }
+										})
+									)
+								}
+							}
+						})
+					)
+				}
+			},
+			include: {
+				sections: {
+					include: {
+						blocks: true
+					}
+				}
+			}
+		})
+	}
+	async assignPreview(id, image) {
+		return await prisma.project.update({
+			where: {
+				id
+			},
+			data: {
+				previewImage: image
+			},
+			include: {
+				sections: {
+					include: {
+						blocks: true
+					}
+				}
+			}
+		})
 	}
 }
 
