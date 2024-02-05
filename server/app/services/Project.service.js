@@ -19,27 +19,6 @@ class ProjectService {
 			}
 		})
 	}
-	// async createSection({ name, background, paddings, blocks, projectId }) {
-	// 	return await prisma.section.create({
-	// 		data: {
-	// 			projectId,
-	// 			name,
-	// 			background,
-	// 			paddings,
-	// 			blocks
-	// 		}
-	// 	})
-	// }
-	// async createBlock({ sectionId, color, text, type }) {
-	// 	return await prisma.block.create({
-	// 		data: {
-	// 			sectionId,
-	// 			color,
-	// 			text,
-	// 			type
-	// 		}
-	// 	})
-	// }
 	async getProject(id) {
 		return await prisma.project.findUnique({
 			where: {
@@ -87,6 +66,11 @@ class ProjectService {
 			data: {
 				...projectData,
 				sections: {
+					deleteMany: {
+						NOT: sections.map(({ id: sectionId = uuidv4() }) => ({
+							id: sectionId
+						}))
+					},
 					upsert: sections.map(
 						({
 							id: sectionId = uuidv4(),
@@ -102,6 +86,11 @@ class ProjectService {
 								paddings,
 								background,
 								blocks: {
+									deleteMany: {
+										NOT: blocks.map(({ id: blockId = uuidv4() }) => ({
+											id: blockId
+										}))
+									},
 									upsert: blocks.map(
 										({ id: blockId = uuidv4(), color, text, type }) => ({
 											where: { id: blockId },
