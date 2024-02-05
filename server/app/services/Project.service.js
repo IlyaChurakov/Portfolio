@@ -26,8 +26,11 @@ class ProjectService {
 			},
 			include: {
 				sections: {
+					orderBy: { createdAt: 'asc' },
 					include: {
-						blocks: true
+						blocks: {
+							orderBy: { createdAt: 'asc' }
+						}
 					}
 				}
 			}
