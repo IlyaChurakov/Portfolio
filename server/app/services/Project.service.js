@@ -80,14 +80,14 @@ class ProjectService {
 							blocks = [],
 							name,
 							paddings,
-							background
+							backgroundPath
 						}) => ({
 							where: { id: sectionId },
-							create: { name, paddings, background },
+							create: { name, paddings, backgroundPath },
 							update: {
 								name,
 								paddings,
-								background,
+								backgroundPath,
 								blocks: {
 									deleteMany: {
 										NOT: blocks.map(({ id: blockId = uuidv4() }) => ({
@@ -95,10 +95,17 @@ class ProjectService {
 										}))
 									},
 									upsert: blocks.map(
-										({ id: blockId = uuidv4(), color, text, type }) => ({
+										({
+											id: blockId = uuidv4(),
+											color,
+											text,
+											type,
+											imgPath,
+											imgDescr
+										}) => ({
 											where: { id: blockId },
-											create: { color, text, type },
-											update: { color, text, type }
+											create: { color, text, type, imgPath, imgDescr },
+											update: { color, text, type, imgPath, imgDescr }
 										})
 									)
 								}

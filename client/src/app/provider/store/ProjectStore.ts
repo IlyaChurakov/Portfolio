@@ -111,10 +111,10 @@ export class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
-	async assignPreview(id: string, fileName: string) {
+	async assignPreview(id: string, imgPath: string | undefined) {
 		try {
 			this.setLoading(true)
-			const { data } = await ProjectService.assignPreview(id, fileName)
+			const { data } = await ProjectService.assignPreview(id, imgPath)
 			this.setLoading(false)
 
 			this.setProject(data)

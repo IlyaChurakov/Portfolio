@@ -83,13 +83,14 @@ class ProjectController {
 			next(err)
 		}
 	}
+
 	async uploadImage(req, res, next) {
 		try {
-			const { img } = req.files
+			const { file } = req.files
 
-			const fileName = uuidv4() + '.jpg'
-
-			img.mv(path.resolve('static', fileName))
+			const fileName = uuidv4() + '.' + file.name.split('.')[1]
+			console.log(fileName)
+			file.mv(path.resolve('static', fileName))
 
 			res.json(fileName)
 		} catch (err) {

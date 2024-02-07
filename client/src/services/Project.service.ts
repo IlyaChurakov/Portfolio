@@ -27,9 +27,9 @@ export default class ProjectService {
 	}
 	static async assignPreview(
 		id: string,
-		fileName: string
+		imgPath: string | undefined
 	): Promise<AxiosResponse<IProject>> {
-		return $axios.post(`/projects/assign-preview/${id}`, { fileName })
+		return $axios.post(`/projects/assign-preview/${id}`, { imgPath })
 	}
 	static async uploadImage(image: FormData): Promise<AxiosResponse<string>> {
 		return $axios.post(`/projects/upload-image`, image)

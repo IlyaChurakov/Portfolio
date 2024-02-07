@@ -1,8 +1,6 @@
-import {
-	ISection,
-	SectionInputs,
-} from '@app/provider/store/types/project.types'
+import { ISection } from '@app/provider/store/types/project.types'
 import useUpload from '@shared/hooks/useUpload'
+import { uploadFile } from '@shared/utils/functions'
 import { observer } from 'mobx-react-lite'
 import { ChangeEvent, useContext, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
@@ -16,44 +14,29 @@ const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
 
 	const navigate = useNavigate()
-	const { selectFile, upload } = useUpload()
+	const { selectFile } = useUpload()
 
 	const [editingSection, setEditingSection] = useState<
 		ISection | null | object
 	>(null)
 
-	const uploadPreview = async (e: ChangeEvent<HTMLInputElement>) => {
+	async function uploadProjectPreview(e: ChangeEvent<HTMLInputElement>) {
 		const file = selectFile(e)
 		if (!file) return
 
-		const fileName = await upload(file)
+		const imgPath = await uploadFile(file)
 
-		await projectStore.assignPreview(projectStore.project.id, fileName)
+		await projectStore.assignPreview(projectStore.project.id, imgPath)
 	}
+	async function deleteProject() {
+		const project = projectStore.project
 
-	const addSection = (data: SectionInputs & ISection) => {
-		const project = { ...projectStore.project }
+		const agree = confirm('Вы действительно хотите удалить проект?')
 
-		project.sections.push({
-			name: data.name,
-			background: data.background,
-			paddings: data.paddings,
-			blocks: [],
-		} as unknown as ISection)
-
-		projectStore.setProject(project)
-	}
-	const editSection = (data: SectionInputs & ISection) => {
-		const project = { ...projectStore.project }
-
-		const section = project.sections.find(section => section.id === data.id)
-		if (!section) return
-
-		section.name = data.name
-		section.background = data.background
-		section.paddings = data.paddings
-
-		projectStore.setProject(project)
+		if (agree) {
+			projectStore.deleteProjectById(project.id)
+			navigate('/projects')
+		}
 	}
 
 	const openSectionModal = (section?: ISection) => {
@@ -65,25 +48,9 @@ const NavPageMap = () => {
 	}
 	const closeSectionModal = () => setEditingSection(null)
 
-	const deleteProject = async () => {
-		const project = projectStore.project
-
-		const agree = confirm('Вы действительно хотите удалить проект?')
-
-		if (agree) {
-			projectStore.deleteProjectById(project.id)
-			navigate('/projects')
-		}
-	}
-
 	return (
 		<>
-			<SectionModal
-				editSection={editSection}
-				addSection={addSection}
-				section={editingSection}
-				closeHandler={closeSectionModal}
-			/>
+			<SectionModal section={editingSection} closeHandler={closeSectionModal} />
 
 			<nav className='fixed top-0 right-0 w-[350px] h-screen bg-black p-5 overflow-y-auto flex flex-col'>
 				<div className='flex-1'>
@@ -106,7 +73,7 @@ const NavPageMap = () => {
 							<input
 								id='select_avatar'
 								type='file'
-								onChange={e => uploadPreview(e)}
+								onChange={e => uploadProjectPreview(e)}
 								className='h-0 w-0 absolute block -z-10 opacity-0'
 							/>
 

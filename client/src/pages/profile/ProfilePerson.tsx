@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { FC, useContext } from 'react'
 import { IoMdCreate } from 'react-icons/io'
-import { MdPublishedWithChanges } from 'react-icons/md'
+import { MdAlternateEmail, MdPublishedWithChanges } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../../main'
 import { transformDate } from '../../shared/utils/functions'
@@ -49,7 +49,10 @@ export const ProfilePerson: FC = observer(() => {
 						/>
 					</div>
 
-					<h2 className=' text-start text-violet mb-3'>{store.user.email}</h2>
+					<p className='flex items-center text-start text-violet mb-3'>
+						<MdAlternateEmail title='Email' className='mr-2' />
+						{store.user.email}
+					</p>
 					<p className='flex items-center text-start text-violet mb-3'>
 						<MdPublishedWithChanges title='Дата регистрации' className='mr-2' />
 						{transformDate(store.user.createdAt)}

@@ -17,7 +17,7 @@ export interface ISection {
 	createdAt: Date
 
 	name: string
-	background?: string
+	backgroundPath?: string
 	paddings?: string
 
 	blocks: IBlock[]
@@ -34,6 +34,8 @@ export interface IBlock {
 	items?: string[]
 	imgPath?: string
 	imgDescr?: string
+
+	sectionId: string
 }
 
 export enum BlockTypes {
@@ -60,7 +62,7 @@ export enum ColorTypes {
 	'grey-dark' = '#232426',
 }
 
-export type Inputs = {
+export type BlockModalInputs = {
 	type: string
 	text: string
 	color: string
@@ -68,8 +70,14 @@ export type Inputs = {
 	imgDescr: string
 }
 
-export type SectionInputs = {
+export type SectionModalInputs = {
 	name: string
-	background: string
+	background: FileList
 	paddings: string
 }
+
+export type blockData = BlockModalInputs &
+	IBlock & { sectionId: string } & { image: string | undefined }
+
+export type SectionData = SectionModalInputs &
+	ISection & { background: string | undefined }

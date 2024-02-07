@@ -51,7 +51,7 @@ const blockTypes: Record<string, (block: IBlock) => JSX.Element> = {
 	},
 	img: block => {
 		return (
-			<>
+			<div key={block.id}>
 				<img
 					className='w-[50%] max-h-64 m-auto my-5 object-cover'
 					src={`http://localhost:7001/${block.imgPath}`}
@@ -69,7 +69,7 @@ const blockTypes: Record<string, (block: IBlock) => JSX.Element> = {
 						/>
 					</p>
 				)}
-			</>
+			</div>
 		)
 	},
 }
@@ -79,8 +79,10 @@ export const renderContent = (project: IProject) => {
 		<section
 			key={section.id}
 			style={{
-				background: section.background
-					? `url(${import.meta.env.VITE_API_STATIC_URL}${section.background})`
+				background: section.backgroundPath
+					? `url(${import.meta.env.VITE_API_STATIC_URL}${
+							section.backgroundPath
+					  })`
 					: '',
 				padding: section.paddings ?? defaultSectionPaddings,
 			}}
