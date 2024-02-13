@@ -1,14 +1,13 @@
 import { Home } from '@pages/Home'
 import { Login } from '@pages/Login'
 import { Register } from '@pages/Register'
-import { Test } from '@pages/Test'
 import { Profile } from '@pages/profile/Profile'
 import { ProfilePerson } from '@pages/profile/ProfilePerson'
 import { ProfileUsers } from '@pages/profile/ProfileUsers'
-import { EditProject } from '@pages/projects/EditProject'
 import { ProjectList } from '@pages/projects/ProjectList'
 import { Projects } from '@pages/projects/Projects'
 import { SingleProject } from '@pages/projects/SingleProject'
+import { EditProject } from '@pages/projects/page-constructor/EditProject'
 import { IRoute, Roles } from './types'
 
 export const routerConfig: IRoute[] = [
@@ -46,9 +45,5 @@ export const routerConfig: IRoute[] = [
 				roles: [Roles.Admin],
 			},
 		],
-	},
-	{
-		path: '/test',
-		component: Test,
 	},
 ]

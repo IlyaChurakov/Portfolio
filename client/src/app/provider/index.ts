@@ -1,5 +1,3 @@
-export { $static } from '../../shared/config/http/axios.static.ts'
-export { $axios } from '../../shared/config/http/axios.ts'
 export { Router } from './router/Router.tsx'
 export { ProjectStore } from './store/ProjectStore'
 export { UserStore } from './store/UserStore'

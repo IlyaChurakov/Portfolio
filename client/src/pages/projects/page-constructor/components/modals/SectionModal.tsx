@@ -3,16 +3,17 @@ import {
 	SectionData,
 	SectionModalInputs,
 } from '@app/provider/store/types/project.types'
-import { uploadFile } from '@shared/utils/functions'
+import { uploadFile } from '@shared/utils/utils'
 import { observer } from 'mobx-react-lite'
 import { useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Context } from '../../../main'
+import { v4 as uuidv4 } from 'uuid'
+import { Context } from '../../../../../main'
+import AcceptButton from '../../../../../shared/ui/buttons/AcceptButton'
+import CloseButton from '../../../../../shared/ui/buttons/CloseButton'
+import Input from '../../../../../shared/ui/inputs/Input'
+import ModalLoader from '../../../../../shared/ui/loaders/ModalLoader'
 import ImageLoader from '../ImageLoader'
-import AcceptButton from '../buttons/AcceptButton'
-import CloseButton from '../buttons/CloseButton'
-import Input from '../inputs/Input'
-import ModalLoader from '../loaders/ModalLoader'
 
 const SectionModal = ({
 	section,
@@ -47,7 +48,7 @@ const SectionModal = ({
 			...data,
 			backgroundPath: imgPath ?? (section as ISection).backgroundPath,
 		}
-		console.log(sectionData)
+
 		if (section && 'id' in section) {
 			editSection(sectionData as SectionData)
 		} else {
@@ -62,6 +63,7 @@ const SectionModal = ({
 		const project = { ...projectStore.project }
 
 		project.sections.push({
+			id: uuidv4(),
 			name: data.name,
 			backgroundPath: data.backgroundPath,
 			paddings: data.paddings,

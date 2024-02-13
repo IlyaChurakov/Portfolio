@@ -6,7 +6,7 @@ import { renderContent } from './utils/renderContent'
 
 export const SingleProject = observer(() => {
 	const { id } = useParams()
-	const { projectStore, store } = useContext(Context)
+	const { projectStore } = useContext(Context)
 
 	useEffect(() => {
 		projectStore.getProject(id as string)

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { Suspense, useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Context } from '../../../main.tsx'
-import { checkUserRoles } from '../../../shared/utils/functions.ts'
+import { checkUserRoles } from '../../../shared/utils/utils.ts'
 
 export const Router = observer(() => {
 	const { store } = useContext(Context)

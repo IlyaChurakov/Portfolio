@@ -1,10 +1,6 @@
-import { FC, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
-interface Props {
-	children: ReactNode
-}
-
-const Container: FC<Props> = ({ children }) => {
+const Container = ({ children }: { children: ReactNode }) => {
 	return <div className='max-w-[1200px] m-auto'>{children}</div>
 }
 

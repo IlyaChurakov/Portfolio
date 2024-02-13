@@ -3,11 +3,9 @@ import { observer } from 'mobx-react-lite'
 import { useContext, useState } from 'react'
 import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { MdDelete } from 'react-icons/md'
-import { Context } from '../../../main'
-import BlockModal from '../../../shared/ui/modals/BlockModal'
+import { Context } from '../../../../main'
 import Block from './Block'
-
-// TODO: вынести блоки в отдельные компоненты
+import BlockModal from './modals/BlockModal'
 
 const Section = ({
 	section,
@@ -25,6 +23,7 @@ const Section = ({
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const openSection = () => setIsVisible(isVisible ? false : true)
 
+	// TODO: вынести в стор
 	const [editingBlock, setEditingBlock] = useState<IBlock | null | object>(null)
 
 	const deleteSection = (id: string | number) => {
@@ -36,12 +35,7 @@ const Section = ({
 	}
 
 	const openBlockModal = (block?: IBlock) => {
-		if (block && !editingBlock) {
-			// TODO: пофиксить вечное добавление блоков
-			setEditingBlock(block)
-		} else {
-			setEditingBlock({ sectionId: section.id })
-		}
+		setEditingBlock(block ?? { sectionId: section.id })
 	}
 	const closeBlockModal = () => setEditingBlock(null)
 
@@ -84,7 +78,7 @@ const Section = ({
 							<Block
 								key={block.id}
 								block={block}
-								openBlockModal={openBlockModal}
+								openBlockModal={() => openBlockModal(block)}
 							/>
 						))}
 						<button

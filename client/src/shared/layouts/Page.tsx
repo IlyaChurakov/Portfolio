@@ -1,12 +1,8 @@
-import { FC, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import Footer from '../ui/Footer'
 
-interface Props {
-	children: ReactNode
-}
-
-const Page: FC<Props> = ({ children }) => {
+const Page = ({ children }: { children: ReactNode }) => {
 	const { pathname } = useLocation()
 
 	return (

@@ -6,18 +6,19 @@ import {
 	IBlock,
 	blockData,
 } from '@app/provider/store/types/project.types'
-import { uploadFile } from '@shared/utils/functions'
+import { uploadFile } from '@shared/utils/utils'
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Context } from '../../../main'
+import { v4 as uuidv4 } from 'uuid'
+import { Context } from '../../../../../main'
+import AcceptButton from '../../../../../shared/ui/buttons/AcceptButton'
+import CloseButton from '../../../../../shared/ui/buttons/CloseButton'
+import Textarea from '../../../../../shared/ui/inputs/Textarea'
+import ModalLoader from '../../../../../shared/ui/loaders/ModalLoader'
+import ColorModalSelect from '../../../../../shared/ui/selects/ColorModalSelect'
+import TypeModalSelect from '../../../../../shared/ui/selects/TypeModalSelect'
 import ImageLoader from '../ImageLoader'
-import AcceptButton from '../buttons/AcceptButton'
-import CloseButton from '../buttons/CloseButton'
-import Textarea from '../inputs/Textarea'
-import ModalLoader from '../loaders/ModalLoader'
-import ColorModalSelect from '../selects/ColorModalSelect'
-import TypeModalSelect from '../selects/TypeModalSelect'
 
 // Компонент модального окна для блока
 
@@ -81,11 +82,11 @@ const BlockModal = ({
 			imgPath: imgPath ?? (block as IBlock).imgPath,
 		}
 
-		console.log(block)
-
 		if (block && 'id' in block) {
+			console.log('edit')
 			editBlock(blockData as blockData)
 		} else {
+			console.log('add')
 			addBlock(blockData as blockData)
 		}
 
@@ -102,6 +103,7 @@ const BlockModal = ({
 		if (!section) return
 
 		section.blocks.push({
+			id: uuidv4(),
 			type: BlockTypesText[data.type as keyof typeof BlockTypesText],
 			text: data.text,
 			color: data.color,

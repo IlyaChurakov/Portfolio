@@ -12,8 +12,6 @@ import {
 import { Context } from '../../main'
 import Container from '../../shared/layouts/Container'
 
-// TODO: проверка защиты роутов, убрать кнопки у неавторизованных пользователей и пользователей без админки
-
 export const Projects: FC = observer(() => {
 	const { pathname } = useLocation()
 	const { id } = useParams()

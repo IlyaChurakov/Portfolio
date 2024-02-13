@@ -2,7 +2,7 @@ import { IBlock, IProject } from '@app/provider/store/types/project.types'
 import { observer } from 'mobx-react-lite'
 import { useContext } from 'react'
 import { MdDelete } from 'react-icons/md'
-import { Context } from '../../../main'
+import { Context } from '../../../../main'
 
 const Block = ({
 	block,

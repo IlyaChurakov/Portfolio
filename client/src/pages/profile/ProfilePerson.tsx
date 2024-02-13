@@ -4,7 +4,7 @@ import { IoMdCreate } from 'react-icons/io'
 import { MdAlternateEmail, MdPublishedWithChanges } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../../main'
-import { transformDate } from '../../shared/utils/functions'
+import { transformDate } from '../../shared/utils/utils'
 import Avatar from './components/Avatar'
 import Description from './components/Description'
 

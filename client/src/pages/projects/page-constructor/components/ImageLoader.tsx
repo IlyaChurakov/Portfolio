@@ -1,4 +1,4 @@
-import { fileReader } from '@shared/utils/functions'
+import { fileReader } from '@shared/utils/utils'
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useState } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'

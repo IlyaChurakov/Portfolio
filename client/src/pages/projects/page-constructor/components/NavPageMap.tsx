@@ -1,14 +1,14 @@
 import { ISection } from '@app/provider/store/types/project.types'
 import useUpload from '@shared/hooks/useUpload'
-import { uploadFile } from '@shared/utils/functions'
+import { uploadFile } from '@shared/utils/utils'
 import { observer } from 'mobx-react-lite'
 import { ChangeEvent, useContext, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
-import { Context } from '../../../main'
-import SectionModal from '../../../shared/ui/modals/SectionModal'
-import Section from '../components/Section'
+import { Context } from '../../../../main'
+import Section from './Section'
+import SectionModal from './modals/SectionModal'
 
 const NavPageMap = () => {
 	const { projectStore } = useContext(Context)
@@ -16,6 +16,7 @@ const NavPageMap = () => {
 	const navigate = useNavigate()
 	const { selectFile } = useUpload()
 
+	// TODO: вынести в стор
 	const [editingSection, setEditingSection] = useState<
 		ISection | null | object
 	>(null)
@@ -40,11 +41,7 @@ const NavPageMap = () => {
 	}
 
 	const openSectionModal = (section?: ISection) => {
-		if (section) {
-			setEditingSection(section)
-		} else {
-			setEditingSection({})
-		}
+		setEditingSection(section ?? {})
 	}
 	const closeSectionModal = () => setEditingSection(null)
 

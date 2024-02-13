@@ -1,4 +1,4 @@
-import { $axios } from '@app/provider'
+import { $axios } from '@shared/config'
 import { AxiosProgressEvent } from 'axios'
 import dayjs from 'dayjs'
 

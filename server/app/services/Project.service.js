@@ -104,7 +104,13 @@ class ProjectService {
 											imgDescr
 										}) => ({
 											where: { id: blockId },
-											create: { color, text, type, imgPath, imgDescr },
+											create: {
+												color,
+												text,
+												type,
+												imgPath,
+												imgDescr
+											},
 											update: { color, text, type, imgPath, imgDescr }
 										})
 									)

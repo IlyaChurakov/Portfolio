@@ -1,9 +1,9 @@
 import { observer } from 'mobx-react-lite'
 import { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Context } from '../../main'
+import { Context } from '../../../main'
+import { renderContent } from '../utils/renderContent'
 import NavPageMap from './components/NavPageMap'
-import { renderContent } from './utils/renderContent'
 
 export const EditProject = observer(() => {
 	const { projectStore } = useContext(Context)
