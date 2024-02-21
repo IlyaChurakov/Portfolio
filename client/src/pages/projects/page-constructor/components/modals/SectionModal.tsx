@@ -1,14 +1,16 @@
+import { useStores } from '@app/provider'
 import {
 	ISection,
 	SectionData,
 	SectionModalInputs,
-} from '@app/provider/store/types/project.types'
+} from '@app/provider/store/projectStore/types/project.types'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { uploadFile } from '@shared/utils/utils'
 import { observer } from 'mobx-react-lite'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
-import { Context } from '../../../../../main'
 import AcceptButton from '../../../../../shared/ui/buttons/AcceptButton'
 import CloseButton from '../../../../../shared/ui/buttons/CloseButton'
 import Input from '../../../../../shared/ui/inputs/Input'
@@ -30,7 +32,11 @@ const SectionModal = ({
 		watch,
 	} = useForm<SectionModalInputs>()
 
-	const { projectStore } = useContext(Context)
+	const projectStore = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.projectStore
+	)
 
 	const [loading, setLoading] = useState(false)
 
@@ -62,13 +68,15 @@ const SectionModal = ({
 	function addSection(data: SectionData) {
 		const project = { ...projectStore.project }
 
-		project.sections.push({
+		const newSection: ISection = {
 			id: uuidv4(),
 			name: data.name,
 			backgroundPath: data.backgroundPath,
 			paddings: data.paddings,
 			blocks: [],
-		} as unknown as ISection)
+		}
+		console.log(newSection)
+		project.sections.push(newSection)
 
 		projectStore.setProject(project)
 	}

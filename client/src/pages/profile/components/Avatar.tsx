@@ -1,11 +1,22 @@
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import useUpload from '@shared/hooks/useUpload'
 import { observer } from 'mobx-react-lite'
-import React, { ChangeEvent, memo, useContext } from 'react'
+import React, { ChangeEvent, memo } from 'react'
 import { TbDownload } from 'react-icons/tb'
-import { Context } from '../../../main'
 
 const Avatar: React.FC = observer(() => {
-	const { store } = useContext(Context)
+	const { user, assignAvatar } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => {
+			return {
+				...store.authStore,
+				...store.userStore,
+			}
+		}
+	)
 
 	const { selectFile, upload } = useUpload()
 
@@ -15,7 +26,7 @@ const Avatar: React.FC = observer(() => {
 
 		const fileName = await upload(file)
 
-		await store.assignAvatar(store.user.id, fileName)
+		await assignAvatar(user.id, fileName)
 	}
 
 	return (
@@ -31,9 +42,9 @@ const Avatar: React.FC = observer(() => {
 				<TbDownload className='text-2xl' />
 			</div>
 
-			{store.user.avatar ? (
+			{user.avatar ? (
 				<img
-					src={`${import.meta.env.VITE_API_STATIC_URL}/${store.user.avatar}`}
+					src={`${import.meta.env.VITE_API_STATIC_URL}/${user.avatar}`}
 					alt='avatar'
 					className='w-full h-full object-cover rounded-lg hover:opacity-30'
 				/>

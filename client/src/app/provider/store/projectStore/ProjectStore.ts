@@ -1,16 +1,27 @@
-import { makeAutoObservable } from 'mobx'
-import ProjectService from '../../../services/Project.service'
+import { makeAutoObservable, runInAction } from 'mobx'
+import ProjectService from '../../../../services/Project.service'
+import { RootStore } from '../rootStore'
 import { IProject } from './types/project.types'
 
 export class ProjectStore {
-	projectList = [] as IProject[]
-	lastProjects = [] as IProject[]
-	project = {} as IProject
-	saved: boolean = true
-	loading: boolean = false
+	private rootStore: RootStore
 
-	constructor() {
-		makeAutoObservable(this)
+	project: IProject
+	projectList: IProject[]
+	lastProjects: IProject[]
+	saved: boolean
+	loading: boolean
+
+	constructor(rootStore: RootStore) {
+		makeAutoObservable(this, {}, { deep: true })
+
+		this.rootStore = rootStore
+
+		this.projectList = [] as IProject[]
+		this.project = {} as IProject
+		this.lastProjects = [] as IProject[]
+		this.saved = true
+		this.loading = false
 	}
 
 	setProjectList(projects: IProject[]) {
@@ -75,14 +86,15 @@ export class ProjectStore {
 		try {
 			this.setLoading(true)
 			const { data } = await ProjectService.getProject(id)
-			this.setLoading(false)
-			console.log(data)
-			this.setProject(data)
-			// эта функция срабатывает при первой загрузке редактирования проекта, поэтому ставим сохранение в true, при всех остальных вариантах будет false
-			this.setSaved(true)
 
-			return data
+			runInAction(() => {
+				this.setLoading(false)
+				this.setProject(data)
+				// эта функция срабатывает при первой загрузке редактирования проекта, поэтому ставим сохранение в true, при всех остальных вариантах будет false
+				this.setSaved(true)
+			})
 		} catch (err) {
+			this.setLoading(false)
 			throw new Error((err as Error).message)
 		}
 	}
@@ -129,17 +141,6 @@ export class ProjectStore {
 			this.setLoading(false)
 
 			return data
-		} catch (err) {
-			throw new Error((err as Error).message)
-		}
-	}
-	async deleteAllProjects() {
-		try {
-			this.setLoading(true)
-			await ProjectService.deleteAllProjects()
-			this.setLoading(false)
-
-			this.setProjectList([])
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}

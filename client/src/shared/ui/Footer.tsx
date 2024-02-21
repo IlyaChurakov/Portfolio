@@ -1,10 +1,16 @@
-import { FC, useContext } from 'react'
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { Context } from '../../main'
 import Container from '../layouts/Container'
 
 const Footer: FC = () => {
-	const { store } = useContext(Context)
+	const userStore = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.userStore
+	)
 
 	return (
 		<footer className=' max-h-[200px] w-full h-full p-10 bg-[#232426]'>
@@ -16,7 +22,7 @@ const Footer: FC = () => {
 						</Link>
 					</div>
 
-					{store.isAuth ? (
+					{userStore.isAuth ? (
 						<div>
 							<Link className=' hover:text-white inline-block' to={'/profile'}>
 								Профиль

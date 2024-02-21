@@ -1,17 +1,23 @@
-import { ISection } from '@app/provider/store/types/project.types'
+import { useStores } from '@app/provider'
+import { ISection } from '@app/provider/store/projectStore/types/project.types'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import useUpload from '@shared/hooks/useUpload'
 import { uploadFile } from '@shared/utils/utils'
 import { observer } from 'mobx-react-lite'
-import { ChangeEvent, useContext, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { TbDownload } from 'react-icons/tb'
 import { useNavigate } from 'react-router-dom'
-import { Context } from '../../../../main'
 import Section from './Section'
 import SectionModal from './modals/SectionModal'
 
 const NavPageMap = () => {
-	const { projectStore } = useContext(Context)
+	const projectStore = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.projectStore
+	)
 
 	const navigate = useNavigate()
 	const { selectFile } = useUpload()

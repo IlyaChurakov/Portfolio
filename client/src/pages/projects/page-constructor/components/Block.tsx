@@ -1,17 +1,27 @@
-import { IBlock, IProject } from '@app/provider/store/types/project.types'
+import { useStores } from '@app/provider'
+import {
+	IBlock,
+	IProject,
+} from '@app/provider/store/projectStore/types/project.types'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { useContext } from 'react'
 import { MdDelete } from 'react-icons/md'
-import { Context } from '../../../../main'
 
 const Block = ({
 	block,
-	openBlockModal,
-}: {
+	onClick,
+}: // openBlockModal,
+{
 	block: IBlock
-	openBlockModal: Function
+	onClick: Function
+	// openBlockModal: Function
 }) => {
-	const { projectStore } = useContext(Context)
+	const projectStore = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.projectStore
+	)
 
 	const deleteBlock = async (sectionId: string, blockId: string) => {
 		const project = { ...(projectStore.project as IProject) }
@@ -33,7 +43,8 @@ const Block = ({
 			<div className='pl-5 pt-2 flex justify-between hover:bg-gray-500 rounded-lg'>
 				<div
 					className='cursor-pointer text-gray hover:text-white'
-					onClick={() => openBlockModal(block)}
+					// onClick={() => openBlockModal(block)}
+					onClick={() => onClick()}
 				>
 					{block.type}
 				</div>

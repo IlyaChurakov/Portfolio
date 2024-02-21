@@ -1,15 +1,20 @@
-import { useContext } from 'react'
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { GoPlus } from 'react-icons/go'
-import { Context } from '../../../../main'
 
 interface IList {
-	id: number
+	id: string
 	isShow: boolean
 	roles: string[]
 }
 
 const List = ({ id, isShow, roles }: IList) => {
-	const { store } = useContext(Context)
+	const { addRoleById } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.userStore
+	)
 
 	if (!isShow) return null
 
@@ -23,7 +28,7 @@ const List = ({ id, isShow, roles }: IList) => {
 							<GoPlus
 								fill='green'
 								className='text-lg cursor-pointer '
-								onClick={() => store.addRoleById(id, role)}
+								onClick={() => addRoleById(id, role)}
 							/>
 						</div>
 					</li>

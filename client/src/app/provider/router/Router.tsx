@@ -2,19 +2,24 @@ import { NotFound } from '@pages/NotFound.tsx'
 import { routerConfig } from '@shared/config/index.ts'
 import { IRoute } from '@shared/config/router/types.ts'
 import { observer } from 'mobx-react-lite'
-import { Suspense, useContext } from 'react'
+import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Context } from '../../../main.tsx'
 import { checkUserRoles } from '../../../shared/utils/utils.ts'
+import { RootStore } from '../store/rootStore.ts'
+import { RootStoreContext, useStores } from '../store/store.ts'
 
 export const Router = observer(() => {
-	const { store } = useContext(Context)
+	const { isLoading, isAuth, user } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.authStore
+	)
 
-	if (store.isLoading) return <div>Loading...</div>
+	if (isLoading) return <div>Loading...</div>
 
 	function renderRoutes(routes: IRoute[]) {
 		return routes.map(route => {
-			if (route.isAuth && !store.isAuth) {
+			if (route.isAuth && !isAuth) {
 				return null
 			}
 
@@ -23,8 +28,8 @@ export const Router = observer(() => {
 					key={route.path}
 					path={route.path}
 					element={
-						route.roles && store.user.roles ? (
-							checkUserRoles(route.roles, store.user.roles) ? (
+						route.roles && user.roles ? (
+							checkUserRoles(route.roles, user.roles) ? (
 								<route.component />
 							) : (
 								<div>Доступ запрещен</div>

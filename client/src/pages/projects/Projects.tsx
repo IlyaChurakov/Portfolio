@@ -1,5 +1,8 @@
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { GoArrowLeft } from 'react-icons/go'
 import { TiArrowSync } from 'react-icons/ti'
 import {
@@ -9,29 +12,30 @@ import {
 	useNavigate,
 	useParams,
 } from 'react-router-dom'
-import { Context } from '../../main'
 import Container from '../../shared/layouts/Container'
 
 export const Projects: FC = observer(() => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
-	const { projectStore, store } = useContext(Context)
+
+	const { projectStore, userStore } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store
+	)
+
 	const navigate = useNavigate()
 
 	const addProject = async (e: React.SyntheticEvent) => {
 		e.preventDefault()
 
 		const name = prompt('Введите имя проекта:')
+		if (!name) return
 
-		if (name) {
-			const project = await projectStore.createProject(name)
+		const project = await projectStore.createProject(name)
+		if (!project) return
 
-			if (project) {
-				navigate(`/projects/${project.id}/edit`)
-			}
-		} else {
-			console.log('not name')
-		}
+		navigate(`/projects/${project.id}/edit`)
 	}
 
 	const saveProject = async () => {
@@ -60,8 +64,8 @@ export const Projects: FC = observer(() => {
 									}
 								}}
 							/>
-							{store.isAuth &&
-								store.user.roles?.includes('admin') &&
+							{userStore.isAuth &&
+								userStore.user.roles?.includes('admin') &&
 								pathname == '/projects' && (
 									<Link
 										to={'/projects/new'}
@@ -71,8 +75,8 @@ export const Projects: FC = observer(() => {
 										Добавить проект
 									</Link>
 								)}
-							{store.isAuth &&
-								store.user.roles?.includes('admin') &&
+							{userStore.isAuth &&
+								userStore.user.roles?.includes('admin') &&
 								pathname.includes('/edit') && (
 									<button
 										onClick={saveProject}
@@ -87,8 +91,8 @@ export const Projects: FC = observer(() => {
 										)}
 									</button>
 								)}
-							{store.isAuth &&
-								store.user.roles?.includes('admin') &&
+							{userStore.isAuth &&
+								userStore.user.roles?.includes('admin') &&
 								!pathname.includes('/edit') &&
 								id && (
 									<Link

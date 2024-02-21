@@ -1,33 +1,42 @@
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { FC, useContext, useEffect } from 'react'
-import { Context } from '../main'
+import { FC, useEffect } from 'react'
 import Container from '../shared/layouts/Container'
 import ProjectItem from '../shared/ui/ProjectItem'
 
 export const Home: FC = observer(() => {
-	const { projectStore } = useContext(Context)
+	const { getLastProjects, lastProjects } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.projectStore
+	)
 
 	useEffect(() => {
-		projectStore.getLastProjects(4)
+		getLastProjects(4)
 	}, [])
 
 	return (
-		<div className='flex flex-col'>
-			<section className='bg-gray-dark px-10 '>
-				<Container>
-					<div className='grid grid-cols-[1fr_0.8fr] items-center'>
+		<Container>
+			<div className='flex flex-col'>
+				<section className='bg-gray-dark px-10 '>
+					<div className='grid grid-cols-[1fr_0.8fr] items-center '>
 						<div>
-							<h1 className='text-white text-5xl font-extrabold mb-5 p-0'>
+							<h1 className='text-white inline-block text-5xl font-extrabold mb-5 p-0'>
 								Илья Чураков
 							</h1>
-							<h2 className='text-[#9255E8] text-3xl font-extrabold flex flex-col'>
+							<br />
+							<h2 className='text-[#9255E8] text-3xl font-extrabold '>
 								<span>Портфолио</span>
+								<br />
 								<span className='my-1 text-4xl text-white'>front-end</span>
+								<br />
 								<span>разработчика</span>
 							</h2>
 						</div>
 
-						<div className='h-[600px] aspect-square relative'>
+						<div className='min-h-[600px] aspect-square relative'>
 							<div
 								className='absolute w-full h-full'
 								style={{
@@ -43,21 +52,19 @@ export const Home: FC = observer(() => {
 							/>
 						</div>
 					</div>
-				</Container>
-			</section>
+				</section>
 
-			<section className='p-5'>
-				<Container>
+				<section className='p-5'>
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Проекты
 					</h1>
 					<div className='grid grid-cols-4 gap-5 justify-items-center'>
-						{projectStore.lastProjects?.map(project => (
+						{lastProjects?.map(project => (
 							<ProjectItem key={project.id} project={project} />
 						))}
 					</div>
-				</Container>
-			</section>
-		</div>
+				</section>
+			</div>
+		</Container>
 	)
 })

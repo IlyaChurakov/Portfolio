@@ -1,8 +1,9 @@
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext, useStores } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoMdCreate } from 'react-icons/io'
 import { RiSave3Fill } from 'react-icons/ri'
-import { Context } from '../../../main'
 
 interface IDescriptionProps {
 	description: string
@@ -10,9 +11,14 @@ interface IDescriptionProps {
 }
 
 const Description = ({ description, onEdit }: IDescriptionProps) => {
+	const { user } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.authStore
+	)
+
 	const [isEditing, setIsEditing] = useState(false)
 	const [editedDescription, setEditedDescription] = useState(description)
-	const { store } = useContext(Context)
 
 	const handleEdit = () => {
 		setIsEditing(true)
@@ -51,9 +57,9 @@ const Description = ({ description, onEdit }: IDescriptionProps) => {
 					>
 						<IoMdCreate className='hover:text-lg text-white' />
 					</button>
-					{store.user.description ? (
+					{user.description ? (
 						<p className='w-full text-white' onClick={handleEdit}>
-							{store.user.description}
+							{user.description}
 						</p>
 					) : (
 						<p className='w-full text-white' onClick={handleEdit}>

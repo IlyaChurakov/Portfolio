@@ -1,4 +1,4 @@
-import { IProject } from '@app/provider/store/types/project.types'
+import { IProject } from '@app/provider/store/projectStore/types/project.types'
 import React from 'react'
 import { PiImageSquareFill } from 'react-icons/pi'
 import { Link } from 'react-router-dom'

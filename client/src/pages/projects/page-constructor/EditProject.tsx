@@ -1,12 +1,18 @@
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Context } from '../../../main'
 import { renderContent } from '../utils/renderContent'
 import NavPageMap from './components/NavPageMap'
 
 export const EditProject = observer(() => {
-	const { projectStore } = useContext(Context)
+	const projectStore = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.projectStore
+	)
 	const { id } = useParams()
 
 	useEffect(() => {

@@ -13,8 +13,8 @@ export interface IProject {
 
 export interface ISection {
 	id: string
-	updatedAt: Date
-	createdAt: Date
+	updatedAt?: Date
+	createdAt?: Date
 
 	name: string
 	backgroundPath?: string
@@ -25,8 +25,8 @@ export interface ISection {
 
 export interface IBlock {
 	id: string
-	updatedAt: Date
-	createdAt: Date
+	updatedAt?: Date
+	createdAt?: Date
 
 	type: string
 	text?: string

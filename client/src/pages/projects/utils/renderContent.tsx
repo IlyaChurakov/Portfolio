@@ -1,4 +1,7 @@
-import { IBlock, IProject } from '@app/provider/store/types/project.types'
+import {
+	IBlock,
+	IProject,
+} from '@app/provider/store/projectStore/types/project.types'
 import { WithLinks } from '@shared/utils/withLinks'
 import Container from '../../../shared/layouts/Container'
 
@@ -74,8 +77,8 @@ const blockTypes: Record<string, (block: IBlock) => JSX.Element> = {
 	},
 }
 
-export const renderContent = (project: IProject) => {
-	return project.sections?.map(section => (
+export const renderContent = (project: IProject | null | undefined) => {
+	return project?.sections?.map(section => (
 		<section
 			key={section.id}
 			style={{

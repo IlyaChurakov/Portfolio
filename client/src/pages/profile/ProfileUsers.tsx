@@ -1,14 +1,25 @@
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext, useStores } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { FC, useContext, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
-import { Context } from '../../main'
 import Menu from './components/menu/Menu'
 
 export const ProfileUsers: FC = observer(() => {
-	const { store } = useContext(Context)
+	const { getUserList, userList, removeRoleById, user, deleteAccount } =
+		useStores(
+			RootStoreContext,
+			(contextData: RootStore) => contextData,
+			(store: RootStore) => {
+				return {
+					...store.userStore,
+					...store.authStore,
+				}
+			}
+		)
 
 	useEffect(() => {
-		store.getUserList()
+		getUserList()
 	}, [])
 
 	const roles = ['admin', 'user', 'developer']
@@ -52,16 +63,17 @@ export const ProfileUsers: FC = observer(() => {
 					</tr>
 				</thead>
 				<tbody>
-					{store.userList?.map(item => {
+					{userList.map(item => {
+						console.log('render')
 						return (
 							<tr
 								key={item.id}
 								className='border-b border-dotted border-gray-300 last:border-none'
 							>
-								<td className='h-5 text-center font-bold'>{item.id}</td>
+								<td className='h-5 text-center'>{item.id}</td>
 								<td className='h-5 text-center'>{item.email}</td>
 								<td className='h-5 text-center'>{item.name}</td>
-								<td className='h-5 '>
+								<td className='h-5 text-center'>
 									{item.isActivated ? (
 										<GoCheckCircleFill className='m-auto text-green' />
 									) : (
@@ -76,9 +88,7 @@ export const ProfileUsers: FC = observer(() => {
 												className='grid grid-cols-[1fr_25px] justify-items-center bg-white m-2 rounded-sm hover:bg-gray-300 text-black'
 											>
 												<div>{role}</div>
-												<button
-													onClick={() => store.removeRoleById(+item.id, role)}
-												>
+												<button onClick={() => removeRoleById(item.id, role)}>
 													<GoX className='text-red' />
 												</button>
 											</div>
@@ -96,11 +106,11 @@ export const ProfileUsers: FC = observer(() => {
 									</div>
 								</td>
 								<td className='h-5 text-center'>
-									{+item.id !== +store.user.id ? (
+									{+item.id !== +user.id ? (
 										<button
 											onClick={() => {
 												if (confirm(`Удалить пользователя ${item.email}`)) {
-													store.deleteAccount(+item.id)
+													deleteAccount(item.id)
 												}
 											}}
 											className='text-red'

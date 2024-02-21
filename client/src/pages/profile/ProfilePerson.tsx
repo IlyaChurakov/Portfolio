@@ -1,28 +1,40 @@
+import { useStores } from '@app/provider'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { IoMdCreate } from 'react-icons/io'
 import { MdAlternateEmail, MdPublishedWithChanges } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import { Context } from '../../main'
 import { transformDate } from '../../shared/utils/utils'
 import Avatar from './components/Avatar'
 import Description from './components/Description'
 
 export const ProfilePerson: FC = observer(() => {
-	const { store } = useContext(Context)
+	const { deleteAccount, user, changeDescription } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => {
+			return {
+				...store.userStore,
+				...store.authStore,
+			}
+		}
+	)
+
 	const navigate = useNavigate()
 
-	async function deleteAccount() {
+	async function deleteAccountWithConfirm() {
 		const agree = confirm('Вы действительно хотите удалить свой аккаунт?')
 		if (agree) {
-			await store.deleteAccount()
+			await deleteAccount(user.id)
 			navigate('/login')
 		}
 	}
 
 	const handleDescriptionEdit = (editedDescription: string) => {
-		if (editedDescription !== store.user.description) {
-			store.changeDescription(+store.user.id, editedDescription)
+		if (editedDescription !== user.description) {
+			changeDescription(user.id, editedDescription)
 		}
 	}
 
@@ -40,37 +52,37 @@ export const ProfilePerson: FC = observer(() => {
 
 				<div>
 					<h1 className='text-start text-3xl text-white font-bold mb-3'>
-						{store.user.name}
+						{user.name}
 					</h1>
 					<div>
 						<Description
-							description={store.user.description}
+							description={user.description}
 							onEdit={handleDescriptionEdit}
 						/>
 					</div>
 
 					<p className='flex items-center text-start text-violet mb-3'>
 						<MdAlternateEmail title='Email' className='mr-2' />
-						{store.user.email}
+						{user.email}
 					</p>
 					<p className='flex items-center text-start text-violet mb-3'>
 						<MdPublishedWithChanges title='Дата регистрации' className='mr-2' />
-						{transformDate(store.user.createdAt)}
+						{transformDate(user.createdAt)}
 					</p>
 					<p className='flex items-center text-start text-violet mb-3'>
 						<IoMdCreate
 							title='Дата последнего изменения профиля'
 							className='mr-2'
 						/>
-						{transformDate(store.user.updatedAt)}
+						{transformDate(user.updatedAt)}
 					</p>
-					{!store.user.isActivated && (
+					{!user.isActivated && (
 						<p className='text-start mb-3 text-white'>Подтвердите аккаунт</p>
 					)}
 
 					<button
 						className='text-white m-auto bg-red rounded-sm px-2 py-1'
-						onClick={deleteAccount}
+						onClick={deleteAccountWithConfirm}
 					>
 						Delete account
 					</button>

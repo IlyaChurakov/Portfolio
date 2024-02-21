@@ -1,9 +1,10 @@
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext, useStores } from '@app/provider/store/store'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
-import { FC, useContext, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { Context } from '../main'
 
 type Inputs = {
 	name: string
@@ -12,7 +13,11 @@ type Inputs = {
 }
 
 export const Register: FC = observer(() => {
-	const { store } = useContext(Context)
+	const { isAuth, register: registration } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.authStore
+	)
 
 	const navigate = useNavigate()
 
@@ -26,10 +31,10 @@ export const Register: FC = observer(() => {
 	})
 
 	useEffect(() => {
-		if (store.isAuth) {
+		if (isAuth) {
 			navigate('/')
 		}
-	}, [store.isAuth])
+	}, [isAuth])
 
 	const onSubmit: SubmitHandler<Inputs> = async ({
 		name,
@@ -37,7 +42,7 @@ export const Register: FC = observer(() => {
 		password,
 	}: Inputs) => {
 		try {
-			await store.register(email, password, name)
+			await registration(email, password, name)
 		} catch (e) {
 			const err = e as AxiosError
 

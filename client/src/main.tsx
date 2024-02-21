@@ -1,29 +1,13 @@
-import { createContext } from 'react'
+import { RootStore } from '@app/provider/store/rootStore.ts'
+import { RootStoreContext } from '@app/provider/store/store.ts'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
-import { ProjectStore } from './app/provider/store/ProjectStore.ts'
-import { UserStore } from './app/provider/store/UserStore.ts'
-
-interface State {
-	store: UserStore
-	projectStore: ProjectStore
-}
-
-const store = new UserStore()
-const projectStore = new ProjectStore()
-
-export const Context = createContext<State>({
-	store,
-	projectStore,
-})
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	// <React.StrictMode>
 	<BrowserRouter>
-		<Context.Provider value={{ store, projectStore }}>
+		<RootStoreContext.Provider value={new RootStore()}>
 			<App />
-		</Context.Provider>
+		</RootStoreContext.Provider>
 	</BrowserRouter>
-	// </React.StrictMode>
 )

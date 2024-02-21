@@ -1,9 +1,10 @@
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext, useStores } from '@app/provider/store/store'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
-import { FC, useContext, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { Context } from '../main'
 
 type Inputs = {
 	email: string
@@ -22,20 +23,24 @@ export const Login: FC = observer(() => {
 
 	const navigate = useNavigate()
 
-	const { store } = useContext(Context)
+	const { isAuth, login } = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.authStore
+	)
 
 	useEffect(() => {
-		if (store.isAuth) {
+		if (isAuth) {
 			navigate('/')
 		}
-	}, [store.isAuth])
+	}, [isAuth])
 
 	const onSubmit: SubmitHandler<Inputs> = async ({
 		email,
 		password,
 	}: Inputs) => {
 		try {
-			await store.login(email, password)
+			await login(email, password)
 		} catch (e) {
 			const err = e as AxiosError
 

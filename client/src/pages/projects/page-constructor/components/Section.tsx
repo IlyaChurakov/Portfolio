@@ -1,11 +1,15 @@
-import { IBlock, ISection } from '@app/provider/store/types/project.types'
+import { useStores } from '@app/provider'
+import {
+	IBlock,
+	ISection,
+} from '@app/provider/store/projectStore/types/project.types'
+import { RootStore } from '@app/provider/store/rootStore'
+import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { MdDelete } from 'react-icons/md'
-import { Context } from '../../../../main'
-import Block from './Block'
-import BlockModal from './modals/BlockModal'
+import BlockEditor from './modals/BlockEditor'
 
 const Section = ({
 	section,
@@ -18,7 +22,11 @@ const Section = ({
 	blocks: IBlock[]
 	openHandler: Function
 }) => {
-	const { projectStore } = useContext(Context)
+	const projectStore = useStores(
+		RootStoreContext,
+		(contextData: RootStore) => contextData,
+		(store: RootStore) => store.projectStore
+	)
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const openSection = () => setIsVisible(isVisible ? false : true)
@@ -75,11 +83,7 @@ const Section = ({
 				{isVisible && (
 					<>
 						{blocks?.map(block => (
-							<Block
-								key={block.id}
-								block={block}
-								openBlockModal={() => openBlockModal(block)}
-							/>
+							<BlockEditor block={block} />
 						))}
 						<button
 							onClick={() => openBlockModal()}
@@ -88,7 +92,7 @@ const Section = ({
 							Добавить элемент
 						</button>
 
-						<BlockModal block={editingBlock} closeHandler={closeBlockModal} />
+						{/* <BlockModal block={editingBlock} closeHandler={closeBlockModal} /> */}
 					</>
 				)}
 			</div>
