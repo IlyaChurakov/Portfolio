@@ -13,7 +13,7 @@ export class ProjectStore {
 	loading: boolean
 
 	constructor(rootStore: RootStore) {
-		makeAutoObservable(this, {}, { deep: true })
+		makeAutoObservable(this)
 
 		this.rootStore = rootStore
 

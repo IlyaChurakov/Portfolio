@@ -1,6 +1,6 @@
-import { Router, useStores } from '@app/provider'
+import { Router } from '@app/provider'
 import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
+import { RootStoreContext, useStores } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
 import Page from './shared/layouts/Page'

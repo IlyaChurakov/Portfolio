@@ -5,9 +5,9 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<BrowserRouter>
-		<RootStoreContext.Provider value={new RootStore()}>
+	<RootStoreContext.Provider value={new RootStore()}>
+		<BrowserRouter>
 			<App />
-		</RootStoreContext.Provider>
-	</BrowserRouter>
+		</BrowserRouter>
+	</RootStoreContext.Provider>
 )

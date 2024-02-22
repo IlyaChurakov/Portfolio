@@ -6,7 +6,7 @@ import { FC, useEffect } from 'react'
 import Container from '../shared/layouts/Container'
 import ProjectItem from '../shared/ui/ProjectItem'
 
-export const Home: FC = observer(() => {
+const Home: FC = observer(() => {
 	const { getLastProjects, lastProjects } = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
@@ -68,3 +68,5 @@ export const Home: FC = observer(() => {
 		</Container>
 	)
 })
+
+export default Home

@@ -10,7 +10,7 @@ import { transformDate } from '../../shared/utils/utils'
 import Avatar from './components/Avatar'
 import Description from './components/Description'
 
-export const ProfilePerson: FC = observer(() => {
+const ProfilePerson: FC = observer(() => {
 	const { deleteAccount, user, changeDescription } = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
@@ -91,3 +91,5 @@ export const ProfilePerson: FC = observer(() => {
 		</div>
 	)
 })
+
+export default ProfilePerson

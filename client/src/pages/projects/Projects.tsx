@@ -14,11 +14,11 @@ import {
 } from 'react-router-dom'
 import Container from '../../shared/layouts/Container'
 
-export const Projects: FC = observer(() => {
+const Projects: FC = observer(() => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
 
-	const { projectStore, userStore } = useStores(
+	const { projectStore, authStore } = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
 		(store: RootStore) => store
@@ -64,8 +64,8 @@ export const Projects: FC = observer(() => {
 									}
 								}}
 							/>
-							{userStore.isAuth &&
-								userStore.user.roles?.includes('admin') &&
+							{authStore.isAuth &&
+								authStore.user.roles?.includes('admin') &&
 								pathname == '/projects' && (
 									<Link
 										to={'/projects/new'}
@@ -75,8 +75,8 @@ export const Projects: FC = observer(() => {
 										Добавить проект
 									</Link>
 								)}
-							{userStore.isAuth &&
-								userStore.user.roles?.includes('admin') &&
+							{authStore.isAuth &&
+								authStore.user.roles?.includes('admin') &&
 								pathname.includes('/edit') && (
 									<button
 										onClick={saveProject}
@@ -91,8 +91,8 @@ export const Projects: FC = observer(() => {
 										)}
 									</button>
 								)}
-							{userStore.isAuth &&
-								userStore.user.roles?.includes('admin') &&
+							{authStore.isAuth &&
+								authStore.user.roles?.includes('admin') &&
 								!pathname.includes('/edit') &&
 								id && (
 									<Link
@@ -111,3 +111,5 @@ export const Projects: FC = observer(() => {
 		</div>
 	)
 })
+
+export default Projects

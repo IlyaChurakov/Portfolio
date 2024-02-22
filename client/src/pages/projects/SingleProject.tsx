@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { renderContent } from './utils/renderContent'
 
-export const SingleProject = observer(() => {
+const SingleProject = observer(() => {
 	const { id } = useParams()
 
 	const projectStore = useStores(
@@ -39,3 +39,5 @@ export const SingleProject = observer(() => {
 		</div>
 	)
 })
+
+export default SingleProject

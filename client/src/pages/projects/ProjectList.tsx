@@ -5,7 +5,7 @@ import { FC, useEffect } from 'react'
 import Container from '../../shared/layouts/Container'
 import ProjectItem from '../../shared/ui/ProjectItem'
 
-export const ProjectList: FC = observer(() => {
+const ProjectList: FC = observer(() => {
 	const { getProjectList, projectList } = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
@@ -28,3 +28,5 @@ export const ProjectList: FC = observer(() => {
 		</section>
 	)
 })
+
+export default ProjectList

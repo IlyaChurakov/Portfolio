@@ -32,6 +32,8 @@ export class AuthStore {
 
 	register = async (email: string, password: string, name: string) => {
 		try {
+			this.setLoading(true)
+
 			const authResponse = await AuthService.register(email, password, name)
 
 			localStorage.setItem('token', authResponse.accessToken)
@@ -97,6 +99,8 @@ export class AuthStore {
 				this.setAuth(true)
 				this.setUser(authResponse.user)
 			})
+
+			return true
 		} catch (err) {
 			this.setError(err as AxiosError)
 		} finally {

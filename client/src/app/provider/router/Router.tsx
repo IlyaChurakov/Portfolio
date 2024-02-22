@@ -1,58 +1,57 @@
-import { NotFound } from '@pages/NotFound.tsx'
 import { routerConfig } from '@shared/config/index.ts'
-import { IRoute } from '@shared/config/router/types.ts'
+import {
+	AppRoutesPrivate,
+	AppRoutesPublic,
+	RoutePropsCustom,
+} from '@shared/config/router/types.ts'
+import Loader from '@shared/ui/loaders/Loader.tsx'
 import { observer } from 'mobx-react-lite'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { checkUserRoles } from '../../../shared/utils/utils.ts'
-import { RootStore } from '../store/rootStore.ts'
-import { RootStoreContext, useStores } from '../store/store.ts'
+import Protect from '../Protect/Protect.tsx'
 
 export const Router = observer(() => {
-	const { isLoading, isAuth, user } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.authStore
-	)
+	const renderRoutesPrivate = (
+		routes:
+			| Record<AppRoutesPublic, RoutePropsCustom>[]
+			| Record<AppRoutesPublic, RoutePropsCustom>
+			| Record<AppRoutesPrivate, RoutePropsCustom>[]
+			| Record<AppRoutesPrivate, RoutePropsCustom>
+	) =>
+		Object.values(routes).map(route => (
+			<Route
+				key={route.path}
+				path={route.path}
+				element={<Protect route={route}>{route.element}</Protect>}
+			>
+				{route.nestedRoutes && renderRoutesPrivate(route.nestedRoutes)}
+			</Route>
+		))
 
-	if (isLoading) return <div>Loading...</div>
-
-	function renderRoutes(routes: IRoute[]) {
-		return routes.map(route => {
-			if (route.isAuth && !isAuth) {
-				return null
-			}
-
+	const renderRoutesPublic = (
+		routes:
+			| Record<AppRoutesPublic, RoutePropsCustom>[]
+			| Record<AppRoutesPublic, RoutePropsCustom>
+			| Record<AppRoutesPrivate, RoutePropsCustom>[]
+			| Record<AppRoutesPrivate, RoutePropsCustom>
+	) => {
+		return Object.values(routes).map(route => {
 			return (
-				<Route
-					key={route.path}
-					path={route.path}
-					element={
-						route.roles && user.roles ? (
-							checkUserRoles(route.roles, user.roles) ? (
-								<route.component />
-							) : (
-								<div>Доступ запрещен</div>
-							)
-						) : (
-							<route.component />
-						)
-					}
-				>
-					{route.nestedRoutes && renderRoutes(route.nestedRoutes)}
+				<Route key={route.path} path={route.path} element={route.element}>
+					{route.nestedRoutes && renderRoutesPublic(route.nestedRoutes)}
 				</Route>
 			)
 		})
 	}
 
+	const routes = [
+		...renderRoutesPrivate(routerConfig.privateRoutes),
+		...renderRoutesPublic(routerConfig.publicRoutes),
+	]
+
 	return (
-		<>
-			<Suspense fallback={<div>Loading...</div>}>
-				<Routes>
-					{renderRoutes(routerConfig)}
-					<Route path='*' element={<NotFound />} />
-				</Routes>
-			</Suspense>
-		</>
+		<Suspense fallback={<Loader />}>
+			<Routes>{routes}</Routes>
+		</Suspense>
 	)
 })

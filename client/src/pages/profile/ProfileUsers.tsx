@@ -5,7 +5,7 @@ import { FC, useEffect } from 'react'
 import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
 import Menu from './components/menu/Menu'
 
-export const ProfileUsers: FC = observer(() => {
+const ProfileUsers: FC = observer(() => {
 	const { getUserList, userList, removeRoleById, user, deleteAccount } =
 		useStores(
 			RootStoreContext,
@@ -129,3 +129,5 @@ export const ProfileUsers: FC = observer(() => {
 		</div>
 	)
 })
+
+export default ProfileUsers

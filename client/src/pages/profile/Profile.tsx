@@ -6,7 +6,7 @@ import { GoArrowLeft } from 'react-icons/go'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Container from '../../shared/layouts/Container'
 
-export const Profile: FC = observer(() => {
+const Profile: FC = observer(() => {
 	const { user } = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
@@ -47,3 +47,5 @@ export const Profile: FC = observer(() => {
 		</>
 	)
 })
+
+export default Profile

@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { renderContent } from '../utils/renderContent'
 import NavPageMap from './components/NavPageMap'
 
-export const EditProject = observer(() => {
+const EditProject = observer(() => {
 	const projectStore = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
@@ -28,3 +28,5 @@ export const EditProject = observer(() => {
 		</div>
 	)
 })
+
+export default EditProject

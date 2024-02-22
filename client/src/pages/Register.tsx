@@ -12,7 +12,7 @@ type Inputs = {
 	password: string
 }
 
-export const Register: FC = observer(() => {
+const Register: FC = observer(() => {
 	const { isAuth, register: registration } = useStores(
 		RootStoreContext,
 		(contextData: RootStore) => contextData,
@@ -111,3 +111,5 @@ export const Register: FC = observer(() => {
 		</div>
 	)
 })
+
+export default Register
