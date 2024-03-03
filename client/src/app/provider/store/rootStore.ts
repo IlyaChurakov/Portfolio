@@ -3,13 +3,13 @@ import { ProjectStore } from './projectStore/ProjectStore'
 import { UserStore } from './userStore/UserStore'
 
 export class RootStore {
+	authStore: AuthStore
 	userStore: UserStore
 	projectStore: ProjectStore
-	authStore: AuthStore
 
 	constructor() {
+		this.authStore = new AuthStore(this)
 		this.userStore = new UserStore(this)
 		this.projectStore = new ProjectStore(this)
-		this.authStore = new AuthStore()
 	}
 }

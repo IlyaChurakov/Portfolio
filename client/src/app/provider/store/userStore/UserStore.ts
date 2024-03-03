@@ -7,27 +7,45 @@ import { RootStore } from '../rootStore'
 export class UserStore {
 	private rootStore: RootStore
 
+	user: IUser
 	userList: IUser[]
-	error: AxiosError | undefined
 
 	constructor(rootStore: RootStore) {
 		makeAutoObservable(this)
 
 		this.rootStore = rootStore
 
+		this.user = {} as IUser
 		this.userList = []
 	}
 
-	setError(err: AxiosError) {
-		this.error = err
+	setUserList(users: IUser[]) {
+		this.userList = users
+	}
+	setUserDescription(description: string) {
+		this.user.description = description
+	}
+	setUserName(name: string) {
+		this.user.name = name
+	}
+	setUserMail(email: string) {
+		this.user.email = email
+	}
+	setUser(user: IUser) {
+		this.user = user
+	}
+
+	set activeUser(user: IUser) {
+		this.activeUser = user
 	}
 
 	getUserList = async () => {
 		try {
 			const users = await UserService.getUsersList()
-			this.userList = users
-		} catch (err) {
-			this.setError(err as AxiosError)
+
+			this.setUserList(users)
+		} catch (e) {
+			throw new Error((e as AxiosError).message)
 		}
 	}
 
@@ -35,7 +53,7 @@ export class UserStore {
 		try {
 			const deletedUser = await UserService.deleteAccount(id)
 
-			if (id === this.rootStore.authStore.user.id) {
+			if (id === this.user.id) {
 				await this.rootStore.authStore.logout()
 			} else {
 				const indexOfDeletedUser = this.userList.findIndex(
@@ -44,41 +62,40 @@ export class UserStore {
 				if (indexOfDeletedUser !== -1)
 					this.userList.splice(indexOfDeletedUser, 1)
 			}
-		} catch (err) {
-			this.setError(err as AxiosError)
+		} catch (e) {
+			throw new Error((e as AxiosError).message)
 		}
 	}
 
 	async addRoleById(id: string, role: string) {
 		try {
-			await UserService.addRole(id, role)
-			await this.getUserList()
-		} catch (err) {
-			throw new Error((err as Error).message)
+			const updatedUser = await UserService.addRole(id, role)
+
+			const user = this.userList.find(us => us.id === updatedUser.id)
+			if (user) user.roles = updatedUser.roles
+		} catch (e) {
+			throw new Error((e as AxiosError).message)
 		}
 	}
-	removeRoleById = async (id: string, role: string) => {
+
+	async removeRoleById(id: string, role: string) {
 		try {
-			await UserService.deleteRole(id, role)
-			await this.getUserList()
-		} catch (err) {
-			throw new Error((err as Error).message)
+			const updatedUser = await UserService.deleteRole(id, role)
+
+			const user = this.userList.find(us => us.id === updatedUser.id)
+			if (user) user.roles = updatedUser.roles
+		} catch (e) {
+			throw new Error((e as AxiosError).message)
 		}
 	}
-	assignAvatar = async (id: string, avatar: string) => {
+
+	async update(user: IUser) {
 		try {
-			const { data } = await UserService.assignAvatar(id, avatar)
-			this.rootStore.authStore.setUser(data)
-		} catch (err) {
-			throw new Error((err as Error).message)
-		}
-	}
-	changeDescription = async (id: string, description: string) => {
-		try {
-			const { data } = await UserService.changeDescription(id, description)
-			this.rootStore.authStore.setUser(data)
-		} catch (err) {
-			throw new Error((err as Error).message)
+			const updatedUser = await UserService.update(user)
+
+			this.setUser(updatedUser)
+		} catch (e) {
+			throw new Error((e as AxiosError).message)
 		}
 	}
 }

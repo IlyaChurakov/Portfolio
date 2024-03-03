@@ -1,13 +1,8 @@
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext, useStores } from '@app/provider/store/store'
+import { useStores } from '@app/provider/store/store'
 import { ChangeEvent } from 'react'
 
 const useUpload = () => {
-	const { uploadImage } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.projectStore
-	)
+	const { projectStore } = useStores()
 
 	const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files?.length) {
@@ -21,7 +16,7 @@ const useUpload = () => {
 		const formData = new FormData()
 		formData.append('img', file as File)
 
-		const fileName = await uploadImage(formData)
+		const fileName = await projectStore.uploadImage(formData)
 
 		return fileName
 	}

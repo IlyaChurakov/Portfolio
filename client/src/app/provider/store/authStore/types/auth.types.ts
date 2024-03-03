@@ -6,7 +6,7 @@ export interface IUser {
 	roles: string[]
 	updatedAt: Date
 	createdAt: Date
-	avatar: string
+	avatar: string | null
 	description: string
 }
 

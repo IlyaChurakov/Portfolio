@@ -1,6 +1,4 @@
 import { useStores } from '@app/provider'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { GoArrowLeft } from 'react-icons/go'
@@ -18,11 +16,7 @@ const Projects: FC = observer(() => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
 
-	const { projectStore, authStore } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store
-	)
+	const { projectStore, authStore, userStore } = useStores()
 
 	const navigate = useNavigate()
 
@@ -65,7 +59,7 @@ const Projects: FC = observer(() => {
 								}}
 							/>
 							{authStore.isAuth &&
-								authStore.user.roles?.includes('admin') &&
+								userStore.user.roles?.includes('admin') &&
 								pathname == '/projects' && (
 									<Link
 										to={'/projects/new'}
@@ -76,7 +70,7 @@ const Projects: FC = observer(() => {
 									</Link>
 								)}
 							{authStore.isAuth &&
-								authStore.user.roles?.includes('admin') &&
+								userStore.user.roles?.includes('admin') &&
 								pathname.includes('/edit') && (
 									<button
 										onClick={saveProject}
@@ -92,7 +86,7 @@ const Projects: FC = observer(() => {
 									</button>
 								)}
 							{authStore.isAuth &&
-								authStore.user.roles?.includes('admin') &&
+								userStore.user.roles?.includes('admin') &&
 								!pathname.includes('/edit') &&
 								id && (
 									<Link

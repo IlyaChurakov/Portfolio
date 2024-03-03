@@ -1,57 +1,65 @@
-import { fileReader } from '@shared/utils/utils'
+import Button from '@pages/profile/components/Forms/components/Button'
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React, { useId, useState } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { TbDownload } from 'react-icons/tb'
 
-const ImageLoader: React.FC<{
-	serverImage: string | undefined
-	clientImage: FileList | undefined
+const ImageLoader = ({
+	uploadedImageUrl,
+	register,
+	setValue,
+}: {
+	uploadedImageUrl: string | null
 	register: UseFormRegisterReturn
-	labelId: string
-}> = observer(({ clientImage, serverImage, register, labelId }) => {
-	const [image, setImage] = useState<string>()
+	setValue: Function
+}) => {
+	const id = useId()
+	const [image, setImage] = useState<string | null>(uploadedImageUrl)
 
-	useEffect(() => {
-		if (clientImage && clientImage[0]) {
-			getFileName(clientImage[0])
-		}
-	}, [clientImage])
+	const onLoadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files ? e.target.files[0] : null
+		if (!file) return
 
-	async function getFileName(file: File | null) {
-		const fileName = await fileReader(file)
-		if (!fileName) return
+		setImage(URL.createObjectURL(file))
+	}
 
-		setImage(fileName as string)
+	const deleteAvatar = () => {
+		setValue('avatar', undefined)
+		setImage(null)
 	}
 
 	return (
-		<label
-			htmlFor={labelId}
-			className='cursor-pointer block relative w-full h-20'
-		>
-			<input
-				id={labelId}
-				type='file'
-				className='h-0 w-0 absolute block -z-10 opacity-0'
-				{...register}
-			/>
-
-			<div className='h-full w-full cursor-pointer rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 flex justify-center items-center hover:bg-black hover:bg-opacity-50'>
-				<TbDownload className='text-2xl' />
-			</div>
-
-			{image ?? serverImage ? (
-				<img
-					src={image ?? `${import.meta.env.VITE_API_STATIC_URL}${serverImage}`}
-					alt='img'
-					className='h-20 max-w-full m-auto'
+		<div className='flex flex-col justify-center'>
+			<label
+				htmlFor={id}
+				className='block relative w-full h-[250px] cursor-pointer text-white'
+			>
+				<input
+					id={id}
+					type='file'
+					{...register}
+					onChange={onLoadImage}
+					accept='image/*,.png,.jpg'
+					className='h-0 w-0 absolute block -z-10 opacity-0'
 				/>
-			) : (
-				<div className='h-20 w-full bg-gray rounded-lg'></div>
-			)}
-		</label>
-	)
-})
 
-export default ImageLoader
+				<div className='h-full w-full rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 hover:opacity-100 flex justify-center items-center hover:bg-black hover:bg-opacity-50'>
+					<TbDownload className='text-2xl' title='Загрузить изображение' />
+				</div>
+
+				{image ? (
+					<img
+						src={image || undefined}
+						alt='img'
+						className='w-full h-full object-cover rounded-lg'
+					/>
+				) : (
+					<div className='w-full h-full bg-gray rounded-lg'></div>
+				)}
+			</label>
+			<Button text='delete' onClick={deleteAvatar} />
+		</div>
+	)
+}
+
+export default observer(ImageLoader)

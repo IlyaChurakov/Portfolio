@@ -1,25 +1,14 @@
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext, useStores } from '@app/provider/store/store'
+import { useStores } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
 import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
 import Menu from './components/menu/Menu'
 
-const ProfileUsers: FC = observer(() => {
-	const { getUserList, userList, removeRoleById, user, deleteAccount } =
-		useStores(
-			RootStoreContext,
-			(contextData: RootStore) => contextData,
-			(store: RootStore) => {
-				return {
-					...store.userStore,
-					...store.authStore,
-				}
-			}
-		)
+const ProfileUsers: FC = () => {
+	const { userStore } = useStores()
 
 	useEffect(() => {
-		getUserList()
+		userStore.getUserList()
 	}, [])
 
 	const roles = ['admin', 'user', 'developer']
@@ -63,71 +52,70 @@ const ProfileUsers: FC = observer(() => {
 					</tr>
 				</thead>
 				<tbody>
-					{userList.map(item => {
-						console.log('render')
-						return (
-							<tr
-								key={item.id}
-								className='border-b border-dotted border-gray-300 last:border-none'
-							>
-								<td className='h-5 text-center'>{item.id}</td>
-								<td className='h-5 text-center'>{item.email}</td>
-								<td className='h-5 text-center'>{item.name}</td>
-								<td className='h-5 text-center'>
-									{item.isActivated ? (
-										<GoCheckCircleFill className='m-auto text-green' />
-									) : (
-										<GoXCircleFill className='text-red m-auto' />
-									)}
-								</td>
-								<td className='h-5 text-center'>
-									{item.roles.map(role => {
-										return (
-											<div
-												key={role}
-												className='grid grid-cols-[1fr_25px] justify-items-center bg-white m-2 rounded-sm hover:bg-gray-300 text-black'
-											>
-												<div>{role}</div>
-												<button onClick={() => removeRoleById(item.id, role)}>
-													<GoX className='text-red' />
-												</button>
-											</div>
-										)
-									})}
-									<div className='w-full grid justify-items-end relative'>
-										<Menu
-											roles={roles.filter(role => {
-												if (!item.roles.includes(role)) {
-													return role
-												}
-											})}
-											id={+item.id}
-										/>
-									</div>
-								</td>
-								<td className='h-5 text-center'>
-									{+item.id !== +user.id ? (
-										<button
-											onClick={() => {
-												if (confirm(`Удалить пользователя ${item.email}`)) {
-													deleteAccount(item.id)
-												}
-											}}
-											className='text-red'
+					{userStore.userList.map(item => (
+						<tr
+							key={item.id}
+							className='border-b border-dotted border-gray-300 last:border-none'
+						>
+							<td className='h-5 text-center'>{item.id}</td>
+							<td className='h-5 text-center'>{item.email}</td>
+							<td className='h-5 text-center'>{item.name}</td>
+							<td className='h-5 text-center'>
+								{item.isActivated ? (
+									<GoCheckCircleFill className='m-auto text-green' />
+								) : (
+									<GoXCircleFill className='text-red m-auto' />
+								)}
+							</td>
+							<td className='h-5 text-center'>
+								{item.roles.map(role => {
+									return (
+										<div
+											key={role}
+											className='grid grid-cols-[1fr_25px] justify-items-center bg-white m-2 rounded-sm hover:bg-gray-300 text-black'
 										>
-											Delete
-										</button>
-									) : (
-										<div className='text-green'>Вы</div>
-									)}
-								</td>
-							</tr>
-						)
-					})}
+											<div>{role}</div>
+											<button
+												onClick={() => userStore.removeRoleById(item.id, role)}
+											>
+												<GoX className='text-red' />
+											</button>
+										</div>
+									)
+								})}
+								<div className='w-full grid justify-items-end relative'>
+									<Menu
+										roles={roles.filter(role => {
+											if (!item.roles.includes(role)) {
+												return role
+											}
+										})}
+										id={item.id}
+									/>
+								</div>
+							</td>
+							<td className='h-5 text-center'>
+								{+item.id !== +userStore.user.id ? (
+									<button
+										onClick={() => {
+											if (confirm(`Удалить пользователя ${item.email}`)) {
+												userStore.deleteAccount(item.id)
+											}
+										}}
+										className='text-red'
+									>
+										Delete
+									</button>
+								) : (
+									<div className='text-green'>Вы</div>
+								)}
+							</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		</div>
 	)
-})
+}
 
-export default ProfileUsers
+export default observer(ProfileUsers)

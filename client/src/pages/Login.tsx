@@ -1,5 +1,4 @@
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext, useStores } from '@app/provider/store/store'
+import { useStores } from '@app/provider/store/store'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
@@ -23,24 +22,20 @@ const Login: FC = observer(() => {
 
 	const navigate = useNavigate()
 
-	const { isAuth, login } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.authStore
-	)
+	const { authStore } = useStores()
 
 	useEffect(() => {
-		if (isAuth) {
+		if (authStore.isAuth) {
 			navigate('/')
 		}
-	}, [isAuth])
+	}, [authStore.isAuth])
 
 	const onSubmit: SubmitHandler<Inputs> = async ({
 		email,
 		password,
 	}: Inputs) => {
 		try {
-			await login(email, password)
+			await authStore.login(email, password)
 		} catch (e) {
 			const err = e as AxiosError
 

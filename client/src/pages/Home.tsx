@@ -1,20 +1,14 @@
 import { useStores } from '@app/provider'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
 import Container from '../shared/layouts/Container'
 import ProjectItem from '../shared/ui/ProjectItem'
 
 const Home: FC = observer(() => {
-	const { getLastProjects, lastProjects } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.projectStore
-	)
+	const { projectStore } = useStores()
 
 	useEffect(() => {
-		getLastProjects(4)
+		projectStore.getLastProjects(4)
 	}, [])
 
 	return (
@@ -59,7 +53,7 @@ const Home: FC = observer(() => {
 						Проекты
 					</h1>
 					<div className='grid grid-cols-4 gap-5 justify-items-center'>
-						{lastProjects?.map(project => (
+						{projectStore.lastProjects?.map(project => (
 							<ProjectItem key={project.id} project={project} />
 						))}
 					</div>

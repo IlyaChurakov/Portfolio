@@ -3,7 +3,7 @@ import { useOnClickOutside } from '../../../../shared/hooks/useOnClickOutside.ts
 import List from './List.js'
 
 interface IMenu {
-	id: number
+	id: string
 	roles: string[]
 }
 

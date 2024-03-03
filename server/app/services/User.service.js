@@ -46,8 +46,7 @@ class UserService {
 	}
 
 	async activate(activationLink) {
-		// TODO: Сделать поиск уникального юзера
-		const user = await prisma.user.findMany({
+		const user = await prisma.user.findUnique({
 			where: {
 				activationLink
 			}
@@ -170,24 +169,13 @@ class UserService {
 		})
 	}
 
-	async assignAvatar(id, avatar) {
-		return await prisma.user.update({
-			where: {
-				id: parseInt(id)
-			},
-			data: {
-				avatar
-			}
-		})
-	}
-
-	async addDescription(id, description) {
+	async updateUser({ id, ...otherUserFields }) {
 		return await prisma.user.update({
 			where: {
 				id
 			},
 			data: {
-				description
+				...otherUserFields
 			}
 		})
 	}

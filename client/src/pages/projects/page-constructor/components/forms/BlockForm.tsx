@@ -7,8 +7,6 @@ import {
 	IBlock,
 	blockData,
 } from '@app/provider/store/projectStore/types/project.types'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
 import AcceptButton from '@shared/ui/buttons/AcceptButton'
 import CloseButton from '@shared/ui/buttons/CloseButton'
 import Textarea from '@shared/ui/inputs/Textarea'
@@ -45,11 +43,7 @@ const BlockForm = ({
 	const type = watch('type')
 	const image = watch('image')
 
-	const projectStore = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.projectStore
-	)
+	const { projectStore } = useStores()
 
 	const [loading, setLoading] = useState(false)
 

@@ -1,5 +1,6 @@
 import {
 	LazyEditProjectPage,
+	LazyHomePage,
 	LazyLoginPage,
 	LazyNotFoundPage,
 	LazyProfilePage,
@@ -7,42 +8,35 @@ import {
 	LazyProfileUsersPage,
 	LazyProjectListPage,
 	LazyProjectsPage,
+	LazyRegisterPage,
 	LazySingleProjectPage,
 } from '../../../pages/index'
 
-import { LazyHomePage, LazyRegisterPage } from '@pages/index'
-import {
-	AppRoles,
-	AppRoutesPrivate,
-	AppRoutesPublic,
-	IRoute,
-	Roles,
-	RoutePropsCustom,
-} from './types'
+import { AppRoles, AppRoutes, RoutePropsCustom } from './types'
 
-export const RoutePaths: Record<AppRoutesPublic | AppRoutesPrivate, string> = {
-	[AppRoutesPublic.HOME]: '/',
-	[AppRoutesPublic.LOGIN]: '/login',
-	[AppRoutesPublic.REGISTER]: '/register',
-	[AppRoutesPrivate.PROFILE]: '/profile/',
-	[AppRoutesPublic.PROJECTS]: '/projects/',
-	[AppRoutesPublic.NOT_FOUND]: '*',
+export const RoutePaths: Record<AppRoutes, string> = {
+	[AppRoutes.HOME]: '/',
+	[AppRoutes.LOGIN]: '/login',
+	[AppRoutes.REGISTER]: '/register',
+	[AppRoutes.PROFILE]: '/profile/*',
+	[AppRoutes.PROJECTS]: '/projects/*',
+	[AppRoutes.NOT_FOUND]: '*',
 }
 
-export const publicRoutes: Record<AppRoutesPublic, RoutePropsCustom> = {
-	[AppRoutesPublic.HOME]: {
+export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
+	[AppRoutes.HOME]: {
 		path: RoutePaths.home,
 		element: <LazyHomePage />,
 	},
-	[AppRoutesPublic.LOGIN]: {
+	[AppRoutes.LOGIN]: {
 		path: RoutePaths.login,
 		element: <LazyLoginPage />,
 	},
-	[AppRoutesPublic.REGISTER]: {
+	[AppRoutes.REGISTER]: {
 		path: RoutePaths.register,
 		element: <LazyRegisterPage />,
 	},
-	[AppRoutesPublic.PROJECTS]: {
+	[AppRoutes.PROJECTS]: {
 		path: RoutePaths.projects,
 		element: <LazyProjectsPage />,
 		nestedRoutes: [
@@ -57,73 +51,30 @@ export const publicRoutes: Record<AppRoutesPublic, RoutePropsCustom> = {
 			{
 				path: ':id/edit',
 				element: <LazyEditProjectPage />,
+				isAuth: true,
 				roles: [AppRoles.ADMIN],
 			},
 		],
 	},
-	[AppRoutesPublic.NOT_FOUND]: {
+	[AppRoutes.NOT_FOUND]: {
 		path: RoutePaths.notFound,
 		element: <LazyNotFoundPage />,
 	},
-}
-
-export const privateRoutes: Record<AppRoutesPrivate, RoutePropsCustom> = {
-	[AppRoutesPrivate.PROFILE]: {
+	[AppRoutes.PROFILE]: {
 		path: RoutePaths.profile,
-		element: <LazyProfilePersonPage />,
-		// nestedRoutes: [
-		// 	{
-		// 		path: '',
-		// 		element: <LazyProfilePersonPage />,
-		// 	},
-		// 	{
-		// 		path: 'users',
-		// 		element: <LazyProfileUsersPage />,
-		// 		roles: [AppRoles.ADMIN],
-		// 	},
-		// ],
-	},
-}
-
-export const routerConfig = {
-	privateRoutes,
-	publicRoutes,
-}
-
-export const routerConfigq: IRoute[] = [
-	{
-		path: '/',
-		component: LazyHomePage,
-	},
-	{
-		path: '/login',
-		component: LazyLoginPage,
-	},
-	{
-		path: '/register',
-		component: LazyRegisterPage,
-	},
-	{
-		path: '/profile/*',
-		component: LazyProfilePage,
-		isAuth: true,
+		element: <LazyProfilePage />,
 		nestedRoutes: [
-			{ path: '', component: LazyProfilePersonPage },
-			{ path: 'users', component: LazyProfileUsersPage, roles: [Roles.Admin] },
-		],
-	},
-	{
-		path: '/projects/*',
-		component: LazyProjectsPage,
-		nestedRoutes: [
-			{ path: '', component: LazyProjectListPage },
-			{ path: ':id', component: LazySingleProjectPage },
 			{
-				path: ':id/edit',
+				path: '',
 				isAuth: true,
-				component: LazyEditProjectPage,
-				roles: [Roles.Admin],
+				element: <LazyProfilePersonPage />,
+			},
+			{
+				path: 'users',
+				element: <LazyProfileUsersPage />,
+				isAuth: true,
+				roles: [AppRoles.ADMIN],
 			},
 		],
 	},
-]
+}

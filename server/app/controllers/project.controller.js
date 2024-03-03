@@ -86,13 +86,30 @@ class ProjectController {
 
 	async uploadImage(req, res, next) {
 		try {
+			if (!req.files)
+				return res.status(400).json({ message: 'No file uploaded' })
+
 			const { file } = req.files
 
-			const fileName = uuidv4() + '.' + file.name.split('.')[1]
-			console.log(fileName)
-			file.mv(path.resolve('static', fileName))
+			if (!file) return res.json({ error: 'Incorrect input name' })
 
-			res.json(fileName)
+			const fileName = uuidv4() + '.' + file.name.split('.')[1]
+
+			const filePath = path.resolve('static', fileName)
+
+			file.mv(filePath, err => {
+				if (err) {
+					console.error(err)
+					return res.status(500).send(err)
+				}
+
+				res.json({
+					name: file.name,
+					type: file.type,
+					path: fileName,
+					size: file.size
+				})
+			})
 		} catch (err) {
 			next(err)
 		}

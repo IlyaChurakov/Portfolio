@@ -11,8 +11,11 @@ export const apiConfig = {
 		deleteRole: (id: string) => `/user/delete-role/${id}`,
 		addRole: (id: string) => `/user/add-role/${id}`,
 		activate: (link: string) => `/user/activate/${link}`,
-		uploadAvatar: (id: string) => `/user/upload-avatar/${id}`,
+		uploadAvatar: (id: string) => `/user/assign-avatar/${id}`,
 		addDescription: (id: string) => `/user/change-description/${id}`,
+		changeName: (id: string) => `/user/change-name/${id}`,
+		changeMail: (id: string) => `/user/change-mail/${id}`,
+		update: () => `/user/update`,
 	},
 	projects: {
 		all: () => `/projects`,

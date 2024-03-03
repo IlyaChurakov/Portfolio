@@ -1,18 +1,21 @@
 import { AxiosError } from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
 import AuthService from '../../../../services/Auth.service'
+import { RootStore } from '../rootStore'
 import { IUser } from './types/auth.types'
 
 export class AuthStore {
-	user: IUser
+	rootStore: RootStore
+
 	isAuth: boolean
 	isLoading: boolean
-	error: AxiosError | undefined
+	error?: AxiosError
 
-	constructor() {
+	constructor(rootStore: RootStore) {
 		makeAutoObservable(this)
 
-		this.user = {} as IUser
+		this.rootStore = rootStore
+
 		this.isAuth = false
 		this.isLoading = false
 	}
@@ -21,7 +24,7 @@ export class AuthStore {
 		this.isAuth = bool
 	}
 	setUser(user: IUser) {
-		this.user = user
+		this.rootStore.userStore.user = user
 	}
 	setLoading(bool: boolean) {
 		this.isLoading = bool
@@ -30,7 +33,7 @@ export class AuthStore {
 		this.error = err
 	}
 
-	register = async (email: string, password: string, name: string) => {
+	async register(email: string, password: string, name: string) {
 		try {
 			this.setLoading(true)
 
@@ -49,7 +52,7 @@ export class AuthStore {
 		}
 	}
 
-	login = async (email: string, password: string) => {
+	async login(email: string, password: string) {
 		try {
 			this.setLoading(true)
 
@@ -68,7 +71,7 @@ export class AuthStore {
 		}
 	}
 
-	logout = async () => {
+	async logout() {
 		try {
 			this.setLoading(true)
 
@@ -87,7 +90,7 @@ export class AuthStore {
 		}
 	}
 
-	checkAuth = async () => {
+	async checkAuth() {
 		try {
 			this.setLoading(true)
 
@@ -99,8 +102,6 @@ export class AuthStore {
 				this.setAuth(true)
 				this.setUser(authResponse.user)
 			})
-
-			return true
 		} catch (err) {
 			this.setError(err as AxiosError)
 		} finally {

@@ -1,6 +1,5 @@
 import { useStores } from '@app/provider'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
+import { observer } from 'mobx-react-lite'
 import { GoPlus } from 'react-icons/go'
 
 interface IList {
@@ -10,16 +9,13 @@ interface IList {
 }
 
 const List = ({ id, isShow, roles }: IList) => {
-	const { addRoleById } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.userStore
-	)
+	const { userStore } = useStores()
 
 	if (!isShow) return null
 
 	return (
 		<nav className='bg-white absolute w-full text-black  shadow-xl  z-10 border-none'>
+			<div>{userStore.loadingStates.addRoleById && <div>Loading</div>}</div>
 			<ul>
 				{roles.map(role => (
 					<li key={role}>
@@ -28,7 +24,7 @@ const List = ({ id, isShow, roles }: IList) => {
 							<GoPlus
 								fill='green'
 								className='text-lg cursor-pointer '
-								onClick={() => addRoleById(id, role)}
+								onClick={() => userStore.addRoleById(id, role)}
 							/>
 						</div>
 					</li>
@@ -38,4 +34,4 @@ const List = ({ id, isShow, roles }: IList) => {
 	)
 }
 
-export default List
+export default observer(List)

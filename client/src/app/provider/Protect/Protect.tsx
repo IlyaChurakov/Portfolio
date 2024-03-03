@@ -1,51 +1,53 @@
-import { AppRoutesPrivate, RoutePropsCustom } from '@shared/config/router/types'
+import { AppRoles, RoutePropsCustom } from '@shared/config/router/types'
 import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useStores } from '..'
-import { RootStore } from '../store/rootStore'
-import { RootStoreContext } from '../store/store'
 
-const Protect = observer(
-	({
-		route,
-		children,
-	}: {
-		children: React.ReactNode
-		route: Record<AppRoutesPrivate, RoutePropsCustom>
-	}) => {
-		const { isAuth, checkAuth, isLoading } = useStores(
-			RootStoreContext,
-			(contextData: RootStore) => contextData,
-			(store: RootStore) => store.authStore
-		)
-		const { pathname } = useLocation()
-		const navigate = useNavigate()
+const Protect = ({
+	route,
+	children,
+}: {
+	children: React.ReactNode
+	route: RoutePropsCustom
+}) => {
+	const { authStore, userStore } = useStores()
+	const navigate = useNavigate()
 
-		useEffect(() => {
-			console.log(isAuth)
-		}, [route])
+	useEffect(() => {
+		checkAccess()
+	}, [route])
 
-		const checkUserAuth = async () => {
-			if (localStorage.getItem('token')) {
-				await checkAuth()
+	const checkAccess = async () => {
+		await checkUserAuth()
 
-				if (isAuth === false) navigate('/')
-			}
-		}
+		if (route.isAuth) {
+			if (!authStore.isAuth) navigate('/')
 
-		if (pathname === '/login' || pathname === '/register') {
-			if (!isAuth) {
-				return <>{children}</>
-			} else {
-				return <Navigate to={'/'} />
-			}
-		} else {
-			if (isAuth) {
-				return <>{children}</>
+			if (route.roles && !roleAccess(userStore.user.roles, route.roles)) {
+				console.log(userStore.user.roles, route.roles)
+				navigate('/')
 			}
 		}
 	}
-)
 
-export default Protect
+	const checkUserAuth = async () => {
+		if (localStorage.getItem('token')) {
+			if (!authStore.isAuth) await authStore.checkAuth()
+		}
+	}
+
+	const roleAccess = (userRoles: string[], routeRoles: AppRoles[]) => {
+		const uniqUserRoles = new Set(userRoles)
+
+		const isAccess = !!routeRoles.find(routeRole =>
+			uniqUserRoles.has(routeRole)
+		)
+
+		return isAccess
+	}
+
+	return <>{children}</>
+}
+
+export default observer(Protect)

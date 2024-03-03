@@ -1,3 +1,2 @@
-export { useStores } from './store/store'
-
 export { Router } from './router/Router.tsx'
+export { useStores } from './store/store'

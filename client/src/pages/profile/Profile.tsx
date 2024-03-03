@@ -1,5 +1,4 @@
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext, useStores } from '@app/provider/store/store'
+import { useStores } from '@app/provider/store/store'
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { GoArrowLeft } from 'react-icons/go'
@@ -7,11 +6,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom'
 import Container from '../../shared/layouts/Container'
 
 const Profile: FC = observer(() => {
-	const { user } = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.authStore
-	)
+	const { userStore } = useStores()
 	const navigate = useNavigate()
 
 	return (
@@ -30,7 +25,7 @@ const Profile: FC = observer(() => {
 							Профиль
 						</Link>
 
-						{user.roles.includes('admin') && (
+						{userStore.user.roles?.includes('admin') && (
 							<Link to={'users'} className='mr-5 text-gray hover:text-white'>
 								Список пользователей
 							</Link>

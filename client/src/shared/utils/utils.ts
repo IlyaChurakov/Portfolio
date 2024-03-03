@@ -1,5 +1,4 @@
 import { $axios } from '@shared/config'
-import { AxiosProgressEvent } from 'axios'
 import dayjs from 'dayjs'
 
 export function checkUserRoles(routeRoles: string[], userRoles: string[]) {
@@ -25,23 +24,20 @@ export function fileReader(file: File | null) {
 	})
 }
 
-export async function uploadFile(file: File | null, func: Function = () => {}) {
+export async function uploadFile(files: FileList) {
+	const file = files[0]
 	if (!file) return
 
 	let data = new FormData()
 	data.append('file', file)
 
-	const controller = new AbortController()
-	const { signal: abortSignal } = controller
+	const response = await $axios.post<{
+		name: string
+		path: string
+		size: string
+		type: string
+	}>(`/projects/upload-image`, data)
+	if (!response.data.path) throw new Error('Ошибка загрузки файла')
 
-	const options = {
-		onUploadProgress: (progressEvent: AxiosProgressEvent) => {
-			func(progressEvent)
-		},
-		signal: abortSignal,
-	}
-
-	const response = await $axios.post(`/projects/upload-image`, data, options)
-
-	return response.data as string
+	return response.data.path
 }
