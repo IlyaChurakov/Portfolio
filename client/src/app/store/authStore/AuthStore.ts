@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
-import AuthService from '../../../../services/Auth.service'
+import AuthService from '../../../services/Auth.service'
 import { RootStore } from '../rootStore'
 import { IUser } from './types/auth.types'
 

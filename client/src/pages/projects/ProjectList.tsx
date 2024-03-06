@@ -1,8 +1,8 @@
-import { useStores } from '@app/provider/store/store'
+import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
 import Container from '../../shared/layouts/Container'
-import ProjectItem from '../../shared/ui/ProjectItem'
+import ProjectItem from '../../widgets/ProjectItem'
 
 const ProjectList: FC = observer(() => {
 	const { projectStore } = useStores()

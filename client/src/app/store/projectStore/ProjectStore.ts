@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import ProjectService from '../../../../services/Project.service'
+import ProjectService from '../../../services/Project.service'
 import { RootStore } from '../rootStore'
 import { IProject } from './types/project.types'
 
@@ -56,26 +56,11 @@ export class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
-	async getProjectList() {
+	async getProjectList(count?: number): Promise<IProject[]> {
 		try {
-			this.setLoading(true)
-			const { data } = await ProjectService.getProjectList()
-			this.setLoading(false)
+			const { data } = await ProjectService.getProjectList(count)
 
 			this.setProjectList(data)
-
-			return data
-		} catch (err) {
-			throw new Error((err as Error).message)
-		}
-	}
-	async getLastProjects(count: number) {
-		try {
-			this.setLoading(true)
-			const { data } = await ProjectService.getLastProjects(count)
-			this.setLoading(false)
-
-			this.setLastProjects(data)
 
 			return data
 		} catch (err) {

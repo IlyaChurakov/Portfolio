@@ -1,4 +1,4 @@
-import { IUser } from '@app/provider/store/authStore/types/auth.types'
+import { IUser } from '@app/store/authStore/types/auth.types'
 import { apiConfig } from '@shared/config'
 import { $axios } from '../shared/config/http/axios'
 

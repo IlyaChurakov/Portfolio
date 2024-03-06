@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
-import Footer from '../ui/Footer'
+import Footer from '../../widgets/Footer'
 
 const Page = ({ children }: { children: ReactNode }) => {
 	const { pathname } = useLocation()

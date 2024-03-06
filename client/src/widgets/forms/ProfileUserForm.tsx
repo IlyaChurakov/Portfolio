@@ -1,16 +1,16 @@
-import { useStores } from '@app/provider'
+import { useStores } from '@app/index'
 import ImageLoader from '@pages/projects/page-constructor/components/ImageLoader'
+import Input from '@shared/ui/form/Input'
+import Textarea from '@shared/ui/form/Textarea'
 import { transformDate, uploadFile } from '@shared/utils/utils'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { IoMdCreate } from 'react-icons/io'
 import { MdAlternateEmail, MdPublishedWithChanges } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import Button from './components/Button'
-import Input from './components/Input'
-import Textarea from './components/Textarea'
+import Button from '../../shared/ui/form/Button'
 
 interface ProfileUserFormFields {
 	avatar?: FileList
@@ -20,18 +20,17 @@ interface ProfileUserFormFields {
 }
 
 const ProfileUserForm = () => {
-	const { userStore } = useStores()
+	const { userStore, errorStore } = useStores()
 	const navigate = useNavigate()
 
 	const [isEditForm, setIsEditForm] = useState<boolean>(false)
-	const [error, setError] = useState<string>()
 
 	const static_url = import.meta.env.VITE_API_STATIC_URL
 
 	const {
 		register,
 		handleSubmit,
-		formState: { isSubmitting },
+		formState: { isSubmitting, dirtyFields },
 		reset,
 		setValue,
 	} = useForm<ProfileUserFormFields>({
@@ -42,19 +41,6 @@ const ProfileUserForm = () => {
 		},
 	})
 
-	useEffect(() => {
-		hideError(error)
-	}, [error])
-
-	const hideError = (error: string | undefined) => {
-		if (!error) return
-
-		const timer = setTimeout(() => {
-			setError(undefined)
-			clearTimeout(timer)
-		}, 3000)
-	}
-
 	const onSubmit = async ({ avatar, ...data }: ProfileUserFormFields) => {
 		try {
 			const user = {
@@ -62,7 +48,6 @@ const ProfileUserForm = () => {
 				...data,
 			}
 
-			// default value is Filelist
 			if (avatar) {
 				const uploadedAvatar = await uploadFile(avatar)
 				if (uploadedAvatar) user.avatar = uploadedAvatar
@@ -74,7 +59,7 @@ const ProfileUserForm = () => {
 
 			closeForm()
 		} catch (err) {
-			setError((err as AxiosError).message)
+			errorStore.add((err as AxiosError).message)
 		}
 	}
 
@@ -101,7 +86,7 @@ const ProfileUserForm = () => {
 			<div>
 				{isEditForm ? (
 					<ImageLoader
-						uploadedImageUrl={static_url + userStore.user.avatar}
+						uploadedImageUrl={userStore.user.avatar}
 						register={register('avatar')}
 						setValue={setValue}
 					/>
@@ -117,17 +102,31 @@ const ProfileUserForm = () => {
 			</div>
 
 			<div className='flex flex-col'>
-				<Input isEdit={isEditForm} type='text' register={register('name')}>
+				<Input
+					isEdit={isEditForm}
+					type='text'
+					register={register('name')}
+					placeholder='Имя'
+				>
 					<p className='text-start text-3xl text-white font-bold mb-3'>
 						{userStore.user.name}
 					</p>
 				</Input>
 
-				<Textarea isEdit={isEditForm} register={register('description')}>
+				<Textarea
+					isEdit={isEditForm}
+					register={register('description')}
+					placeholder='Описание'
+				>
 					<p className='text-white mb-5'>{userStore.user.description}</p>
 				</Textarea>
 
-				<Input isEdit={isEditForm} type='text' register={register('email')}>
+				<Input
+					isEdit={isEditForm}
+					type='text'
+					register={register('email')}
+					placeholder='Email'
+				>
 					<p className='flex items-center text-start text-violet mb-3'>
 						<MdAlternateEmail title='Email' className='mr-2' />
 						{userStore.user.email}
@@ -157,8 +156,6 @@ const ProfileUserForm = () => {
 				) : (
 					<Button text='Редактировать' onClick={() => setIsEditForm(true)} />
 				)}
-
-				<div>{error && <p className='text-red'>{error}</p>}</div>
 
 				<Button text='Удалить аккаунт' onClick={deleteAccount} />
 			</div>

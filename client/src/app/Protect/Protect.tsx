@@ -25,7 +25,6 @@ const Protect = ({
 			if (!authStore.isAuth) navigate('/')
 
 			if (route.roles && !roleAccess(userStore.user.roles, route.roles)) {
-				console.log(userStore.user.roles, route.roles)
 				navigate('/')
 			}
 		}

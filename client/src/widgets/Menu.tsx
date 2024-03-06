@@ -1,4 +1,4 @@
-import { useStores } from '@app/provider'
+import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
 import { FC, useState } from 'react'
 import { AiOutlineUser } from 'react-icons/ai'

@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios'
 import { makeAutoObservable } from 'mobx'
-import UserService from '../../../../services/User.service'
+import UserService from '../../../services/User.service'
 import { IUser } from '../authStore/types/auth.types'
 import { RootStore } from '../rootStore'
 
@@ -39,6 +39,17 @@ export class UserStore {
 		this.activeUser = user
 	}
 
+	selectUserFields(userFields: Partial<IUser>): Partial<IUser> {
+		const partOfUser: { [key: string]: unknown } = {}
+
+		for (const key in userFields) {
+			if (this.user.hasOwnProperty(key)) {
+				partOfUser[key] = this.user[key as keyof IUser]
+			}
+		}
+
+		return partOfUser
+	}
 	getUserList = async () => {
 		try {
 			const users = await UserService.getUsersList()

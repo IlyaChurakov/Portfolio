@@ -41,3 +41,34 @@ export async function uploadFile(files: FileList) {
 
 	return response.data.path
 }
+
+export const isObject = (object: any) => {
+	return object != null && typeof object === 'object'
+}
+
+export function deepEqual(obj1: any, obj2: any): boolean {
+	const keys1 = Object.keys(obj1)
+	const keys2 = Object.keys(obj2)
+
+	if (!isObject(obj1) || !isObject(obj2)) {
+		return obj1 === obj2
+	}
+
+	if (keys1.length !== keys2.length) return false
+
+	for (const key of keys1) {
+		if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+			return false
+		}
+	}
+
+	return true
+}
+
+export function fieldsChanges<T, J>(
+	current: Partial<T>,
+	updated: Partial<J>
+): boolean {
+	if (deepEqual(current, updated)) return false
+	return true
+}

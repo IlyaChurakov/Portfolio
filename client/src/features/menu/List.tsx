@@ -1,4 +1,4 @@
-import { useStores } from '@app/provider'
+import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
 import { GoPlus } from 'react-icons/go'
 
@@ -15,7 +15,6 @@ const List = ({ id, isShow, roles }: IList) => {
 
 	return (
 		<nav className='bg-white absolute w-full text-black  shadow-xl  z-10 border-none'>
-			<div>{userStore.loadingStates.addRoleById && <div>Loading</div>}</div>
 			<ul>
 				{roles.map(role => (
 					<li key={role}>

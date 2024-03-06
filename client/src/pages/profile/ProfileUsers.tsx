@@ -1,8 +1,8 @@
-import { useStores } from '@app/provider/store/store'
+import { useStores } from '@app/index'
+import Menu from '@features/menu/Menu'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect } from 'react'
 import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
-import Menu from './components/menu/Menu'
 
 const ProfileUsers: FC = () => {
 	const { userStore } = useStores()

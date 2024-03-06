@@ -1,6 +1,5 @@
-import { useStores } from '@app/provider'
+import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
-import { FC } from 'react'
 import { GoArrowLeft } from 'react-icons/go'
 import { TiArrowSync } from 'react-icons/ti'
 import {
@@ -12,7 +11,7 @@ import {
 } from 'react-router-dom'
 import Container from '../../shared/layouts/Container'
 
-const Projects: FC = observer(() => {
+const Projects = () => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
 
@@ -104,6 +103,6 @@ const Projects: FC = observer(() => {
 			<Outlet />
 		</div>
 	)
-})
+}
 
-export default Projects
+export default observer(Projects)

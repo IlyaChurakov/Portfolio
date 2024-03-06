@@ -1,13 +1,7 @@
-import { useOnClickOutside } from '../../../../shared/hooks/useOnClickOutside.ts'
-
+import { useOnClickOutside } from '@shared/hooks/useOnClickOutside.js'
 import List from './List.js'
 
-interface IMenu {
-	id: string
-	roles: string[]
-}
-
-const Menu = ({ id, roles }: IMenu) => {
+const Menu = ({ id, roles }: { id: string; roles: string[] }) => {
 	const { isShow, ref, setIsShow } = useOnClickOutside(false)
 
 	return (

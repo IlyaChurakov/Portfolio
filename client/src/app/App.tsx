@@ -1,9 +1,10 @@
-import { Router } from '@app/provider'
+import Errors from '@widgets/Errors'
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import Page from './shared/layouts/Page'
-import Menu from './shared/ui/Menu'
-import './tailwind.css'
+import { Router } from '.'
+import Page from '../shared/layouts/Page'
+import '../tailwind.css'
+import Menu from '../widgets/Menu'
 
 const App: FC = () => {
 	return (
@@ -12,6 +13,7 @@ const App: FC = () => {
 			<Page>
 				<Router />
 			</Page>
+			<Errors />
 		</>
 	)
 }

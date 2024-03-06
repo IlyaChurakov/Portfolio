@@ -1,16 +1,10 @@
-import { useStores } from '@app/provider'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
+import { useStores } from '@app/index'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import Container from '../layouts/Container'
+import Container from '../shared/layouts/Container'
 
 const Footer: FC = () => {
-	const userStore = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.userStore
-	)
+	const { authStore } = useStores()
 
 	return (
 		<footer className=' max-h-[200px] w-full h-full p-10 bg-[#232426]'>
@@ -22,7 +16,7 @@ const Footer: FC = () => {
 						</Link>
 					</div>
 
-					{userStore.isAuth ? (
+					{authStore.isAuth ? (
 						<div>
 							<Link className=' hover:text-white inline-block' to={'/profile'}>
 								Профиль
@@ -35,6 +29,7 @@ const Footer: FC = () => {
 							</Link>
 						</div>
 					)}
+
 					<div>
 						<Link className=' hover:text-white inline-block' to={'/projects'}>
 							Проекты

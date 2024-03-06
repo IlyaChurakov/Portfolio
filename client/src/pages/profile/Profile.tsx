@@ -1,4 +1,4 @@
-import { useStores } from '@app/provider/store/store'
+import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { GoArrowLeft } from 'react-icons/go'

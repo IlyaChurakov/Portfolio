@@ -9,17 +9,21 @@ export default class ProjectService {
 		return await $axios.post<IProject>(path)
 	}
 
-	static async getProjectList(): Promise<AxiosResponse<IProject[]>> {
-		const path = apiConfig.projects.all()
+	static async getProjectList(
+		count?: number
+	): Promise<AxiosResponse<IProject[]>> {
+		const path = count
+			? apiConfig.projects.last(count)
+			: apiConfig.projects.all()
 		return await $axios.get<IProject[]>(path)
 	}
 
-	static async getLastProjects(
-		count: number
-	): Promise<AxiosResponse<IProject[]>> {
-		const path = apiConfig.projects.last(count)
-		return await $axios.get<IProject[]>(path)
-	}
+	// static async getLastProjects(
+	// 	count: number
+	// ): Promise<AxiosResponse<IProject[]>> {
+	// 	const path = apiConfig.projects.last(count)
+	// 	return await $axios.get<IProject[]>(path)
+	// }
 
 	static async getProject(id: string): Promise<AxiosResponse<IProject>> {
 		const path = apiConfig.projects.one(id)

@@ -1,16 +1,11 @@
-import { useStores } from '@app/provider'
+import ProjectList from '@widgets/ProjectList'
 import { observer } from 'mobx-react-lite'
-import { FC, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Container from '../shared/layouts/Container'
-import ProjectItem from '../shared/ui/ProjectItem'
 
-const Home: FC = observer(() => {
-	const { projectStore } = useStores()
+// TODO: раскидать на компоненты
 
-	useEffect(() => {
-		projectStore.getLastProjects(4)
-	}, [])
-
+const Home = () => {
 	return (
 		<Container>
 			<div className='flex flex-col'>
@@ -52,15 +47,14 @@ const Home: FC = observer(() => {
 					<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>
 						Проекты
 					</h1>
-					<div className='grid grid-cols-4 gap-5 justify-items-center'>
-						{projectStore.lastProjects?.map(project => (
-							<ProjectItem key={project.id} project={project} />
-						))}
+					<ProjectList count={4} />
+					<div className='mt-5 text-violet flex justify-end'>
+						<Link to='/projects'>Смотреть все</Link>
 					</div>
 				</section>
 			</div>
 		</Container>
 	)
-})
+}
 
-export default Home
+export default observer(Home)

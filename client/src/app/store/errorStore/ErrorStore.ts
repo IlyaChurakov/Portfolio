@@ -19,10 +19,8 @@ export class ErrorStore {
 
 		this.errors.push(err)
 
-		const timer = setTimeout(() => {
+		setTimeout(() => {
 			this.errors.shift()
 		}, 3000)
-
-		clearTimeout(timer)
 	}
 }
