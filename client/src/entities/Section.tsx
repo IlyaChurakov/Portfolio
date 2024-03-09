@@ -1,38 +1,26 @@
-import { useStores } from '@app/provider'
-import {
-	IBlock,
-	ISection,
-} from '@app/provider/store/projectStore/types/project.types'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
+import { useStores } from '@app/index'
+import { IBlock, ISection } from '@app/store/projectStore/types/project.types'
+import Button from '@shared/ui/form/Button'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { MdDelete } from 'react-icons/md'
-import BlockEditor from './modals/BlockEditor'
+import BlockModal from '../features/modals/BlockModal'
+import Block from './Block'
 
 const Section = ({
 	section,
-	name,
-	blocks,
-	openHandler,
+	openModal,
 }: {
 	section: ISection
-	name: string
-	blocks: IBlock[]
-	openHandler: Function
+	openModal: Function
 }) => {
-	const projectStore = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.projectStore
-	)
+	const { projectStore } = useStores()
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const openSection = () => setIsVisible(isVisible ? false : true)
 
-	// TODO: вынести в стор
-	const [editingBlock, setEditingBlock] = useState<IBlock | null | object>(null)
+	const [editingBlock, setEditingBlock] = useState<IBlock | null>(null)
 
 	const deleteSection = (id: string | number) => {
 		const project = { ...projectStore.project }
@@ -42,13 +30,13 @@ const Section = ({
 		projectStore.setProject(project)
 	}
 
-	const openBlockModal = (block?: IBlock) => {
-		setEditingBlock(block ?? { sectionId: section.id })
-	}
+	const openBlockModal = (block: IBlock) => setEditingBlock(block)
 	const closeBlockModal = () => setEditingBlock(null)
 
 	return (
 		<>
+			<BlockModal block={editingBlock} close={closeBlockModal} />
+
 			<div className='bg-gray-600 mb-2 p-2 border-l-[1px] border-l-gray'>
 				<div className='flex justify-between'>
 					<div className='cursor-pointer flex items-center'>
@@ -66,9 +54,9 @@ const Section = ({
 
 						<span
 							className='text-gray hover:text-white'
-							onClick={() => openHandler(section)}
+							onClick={() => openModal(section)}
 						>
-							{name}
+							{section.name}
 						</span>
 					</div>
 
@@ -82,17 +70,15 @@ const Section = ({
 
 				{isVisible && (
 					<>
-						{blocks?.map(block => (
-							<BlockEditor block={block} />
+						{section.blocks?.map(block => (
+							<Block key={block.id} block={block} openModal={openBlockModal} />
 						))}
-						<button
-							onClick={() => openBlockModal()}
-							className='pl-5 pt-2 hover:bg-gray-500 w-full text-start rounded-lg text-gray hover:text-white'
-						>
-							Добавить элемент
-						</button>
-
-						{/* <BlockModal block={editingBlock} closeHandler={closeBlockModal} /> */}
+						<Button
+							text='Добавить элемент'
+							onClick={() =>
+								openBlockModal({ sectionId: section.id } as IBlock)
+							}
+						/>
 					</>
 				)}
 			</div>

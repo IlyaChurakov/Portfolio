@@ -1,8 +1,8 @@
 import { useStores } from '@app/index'
-import ImageLoader from '@pages/projects/page-constructor/components/ImageLoader'
+import ImageLoader from '@features/ImageLoader'
+import { transformDate, uploadFile } from '@shared/lib/utils'
 import Input from '@shared/ui/form/Input'
 import Textarea from '@shared/ui/form/Textarea'
-import { transformDate, uploadFile } from '@shared/utils/utils'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
@@ -30,7 +30,7 @@ const ProfileUserForm = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { isSubmitting, dirtyFields },
+		formState: { isSubmitting },
 		reset,
 		setValue,
 	} = useForm<ProfileUserFormFields>({
@@ -63,6 +63,11 @@ const ProfileUserForm = () => {
 		}
 	}
 
+	const closeForm = () => {
+		setIsEditForm(false)
+		reset()
+	}
+
 	const deleteAccount = async () => {
 		if (confirm('Вы действительно хотите удалить свой аккаунт?')) {
 			await userStore.deleteAccount(userStore.user.id)
@@ -70,14 +75,16 @@ const ProfileUserForm = () => {
 		}
 	}
 
-	const closeForm = () => {
-		setIsEditForm(false)
-		reset()
+	const deleteAvatar = () => {
+		setValue('avatar', undefined)
+		userStore.user.avatar = null
 	}
+
+	const sendForm = handleSubmit(onSubmit)
 
 	return (
 		<form
-			onSubmit={handleSubmit(onSubmit)}
+			onSubmit={sendForm}
 			className='w-full bg-black p-5 grid grid-cols-[10rem_1fr_8rem] gap-5 rounded-[10px]'
 			style={{
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
@@ -85,11 +92,14 @@ const ProfileUserForm = () => {
 		>
 			<div>
 				{isEditForm ? (
-					<ImageLoader
-						uploadedImageUrl={userStore.user.avatar}
-						register={register('avatar')}
-						setValue={setValue}
-					/>
+					<>
+						<ImageLoader
+							uploadedImageUrl={userStore.user.avatar}
+							register={register('avatar')}
+							setValue={setValue}
+						/>
+						<Button text='delete image' onClick={deleteAvatar} />
+					</>
 				) : userStore.user.avatar ? (
 					<img
 						src={static_url + userStore.user.avatar}

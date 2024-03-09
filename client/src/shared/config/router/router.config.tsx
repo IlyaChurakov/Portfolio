@@ -1,15 +1,15 @@
 import {
-	LazyEditProjectPage,
 	LazyHomePage,
 	LazyLoginPage,
 	LazyNotFoundPage,
-	LazyProfilePage,
 	LazyProfilePersonPage,
 	LazyProfileUsersPage,
+	LazyProfileWrapperPage,
+	LazyProjectEditorPage,
 	LazyProjectListPage,
-	LazyProjectsPage,
+	LazyProjectPage,
+	LazyProjectWrapperPage,
 	LazyRegisterPage,
-	LazySingleProjectPage,
 } from '../../../pages/index'
 
 import { AppRoles, AppRoutes, RoutePropsCustom } from './types'
@@ -38,7 +38,7 @@ export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
 	},
 	[AppRoutes.PROJECTS]: {
 		path: RoutePaths.projects,
-		element: <LazyProjectsPage />,
+		element: <LazyProjectWrapperPage />,
 		nestedRoutes: [
 			{
 				path: '',
@@ -46,11 +46,11 @@ export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
 			},
 			{
 				path: ':id',
-				element: <LazySingleProjectPage />,
+				element: <LazyProjectPage />,
 			},
 			{
 				path: ':id/edit',
-				element: <LazyEditProjectPage />,
+				element: <LazyProjectEditorPage />,
 				isAuth: true,
 				roles: [AppRoles.ADMIN],
 			},
@@ -62,7 +62,7 @@ export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
 	},
 	[AppRoutes.PROFILE]: {
 		path: RoutePaths.profile,
-		element: <LazyProfilePage />,
+		element: <LazyProfileWrapperPage />,
 		nestedRoutes: [
 			{
 				path: '',

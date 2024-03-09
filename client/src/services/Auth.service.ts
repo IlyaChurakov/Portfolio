@@ -1,4 +1,4 @@
-import { AuthResponse } from '@app/provider/store/authStore/types/auth.types'
+import { AuthResponse } from '@app/store/authStore/types/auth.types'
 import { apiConfig } from '@shared/config'
 import axios from 'axios'
 import { $axios } from '../shared/config/http/axios'

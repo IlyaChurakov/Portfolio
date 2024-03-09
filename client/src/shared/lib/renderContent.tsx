@@ -1,24 +1,19 @@
-import {
-	IBlock,
-	IProject,
-} from '@app/provider/store/projectStore/types/project.types'
-import { WithLinks } from '@shared/utils/withLinks'
-import Container from '../../../shared/layouts/Container'
+import { IBlock, IProject } from '@app/store/projectStore/types/project.types'
+import { WithLinks } from '@shared/lib/withLinks'
+import Container from '../layouts/Container'
 
 const defaultSectionPaddings = '2.5rem 0'
 
 const blockTypes: Record<string, (block: IBlock) => JSX.Element> = {
-	h1: block => {
-		return (
-			<h1
-				className={`text-4xl font-bold mb-5`}
-				style={{ color: block.color }}
-				key={block.id}
-			>
-				{block.text}
-			</h1>
-		)
-	},
+	h1: block => (
+		<h1
+			className={`text-4xl font-bold mb-5`}
+			style={{ color: block.color }}
+			key={block.id}
+		>
+			{block.text}
+		</h1>
+	),
 	h2: block => {
 		return (
 			<h2
@@ -91,7 +86,10 @@ export const renderContent = (project: IProject | null | undefined) => {
 			}}
 		>
 			<Container>
-				{section.blocks?.map(block => blockTypes[block.type](block))}
+				{section.blocks?.map(block => {
+					console.log(block.type)
+					return blockTypes[block.type](block)
+				})}
 			</Container>
 		</section>
 	))

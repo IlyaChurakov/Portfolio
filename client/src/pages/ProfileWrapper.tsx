@@ -1,11 +1,10 @@
 import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
-import { FC } from 'react'
 import { GoArrowLeft } from 'react-icons/go'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import Container from '../../shared/layouts/Container'
+import Container from '../shared/layouts/Container'
 
-const Profile: FC = observer(() => {
+const ProfileWrapper = () => {
 	const { userStore } = useStores()
 	const navigate = useNavigate()
 
@@ -41,6 +40,6 @@ const Profile: FC = observer(() => {
 			</section>
 		</>
 	)
-})
+}
 
-export default Profile
+export default observer(ProfileWrapper)

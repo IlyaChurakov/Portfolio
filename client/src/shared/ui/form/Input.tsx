@@ -8,7 +8,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	children?: ReactNode
 }
 
-const Input = ({ isEdit, type, register, children, ...props }: InputProps) => {
+const Input = ({
+	isEdit,
+	type,
+	register,
+	children,
+	className,
+	...props
+}: InputProps) => {
 	return (
 		<>
 			{isEdit ? (
@@ -16,7 +23,7 @@ const Input = ({ isEdit, type, register, children, ...props }: InputProps) => {
 					{...props}
 					type={type}
 					{...register}
-					className='mb-3 rounded-sm p-1'
+					className={`block mb-3 rounded-sm p-1 ${className}`}
 				/>
 			) : (
 				children

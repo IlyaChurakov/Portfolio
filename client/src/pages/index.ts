@@ -4,24 +4,22 @@ export const LazyHomePage = lazy(async () => await import('./Home'))
 export const LazyLoginPage = lazy(async () => await import('./Login'))
 export const LazyNotFoundPage = lazy(async () => await import('./NotFound'))
 export const LazyRegisterPage = lazy(async () => await import('./Register'))
-export const LazyProfilePage = lazy(
-	async () => await import('./profile/Profile')
+export const LazyProfileWrapperPage = lazy(
+	async () => await import('./ProfileWrapper')
 )
 export const LazyProfilePersonPage = lazy(
-	async () => await import('./profile/ProfilePerson')
+	async () => await import('./ProfilePerson')
 )
 export const LazyProfileUsersPage = lazy(
-	async () => await import('./profile/ProfileUsers')
+	async () => await import('./ProfileUsers')
 )
 export const LazyProjectListPage = lazy(
-	async () => await import('./projects/ProjectList')
+	async () => await import('./ProjectList')
 )
-export const LazyEditProjectPage = lazy(
-	async () => await import('./projects/page-constructor/EditProject')
+export const LazyProjectEditorPage = lazy(
+	async () => await import('./ProjectEditor')
 )
-export const LazyProjectsPage = lazy(
-	async () => await import('./projects/Projects')
+export const LazyProjectWrapperPage = lazy(
+	async () => await import('./ProjectWrapper')
 )
-export const LazySingleProjectPage = lazy(
-	async () => await import('./projects/SingleProject')
-)
+export const LazyProjectPage = lazy(async () => await import('./Project'))

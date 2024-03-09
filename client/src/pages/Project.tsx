@@ -1,29 +1,24 @@
-import { useStores } from '@app/provider'
-import { RootStore } from '@app/provider/store/rootStore'
-import { RootStoreContext } from '@app/provider/store/store'
+import { useStores } from '@app/index'
+import PageLoader from '@shared/ui/loaders/PageLoader'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { renderContent } from './utils/renderContent'
+import { renderContent } from '../shared/lib/renderContent'
 
-const SingleProject = observer(() => {
+const Project = () => {
 	const { id } = useParams()
 
-	const projectStore = useStores(
-		RootStoreContext,
-		(contextData: RootStore) => contextData,
-		(store: RootStore) => store.projectStore
-	)
+	const { projectStore } = useStores()
 
 	useEffect(() => {
 		if (id) projectStore.getProject(id)
 	}, [id])
-
+	// FIXME: пофиксить лоадер
 	return (
 		<div>
 			{projectStore.loading ? (
 				<div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-bold text-2xl'>
-					Загрузка
+					<PageLoader />
 				</div>
 			) : (
 				<div>
@@ -38,6 +33,6 @@ const SingleProject = observer(() => {
 			)}
 		</div>
 	)
-})
+}
 
-export default SingleProject
+export default observer(Project)

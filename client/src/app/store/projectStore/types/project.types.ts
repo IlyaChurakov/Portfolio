@@ -4,7 +4,7 @@ export interface IProject {
 	createdAt: Date
 
 	name: string
-	previewImage?: string
+	previewImage: string | null
 	archived?: boolean
 	labels?: string[]
 
@@ -17,7 +17,7 @@ export interface ISection {
 	createdAt?: Date
 
 	name: string
-	backgroundPath?: string
+	backgroundPath: string | null
 	paddings?: string
 
 	blocks: IBlock[]
@@ -32,7 +32,7 @@ export interface IBlock {
 	text?: string
 	color?: string
 	items?: string[]
-	imgPath?: string
+	imgPath: string | null
 	imgDescr?: string
 
 	sectionId: string

@@ -9,9 +9,9 @@ import {
 	useNavigate,
 	useParams,
 } from 'react-router-dom'
-import Container from '../../shared/layouts/Container'
+import Container from '../shared/layouts/Container'
 
-const Projects = () => {
+const ProjectWrapper = () => {
 	const { pathname } = useLocation()
 	const { id } = useParams()
 
@@ -105,4 +105,4 @@ const Projects = () => {
 	)
 }
 
-export default observer(Projects)
+export default observer(ProjectWrapper)
