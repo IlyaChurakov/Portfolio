@@ -28,6 +28,7 @@ const ImageLoader = ({
 	const id = useId()
 
 	useEffect(() => {
+		console.log(uploadedImageUrl)
 		setImagePath(path)
 	}, [uploadedImageUrl])
 

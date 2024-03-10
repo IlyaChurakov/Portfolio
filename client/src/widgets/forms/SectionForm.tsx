@@ -94,32 +94,42 @@ const SectionForm = ({
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<ImageLoader
-				uploadedImageUrl={sectionObj.backgroundPath}
-				register={register('backgroundPath')}
-				setValue={setValue}
-				width='100px'
-				height='100px'
-			/>
-			<Button text='delete image' onClick={deleteBackground} />
+		<form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col'>
+			<div className='flex-1 flex flex-col items-center'>
+				<ImageLoader
+					uploadedImageUrl={sectionObj.backgroundPath}
+					register={register('backgroundPath')}
+					setValue={setValue}
+					width='100%'
+					height='200px'
+				/>
+				<div className='w-full flex justify-end mb-3'>
+					<Button onClick={deleteBackground}>Удалить изображение</Button>
+				</div>
 
-			<Input
-				type='text'
-				isEdit
-				register={register('name')}
-				placeholder='Название секции'
-				className='w-full'
-			/>
+				<Input
+					type='text'
+					isEdit
+					register={register('name')}
+					placeholder='Название секции'
+					className='w-full'
+				/>
 
-			<Input
-				type='text'
-				isEdit
-				register={register('paddings')}
-				placeholder='Отступы'
-			/>
+				<Input
+					type='text'
+					isEdit
+					register={register('paddings')}
+					placeholder='Отступы'
+					className='w-full'
+				/>
+			</div>
 
-			<Button isLoading={isSubmitting} type='submit' text='Сохранить' />
+			<div className='flex justify-between'>
+				<Button onClick={closeForm}>Отменить</Button>
+				<Button isLoading={isSubmitting} type='submit'>
+					Сохранить
+				</Button>
+			</div>
 		</form>
 	)
 }

@@ -1,4 +1,5 @@
 import { useStores } from '@app/index'
+import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import Container from '../shared/layouts/Container'
@@ -41,4 +42,4 @@ const Footer: FC = () => {
 	)
 }
 
-export default Footer
+export default observer(Footer)
