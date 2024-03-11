@@ -89,10 +89,12 @@ const RegisterForm = () => {
 
 			<Button
 				type='submit'
-				text='Зарегистрироваться'
+				loadingColor='white'
 				isLoading={isSubmitting}
 				className='bg-violet text-white my-2 p-1'
-			/>
+			>
+				Зарегистрироваться
+			</Button>
 			<Link to={'/login'} className='text-violet block m-auto'>
 				Авторизоваться
 			</Link>

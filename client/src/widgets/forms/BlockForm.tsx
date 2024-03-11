@@ -141,43 +141,62 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)}>
-			<TypeModalSelect
-				values={valuesForTypeSelect}
-				register={register('type', { required: true })}
-			/>
+		<form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col'>
+			<div className='flex-1 flex flex-col items-center'>
+				<TypeModalSelect
+					values={valuesForTypeSelect}
+					register={register('type', { required: true })}
+					className='w-full mb-3 p-1'
+				/>
 
-			{isEqual(type, [BlockTypes.h1, BlockTypes.p]) && (
-				<Textarea isEdit register={register('text', { required: true })} />
-			)}
-
-			{isEqual(type, [BlockTypes.img]) && (
-				<>
-					<ImageLoader
-						uploadedImageUrl={blockObj.imgPath}
-						register={register('imgPath')}
-						setValue={setValue}
-						width='100px'
-						height='100px'
-					/>
-					<Button text='delete image' onClick={deleteImage} />
-
-					<Input
-						type='text'
+				{isEqual(type, [BlockTypes.h1, BlockTypes.p]) && (
+					<Textarea
 						isEdit
-						register={register('imgDescr')}
-						placeholder='Подпись изображения'
-						className='w-full'
+						register={register('text', { required: true })}
+						className='w-full mb-3 p-1'
 					/>
-				</>
-			)}
+				)}
 
-			<ColorModalSelect
-				values={valuesForColorSelect}
-				register={register('color')}
-			/>
+				{isEqual(type, [BlockTypes.img]) && (
+					<>
+						<ImageLoader
+							uploadedImageUrl={blockObj.imgPath}
+							register={register('imgPath')}
+							setValue={setValue}
+							width='100%'
+							height='200px'
+						/>
+						<Button onClick={deleteImage}>Удалить изображение</Button>
 
-			<Button isLoading={isSubmitting} type='submit' text='Сохранить' />
+						<Input
+							type='text'
+							isEdit
+							register={register('imgDescr')}
+							placeholder='Подпись изображения'
+							className='w-full my-3 p-1'
+						/>
+					</>
+				)}
+
+				<ColorModalSelect
+					values={valuesForColorSelect}
+					register={register('color')}
+				/>
+			</div>
+
+			<div className='flex justify-between'>
+				<Button onClick={closeForm}>Отменить</Button>
+				<Button
+					isLoading={isSubmitting}
+					variant='contained'
+					loadingColor='white'
+					type='submit'
+					width='100px'
+					height='30px'
+				>
+					Сохранить
+				</Button>
+			</div>
 		</form>
 	)
 }

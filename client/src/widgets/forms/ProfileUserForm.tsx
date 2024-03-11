@@ -24,6 +24,7 @@ const ProfileUserForm = () => {
 	const navigate = useNavigate()
 
 	const [isEditForm, setIsEditForm] = useState<boolean>(false)
+	const [isDeletedAvatar, setIsDeletedAvatar] = useState<boolean>(false)
 
 	const static_url = import.meta.env.VITE_API_STATIC_URL
 
@@ -40,8 +41,6 @@ const ProfileUserForm = () => {
 			description: userStore.user.description,
 		},
 	})
-
-	const [isDeletedAvatar, setIsDeletedAvatar] = useState(false)
 
 	const onSubmit = async ({ avatar, ...data }: ProfileUserFormFields) => {
 		try {
@@ -67,8 +66,8 @@ const ProfileUserForm = () => {
 
 	const closeForm = () => {
 		setIsEditForm(false)
-		reset()
 		setIsDeletedAvatar(false)
+		reset()
 	}
 
 	const deleteAccount = async () => {
@@ -88,10 +87,9 @@ const ProfileUserForm = () => {
 	return (
 		<form
 			onSubmit={sendForm}
-			className={`w-full bg-black p-5 grid grid-cols-[10rem_1fr_6rem] grid-rows-[${
-				isEditForm ? '1fr_40px' : '1fr'
-			}] gap-5 rounded-[10px]`}
+			className={`w-full bg-black p-5 grid grid-cols-[10rem_1fr_6rem] gap-5 rounded-[10px]`}
 			style={{
+				gridTemplateRows: isEditForm ? '1fr 40px' : '1fr',
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
 		>
@@ -166,16 +164,11 @@ const ProfileUserForm = () => {
 
 			<div className='flex justify-end items-start'>
 				{isEditForm ? (
-					<Button type='submit' isLoading={isSubmitting}>
+					<Button key='save' type='submit' isLoading={isSubmitting}>
 						Сохранить
 					</Button>
 				) : (
-					<Button
-						onClick={e => {
-							e.preventDefault()
-							setIsEditForm(true)
-						}}
-					>
+					<Button key='edit' onClick={() => setIsEditForm(true)}>
 						Редактировать
 					</Button>
 				)}
@@ -184,27 +177,23 @@ const ProfileUserForm = () => {
 			{isEditForm && (
 				<>
 					<div className='flex justify-center w-full'>
-						{isEditForm && (
-							<Button
-								onClick={deleteAvatar}
-								variant='contained-danger'
-								className='w-full'
-							>
-								Удалить аватар
-							</Button>
-						)}
+						<Button
+							onClick={deleteAvatar}
+							variant='contained-danger'
+							className='w-full'
+						>
+							Удалить аватар
+						</Button>
 					</div>
 
 					<div className='flex justify-start'>
-						{isEditForm && (
-							<Button onClick={deleteAccount} variant='text-danger'>
-								Удалить аккаунт
-							</Button>
-						)}
+						<Button onClick={deleteAccount} variant='text-danger'>
+							Удалить аккаунт
+						</Button>
 					</div>
 
 					<div className='flex justify-end'>
-						{isEditForm && <Button onClick={closeForm}>Отменить</Button>}
+						<Button onClick={closeForm}>Отменить</Button>
 					</div>
 				</>
 			)}

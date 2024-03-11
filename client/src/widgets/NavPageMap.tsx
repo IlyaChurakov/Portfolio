@@ -62,9 +62,11 @@ const NavPageMap = () => {
 					))}
 
 					<Button
-						text='Добавить секцию'
+						className='pl-3 pt-2'
 						onClick={() => openSectionModal({} as ISection)}
-					/>
+					>
+						Добавить секцию
+					</Button>
 				</div>
 			</nav>
 		</>

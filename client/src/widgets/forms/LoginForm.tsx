@@ -81,10 +81,12 @@ const LoginForm = () => {
 
 			<Button
 				type='submit'
-				text='Авторизоваться'
+				loadingColor='white'
 				isLoading={isSubmitting}
 				className='bg-violet text-white my-2 p-1'
-			/>
+			>
+				Авторизоваться
+			</Button>
 			<Link to={'/register'} className='text-violet block m-auto'>
 				Зарегистрироваться
 			</Link>

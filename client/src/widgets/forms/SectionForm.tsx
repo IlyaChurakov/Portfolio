@@ -112,7 +112,7 @@ const SectionForm = ({
 					isEdit
 					register={register('name')}
 					placeholder='Название секции'
-					className='w-full'
+					className='w-full  mb-3'
 				/>
 
 				<Input
@@ -126,7 +126,14 @@ const SectionForm = ({
 
 			<div className='flex justify-between'>
 				<Button onClick={closeForm}>Отменить</Button>
-				<Button isLoading={isSubmitting} type='submit'>
+				<Button
+					isLoading={isSubmitting}
+					variant='contained'
+					loadingColor='white'
+					type='submit'
+					width='100px'
+					height='30px'
+				>
 					Сохранить
 				</Button>
 			</div>

@@ -80,7 +80,7 @@ export const renderContent = (project: IProject | null | undefined) => {
 				background: section.backgroundPath
 					? `url(${import.meta.env.VITE_API_STATIC_URL}${
 							section.backgroundPath
-					  })`
+					  }) ` + 'center/cover no-repeat'
 					: '',
 				padding: section.paddings ?? defaultSectionPaddings,
 			}}

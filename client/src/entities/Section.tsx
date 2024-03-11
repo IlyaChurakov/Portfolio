@@ -74,11 +74,13 @@ const Section = ({
 							<Block key={block.id} block={block} openModal={openBlockModal} />
 						))}
 						<Button
-							text='Добавить элемент'
+							className='pl-5 pt-2'
 							onClick={() =>
 								openBlockModal({ sectionId: section.id } as IBlock)
 							}
-						/>
+						>
+							Добавить элемент
+						</Button>
 					</>
 				)}
 			</div>

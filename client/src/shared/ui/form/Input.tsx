@@ -23,7 +23,7 @@ const Input = ({
 					{...props}
 					type={type}
 					{...register}
-					className={`block mb-3 rounded-sm p-1 ${className}`}
+					className={`block rounded-sm p-1 ${className}`}
 				/>
 			) : (
 				children

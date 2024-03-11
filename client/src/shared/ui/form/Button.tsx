@@ -6,6 +6,8 @@ type variants = 'contained' | 'text' | 'contained-danger' | 'text-danger'
 interface IButtonProps extends InputHTMLAttributes<HTMLButtonElement> {
 	children: string
 	isLoading?: boolean
+	width?: string
+	height?: string
 	loadingColor?: string
 	variant?: variants
 	className?: string
@@ -21,6 +23,8 @@ const variants: Record<variants, string> = {
 
 const Button = ({
 	isLoading,
+	width,
+	height,
 	type = 'button',
 	variant = 'text',
 	loadingColor = '#9255E8',
@@ -32,6 +36,7 @@ const Button = ({
 		<button
 			type={type}
 			className={`${variants[variant]} flex justify-center items-center  rounded-lg hover:opacity-75 ${className}`}
+			style={{ width, height }}
 			{...props}
 		>
 			{isLoading ? (
