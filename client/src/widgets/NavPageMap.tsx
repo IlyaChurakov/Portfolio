@@ -1,6 +1,7 @@
 import { useStores } from '@app/index'
 import { ISection } from '@app/store/projectStore/types/project.types'
 import Section from '@entities/Section'
+import ProjectSavingButton from '@features/ProjectSavingButton'
 import Button from '@shared/ui/form/Button'
 import ProjectImageForm from '@widgets/forms/ProjectImageForm'
 import { observer } from 'mobx-react-lite'
@@ -67,6 +68,10 @@ const NavPageMap = () => {
 					>
 						Добавить секцию
 					</Button>
+				</div>
+
+				<div className='w-full flex justify-center'>
+					<ProjectSavingButton />
 				</div>
 			</nav>
 		</>

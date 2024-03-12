@@ -87,10 +87,9 @@ const ProfileUserForm = () => {
 	return (
 		<form
 			onSubmit={sendForm}
-			className={`w-full bg-black p-5 grid grid-cols-[10rem_1fr_6rem] gap-5 rounded-[10px]`}
+			className={`w-full bg-black p-5 grid grid-cols-[10rem_1fr_7.3rem] gap-5 rounded-[3px]`}
 			style={{
 				gridTemplateRows: isEditForm ? '1fr 40px' : '1fr',
-				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
 		>
 			<div>
@@ -113,13 +112,13 @@ const ProfileUserForm = () => {
 				)}
 			</div>
 
-			<div className='flex flex-col items-start'>
+			<div className='flex flex-col items-start border-l-[1px] border-r-[1px] border-[#9255e859] px-5'>
 				<Input
 					isEdit={isEditForm}
 					type='text'
 					register={register('name')}
 					placeholder='Имя'
-					className='w-full'
+					className='w-full mb-3'
 				>
 					<p className='text-start text-3xl text-white font-bold mb-3'>
 						{userStore.user.name}
@@ -130,9 +129,9 @@ const ProfileUserForm = () => {
 					isEdit={isEditForm}
 					register={register('description')}
 					placeholder='Описание'
-					className='w-full'
+					className='w-full mb-3'
 				>
-					<p className='text-white mb-5'>{userStore.user.description}</p>
+					<p className='text-white mb-3'>{userStore.user.description}</p>
 				</Textarea>
 
 				<Input
@@ -140,9 +139,9 @@ const ProfileUserForm = () => {
 					type='text'
 					register={register('email')}
 					placeholder='Email'
-					className='w-full'
+					className='w-full mb-10'
 				>
-					<p className='flex items-center text-start text-violet mb-3'>
+					<p className='flex items-center text-start text-white mb-10'>
 						<MdAlternateEmail title='Email' className='mr-2' />
 						{userStore.user.email}
 					</p>
@@ -186,8 +185,12 @@ const ProfileUserForm = () => {
 						</Button>
 					</div>
 
-					<div className='flex justify-start'>
-						<Button onClick={deleteAccount} variant='text-danger'>
+					<div className='flex justify-start border-l-[1px] border-r-[1px] border-[#9255e859]'>
+						<Button
+							onClick={deleteAccount}
+							variant='text-danger'
+							className='px-[22px]'
+						>
 							Удалить аккаунт
 						</Button>
 					</div>

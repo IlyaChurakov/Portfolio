@@ -166,7 +166,9 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 							width='100%'
 							height='200px'
 						/>
-						<Button onClick={deleteImage}>Удалить изображение</Button>
+						<div className='w-full flex justify-end mb-3'>
+							<Button onClick={deleteImage}>Удалить изображение</Button>
+						</div>
 
 						<Input
 							type='text'
@@ -188,7 +190,6 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 				<Button onClick={closeForm}>Отменить</Button>
 				<Button
 					isLoading={isSubmitting}
-					variant='contained'
 					loadingColor='white'
 					type='submit'
 					width='100px'

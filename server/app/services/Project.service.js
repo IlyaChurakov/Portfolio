@@ -83,7 +83,16 @@ class ProjectService {
 							backgroundPath
 						}) => ({
 							where: { id: sectionId },
-							create: { name, paddings, backgroundPath },
+							create: {
+								name,
+								paddings,
+								backgroundPath,
+								blocks: {
+									create: blocks.map(({ sectionId, ...block }) => ({
+										...block
+									}))
+								}
+							},
 							update: {
 								name,
 								paddings,

@@ -33,6 +33,7 @@ export class ProjectStore {
 	setProject(project: IProject) {
 		this.project = project
 		this.setSaved(false)
+		console.log(this.project)
 	}
 	setSaved(bool: boolean) {
 		this.saved = bool

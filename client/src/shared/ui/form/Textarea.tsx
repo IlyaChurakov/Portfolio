@@ -21,7 +21,7 @@ const Textarea = ({
 				<textarea
 					{...register}
 					{...props}
-					className={`mb-3 rounded-sm p-1 ${className}`}
+					className={`mb-3 rounded-sm py-1 px-2 border-[1px] border-violet bg-[#3e3e3e] text-white focus:border-[#ae82ed] outline-none ${className}`}
 				/>
 			) : (
 				children

@@ -1,5 +1,9 @@
 import { useStores } from '@app/index'
-import { IBlock, IProject } from '@app/store/projectStore/types/project.types'
+import {
+	BlockTypes,
+	IBlock,
+	IProject,
+} from '@app/store/projectStore/types/project.types'
 import { observer } from 'mobx-react-lite'
 import { MdDelete } from 'react-icons/md'
 
@@ -34,7 +38,7 @@ const Block = ({
 					className='cursor-pointer text-gray hover:text-white'
 					onClick={() => openModal(block)}
 				>
-					{block.type}
+					{BlockTypes[block.type as keyof typeof BlockTypes]}
 				</span>
 				<div
 					className='text-red-500 cursor-pointer flex items-center'

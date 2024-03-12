@@ -103,6 +103,7 @@ const SectionForm = ({
 					width='100%'
 					height='200px'
 				/>
+
 				<div className='w-full flex justify-end mb-3'>
 					<Button onClick={deleteBackground}>Удалить изображение</Button>
 				</div>
@@ -128,7 +129,6 @@ const SectionForm = ({
 				<Button onClick={closeForm}>Отменить</Button>
 				<Button
 					isLoading={isSubmitting}
-					variant='contained'
 					loadingColor='white'
 					type='submit'
 					width='100px'

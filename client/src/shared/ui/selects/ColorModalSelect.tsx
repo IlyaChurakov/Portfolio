@@ -2,20 +2,17 @@ import React from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 
 interface ColorModalSelectProps {
-	// textColor: ColorTypes
 	values: string[]
 	register: UseFormRegisterReturn
 }
 
 const ColorModalSelect: React.FC<ColorModalSelectProps> = ({
-	// textColor,
 	values,
 	register,
 }) => {
 	return (
 		<select
-			className='w-full bg-white h-[30px] rounded-sm outline-none'
-			// style={{ color: textColor }}
+			className='w-full h-[30px] rounded-sm border-[2px] border-violet focus:border-[#ae82ed] outline-0 bg-[#3e3e3e] text-white'
 			{...register}
 		>
 			{values.map(value => {

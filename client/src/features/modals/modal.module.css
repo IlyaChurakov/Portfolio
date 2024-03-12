@@ -1,0 +1,8 @@
+.wrapper {
+	padding: 20px;
+	box-sizing: border-box;
+	background: linear-gradient(rgba(23, 23, 23, 0) 0vh, rgb(35, 36, 38) 70vh),
+		url(/pattern.svg) repeat repeat;
+	background-color: rgba(23, 23, 23, 1);
+	background-size: 100% 100%, 15px 20px;
+}

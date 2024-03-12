@@ -1,7 +1,7 @@
 import { useStores } from '@app/index'
+import ProjectSavingButton from '@features/ProjectSavingButton'
 import { observer } from 'mobx-react-lite'
 import { GoArrowLeft } from 'react-icons/go'
-import { TiArrowSync } from 'react-icons/ti'
 import {
 	Link,
 	Outlet,
@@ -29,10 +29,6 @@ const ProjectWrapper = () => {
 		if (!project) return
 
 		navigate(`/projects/${project.id}/edit`)
-	}
-
-	const saveProject = async () => {
-		await projectStore.saveProject()
 	}
 
 	return (
@@ -70,20 +66,7 @@ const ProjectWrapper = () => {
 								)}
 							{authStore.isAuth &&
 								userStore.user.roles?.includes('admin') &&
-								pathname.includes('/edit') && (
-									<button
-										onClick={saveProject}
-										className='mr-5 flex items-center'
-										style={{
-											color: projectStore.saved ? 'rgb(0, 178, 23)' : '#C24D51',
-										}}
-									>
-										{projectStore.saved ? 'Сохранено' : 'Сохранить'}
-										{projectStore.loading && (
-											<TiArrowSync className='text-gray ml-2' />
-										)}
-									</button>
-								)}
+								pathname.includes('/edit') && <ProjectSavingButton />}
 							{authStore.isAuth &&
 								userStore.user.roles?.includes('admin') &&
 								!pathname.includes('/edit') &&

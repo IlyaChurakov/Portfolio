@@ -35,7 +35,7 @@ const Button = ({
 	return (
 		<button
 			type={type}
-			className={`${variants[variant]} flex justify-center items-center  rounded-lg hover:opacity-75 ${className}`}
+			className={`${variants[variant]} flex justify-center items-center  rounded-lg hover:opacity-75 outline-none focus:text-[#ae82ed] ${className}`}
 			style={{ width, height }}
 			{...props}
 		>
