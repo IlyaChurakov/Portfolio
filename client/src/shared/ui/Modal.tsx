@@ -1,17 +1,16 @@
-import { ISection } from '@app/store/projectStore/types/project.types'
-import SectionForm from '@widgets/forms/SectionForm'
 import classNames from 'classnames'
 import { observer } from 'mobx-react-lite'
+import { ReactNode } from 'react'
 import styles from './modal.module.css'
 
-const SectionModal = ({
-	section,
-	close,
+const Modal = ({
+	isOpen,
+	children,
 }: {
-	section: ISection | null
-	close: () => void
+	isOpen: boolean
+	children: ReactNode
 }) => {
-	if (!section) return
+	if (!isOpen) return
 
 	return (
 		<div
@@ -20,9 +19,9 @@ const SectionModal = ({
 				styles.wrapper
 			)}
 		>
-			<SectionForm closeModal={close} section={section} />
+			{children}
 		</div>
 	)
 }
 
-export default observer(SectionModal)
+export default observer(Modal)

@@ -26,10 +26,10 @@ class ProjectService {
 			},
 			include: {
 				sections: {
-					orderBy: { createdAt: 'asc' },
+					orderBy: { serial: 'asc' },
 					include: {
 						blocks: {
-							orderBy: { createdAt: 'asc' }
+							orderBy: { serial: 'asc' }
 						}
 					}
 				}
@@ -75,13 +75,16 @@ class ProjectService {
 						}))
 					},
 					upsert: sections.map(
-						({
-							id: sectionId = uuidv4(),
-							blocks = [],
-							name,
-							paddings,
-							backgroundPath
-						}) => ({
+						(
+							{
+								id: sectionId = uuidv4(),
+								blocks = [],
+								name,
+								paddings,
+								backgroundPath
+							},
+							index
+						) => ({
 							where: { id: sectionId },
 							create: {
 								name,
@@ -91,7 +94,8 @@ class ProjectService {
 									create: blocks.map(({ sectionId, ...block }) => ({
 										...block
 									}))
-								}
+								},
+								serial: index
 							},
 							update: {
 								name,
@@ -104,26 +108,38 @@ class ProjectService {
 										}))
 									},
 									upsert: blocks.map(
-										({
-											id: blockId = uuidv4(),
-											color,
-											text,
-											type,
-											imgPath,
-											imgDescr
-										}) => ({
-											where: { id: blockId },
-											create: {
+										(
+											{
+												id: blockId = uuidv4(),
 												color,
 												text,
 												type,
 												imgPath,
 												imgDescr
 											},
-											update: { color, text, type, imgPath, imgDescr }
+											index
+										) => ({
+											where: { id: blockId },
+											create: {
+												color,
+												text,
+												type,
+												imgPath,
+												imgDescr,
+												serial: index
+											},
+											update: {
+												color,
+												text,
+												type,
+												imgPath,
+												imgDescr,
+												serial: index
+											}
 										})
 									)
-								}
+								},
+								serial: index
 							}
 						})
 					)

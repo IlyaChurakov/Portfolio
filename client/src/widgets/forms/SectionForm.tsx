@@ -2,8 +2,8 @@ import { useStores } from '@app/index'
 import { ISection } from '@app/store/projectStore/types/project.types'
 import ImageLoader from '@features/ImageLoader'
 import { uploadFile } from '@shared/lib/utils'
-import Button from '@shared/ui/form/Button'
-import Input from '@shared/ui/form/Input'
+import Button from '@shared/ui/Button'
+import Input from '@shared/ui/Input'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -16,14 +16,13 @@ type SectionFormInputs = {
 }
 
 interface ISectionFormProps {
-	section: ISection
-	closeModal: () => void
+	section: ISection | null
+	close: () => void
 }
 
-const SectionForm = ({
-	section: sectionObj,
-	closeModal,
-}: ISectionFormProps) => {
+const SectionForm = ({ section: sectionObj, close }: ISectionFormProps) => {
+	if (!sectionObj) return
+
 	const { projectStore, errorStore } = useStores()
 
 	const {
@@ -51,7 +50,7 @@ const SectionForm = ({
 
 	const closeForm = () => {
 		reset()
-		closeModal()
+		close()
 	}
 
 	async function addOrEditSection({
@@ -63,7 +62,7 @@ const SectionForm = ({
 		let section: ISection | undefined
 
 		const findedSection = project.sections.find(
-			section => section.id === sectionObj.id
+			section => section.id === sectionObj?.id
 		)
 
 		if (findedSection) section = { ...findedSection, ...data }

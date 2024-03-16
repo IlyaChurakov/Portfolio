@@ -1,6 +1,6 @@
 import { routesSchema } from '@shared/config/router/router.config.tsx'
 import { AppRoutes, RoutePropsCustom } from '@shared/config/router/types.ts'
-import PageLoader from '@shared/ui/loaders/PageLoader.tsx'
+import PageLoader from '@shared/ui/PageLoader.tsx'
 import { observer } from 'mobx-react-lite'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'

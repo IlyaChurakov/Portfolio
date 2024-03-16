@@ -6,11 +6,10 @@ import {
 	IBlock,
 } from '@app/store/projectStore/types/project.types'
 import { uploadFile } from '@shared/lib/utils'
-import Button from '@shared/ui/form/Button'
-import Input from '@shared/ui/form/Input'
-import Textarea from '@shared/ui/form/Textarea'
-import ColorModalSelect from '@shared/ui/selects/ColorModalSelect'
-import TypeModalSelect from '@shared/ui/selects/TypeModalSelect'
+import Button from '@shared/ui/Button'
+import Input from '@shared/ui/Input'
+import { default as Select } from '@shared/ui/Select'
+import Textarea from '@shared/ui/Textarea'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -26,11 +25,13 @@ type BlockFormInputs = {
 }
 
 interface IBlockFormProps {
-	block: IBlock
-	closeModal: () => void
+	block: IBlock | null
+	close: () => void
 }
 
-const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
+const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
+	if (!blockObj) return
+
 	const { projectStore, errorStore } = useStores()
 
 	const transformedBlockType =
@@ -72,7 +73,7 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 
 	const closeForm = () => {
 		reset()
-		closeModal()
+		close()
 	}
 
 	async function addOrEditBlock({ imgPath, type, ...data }: BlockFormInputs) {
@@ -81,12 +82,12 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 		let block: IBlock | undefined
 
 		const findedSection = project.sections.find(
-			section => section.id === blockObj.sectionId
+			section => section.id === blockObj!.sectionId
 		)
 		if (!findedSection) return
 
 		const findedBlock = findedSection.blocks.find(
-			block => block.id === blockObj.id
+			block => block.id === blockObj!.id
 		)
 
 		if (findedBlock)
@@ -102,7 +103,7 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 				type: BlockTypesText[type as keyof typeof BlockTypesText],
 				...data,
 				imgPath: null,
-				sectionId: blockObj.sectionId,
+				sectionId: blockObj!.sectionId,
 			}
 
 		if (imgPath) {
@@ -143,7 +144,7 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col'>
 			<div className='flex-1 flex flex-col items-center'>
-				<TypeModalSelect
+				<Select
 					values={valuesForTypeSelect}
 					register={register('type', { required: true })}
 					className='w-full mb-3 p-1'
@@ -180,10 +181,7 @@ const BlockForm = ({ block: blockObj, closeModal }: IBlockFormProps) => {
 					</>
 				)}
 
-				<ColorModalSelect
-					values={valuesForColorSelect}
-					register={register('color')}
-				/>
+				<Select values={valuesForColorSelect} register={register('color')} />
 			</div>
 
 			<div className='flex justify-between'>

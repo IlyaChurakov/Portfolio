@@ -11,9 +11,6 @@ const Errors = () => {
 					key={index}
 					className='relative w-[300px] h-14 text-red bg-black rounded-lg mt-5 flex items-center p-2 border-[1px] border-violet '
 				>
-					{/* <div className='absolute w-5 h-5 rounded-full border-[1px] border-violet top-[-5px] left-[-5px]  text-violet cursor-pointer flex justify-center items-center text-sm bg-black'>
-						X
-					</div> */}
 					{error}
 				</li>
 			))}

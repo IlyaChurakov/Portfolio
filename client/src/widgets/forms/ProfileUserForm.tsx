@@ -1,8 +1,8 @@
 import { useStores } from '@app/index'
 import ImageLoader from '@features/ImageLoader'
 import { transformDate, uploadFile } from '@shared/lib/utils'
-import Input from '@shared/ui/form/Input'
-import Textarea from '@shared/ui/form/Textarea'
+import Input from '@shared/ui/Input'
+import Textarea from '@shared/ui/Textarea'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { IoMdCreate } from 'react-icons/io'
 import { MdAlternateEmail, MdPublishedWithChanges } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import Button from '../../shared/ui/form/Button'
+import Button from '../../shared/ui/Button'
 
 interface ProfileUserFormFields {
 	avatar?: FileList

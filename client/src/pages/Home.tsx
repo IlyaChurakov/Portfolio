@@ -1,4 +1,5 @@
 import ProjectList from '@widgets/ProjectList'
+import ContactForm from '@widgets/forms/ContactForm'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
 import Container from '../shared/layouts/Container'
@@ -45,9 +46,14 @@ const Home = () => {
 			<section className='p-5'>
 				<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>Проекты</h1>
 				<ProjectList count={4} />
+
 				<div className='mt-5 text-violet flex justify-end'>
 					<Link to='/projects'>Смотреть все</Link>
 				</div>
+			</section>
+
+			<section>
+				<ContactForm />
 			</section>
 		</Container>
 	)

@@ -1,13 +1,13 @@
 import React, { ComponentProps } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 
-interface TypeModalSelectProps extends ComponentProps<'select'> {
+interface SelectProps extends ComponentProps<'select'> {
 	values: string[]
-	className: string
+	className?: string
 	register: UseFormRegisterReturn
 }
 
-const TypeModalSelect: React.FC<TypeModalSelectProps> = ({
+const Select: React.FC<SelectProps> = ({
 	values,
 	register,
 	className,
@@ -21,7 +21,7 @@ const TypeModalSelect: React.FC<TypeModalSelectProps> = ({
 		>
 			{values.map(value => {
 				return (
-					<option value={value} key={value} className='text-black'>
+					<option value={value} key={value} className='text-white'>
 						{value}
 					</option>
 				)
@@ -30,4 +30,4 @@ const TypeModalSelect: React.FC<TypeModalSelectProps> = ({
 	)
 }
 
-export default TypeModalSelect
+export default Select

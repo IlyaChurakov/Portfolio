@@ -1,5 +1,4 @@
 import { useStores } from '@app/index'
-import ProjectSavingButton from '@features/ProjectSavingButton'
 import { observer } from 'mobx-react-lite'
 import { GoArrowLeft } from 'react-icons/go'
 import {
@@ -64,9 +63,9 @@ const ProjectWrapper = () => {
 										Добавить проект
 									</Link>
 								)}
-							{authStore.isAuth &&
+							{/* {authStore.isAuth &&
 								userStore.user.roles?.includes('admin') &&
-								pathname.includes('/edit') && <ProjectSavingButton />}
+								pathname.includes('/edit') && <ProjectSavingButton />} */}
 							{authStore.isAuth &&
 								userStore.user.roles?.includes('admin') &&
 								!pathname.includes('/edit') &&

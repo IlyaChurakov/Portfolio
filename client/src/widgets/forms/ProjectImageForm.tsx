@@ -1,7 +1,7 @@
 import { useStores } from '@app/index'
 import ImageLoader from '@features/ImageLoader'
 import { uploadFile } from '@shared/lib/utils'
-import Button from '@shared/ui/form/Button'
+import Button from '@shared/ui/Button'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { SubmitHandler, useForm } from 'react-hook-form'

@@ -1,6 +1,6 @@
 import { useStores } from '@app/index'
-import Button from '@shared/ui/form/Button'
-import Input from '@shared/ui/form/Input'
+import Button from '@shared/ui/Button'
+import Input from '@shared/ui/Input'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
