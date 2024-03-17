@@ -48,15 +48,18 @@ const ProjectImageForm = () => {
 			{isSubmitting ? (
 				<ReactLoading type='spin' width={15} height={15} color='#9255E8' />
 			) : (
-				<>
+				<div className='grid grid-rows-[144px_30px] items-center bg-black'>
 					<ImageLoader
 						uploadedImageUrl={projectStore.project.previewImage}
 						register={register('preview')}
 						setValue={setValue}
 						submitForm={sendForm}
 					/>
-					<Button text='delete preview' onClick={deletePreview} />
-				</>
+
+					<Button onClick={deletePreview} className='m-auto'>
+						Удалить превью
+					</Button>
+				</div>
 			)}
 		</form>
 	)

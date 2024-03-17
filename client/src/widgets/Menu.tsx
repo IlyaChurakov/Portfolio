@@ -37,7 +37,7 @@ const Menu: FC = () => {
 			<div
 				className={`flex ${
 					isVisible ? 'justify-end pt-5 px-5' : 'justify-center pt-5'
-				} w-full text-[#6F7680]`}
+				} w-full text-violet`}
 			>
 				{isVisible ? (
 					<IoClose
@@ -60,7 +60,7 @@ const Menu: FC = () => {
 				<Link
 					to={authStore.isAuth ? '/profile' : '/login'}
 					onClick={closeMenu}
-					className={`flex items-center my-2 text-[#6F7680] hover:text-white cursor-pointer ${
+					className={`flex items-center my-2 text-violet hover:text-white cursor-pointer ${
 						!isVisible && 'justify-center'
 					}`}
 				>
@@ -75,7 +75,7 @@ const Menu: FC = () => {
 				<Link
 					to='/'
 					onClick={closeMenu}
-					className={`flex items-center my-2 text-[#6F7680] hover:text-white cursor-pointer ${
+					className={`flex items-center my-2 text-violet hover:text-white cursor-pointer ${
 						!isVisible && 'justify-center'
 					}`}
 				>
@@ -86,7 +86,7 @@ const Menu: FC = () => {
 				<Link
 					to={'/projects'}
 					onClick={closeMenu}
-					className={`flex items-center my-2 text-[#6F7680] hover:text-white cursor-pointer ${
+					className={`flex items-center my-2 text-violet hover:text-white cursor-pointer ${
 						!isVisible && 'justify-center'
 					}`}
 				>
@@ -99,7 +99,7 @@ const Menu: FC = () => {
 						onClick={() => {
 							logoutHandler()
 						}}
-						className={`flex items-center my-2 text-[#6F7680] hover:text-white cursor-pointer ${
+						className={`flex items-center my-2 text-violet hover:text-white cursor-pointer ${
 							!isVisible && 'justify-center'
 						}`}
 					>
@@ -110,7 +110,7 @@ const Menu: FC = () => {
 			</div>
 
 			<div
-				className={`text-[#6F7680] flex items-center ${
+				className={`text-violet flex items-center ${
 					isVisible ? 'justify-center px-12' : 'flex-col justify-center pb-5'
 				}`}
 			>

@@ -18,7 +18,13 @@ export const Content = ({ project }: { project: IProject }) => {
 						{section.blocks?.map(block => {
 							switch (block.type) {
 								case 'h1':
-									return <Title key={block.id} block={block} />
+									return (
+										<Title
+											key={block.id}
+											text={block.text!}
+											color={block.color}
+										/>
+									)
 								case 'p':
 									return <Text key={block.id} block={block} />
 								case 'img':

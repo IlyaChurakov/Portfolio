@@ -1,39 +1,26 @@
+import CustomLink from '@shared/ui/CustomLink'
 import ProjectList from '@widgets/ProjectList'
+import Subtitle from '@widgets/blocks/Subtitle'
+import Title from '@widgets/blocks/Title'
 import ContactForm from '@widgets/forms/ContactForm'
 import { observer } from 'mobx-react-lite'
-import { Link } from 'react-router-dom'
 import Container from '../shared/layouts/Container'
-
-// TODO: раскидать на компоненты
+import styles from './home.module.css'
 
 const Home = () => {
 	return (
 		<Container>
-			<section className='bg-gray-dark px-10 '>
+			<section>
 				<div className='grid grid-cols-[1fr_0.8fr] items-center '>
 					<div>
-						<h1 className='text-white inline-block text-5xl font-extrabold mb-5 p-0'>
-							Илья Чураков
-						</h1>
-						<br />
-						<h2 className='text-[#9255E8] text-3xl font-extrabold '>
-							<span>Портфолио</span>
-							<br />
-							<span className='my-1 text-4xl text-white'>front-end</span>
-							<br />
-							<span>разработчика</span>
-						</h2>
+						<Title text='Илья Чураков' />
+						<Subtitle text='Портфолио' color='#9255E8' />
+						<Subtitle text='front-end' />
+						<Subtitle text='разработчика' color='#9255E8' />
 					</div>
 
 					<div className='min-h-[600px] aspect-square relative'>
-						<div
-							className='absolute w-full h-full'
-							style={{
-								backgroundImage:
-									'linear-gradient( -45deg, #bd34fe 50%, #47caff 50% )',
-								filter: 'blur(72px)',
-							}}
-						></div>
+						<div className={styles.background} />
 						<img
 							src='MeArtShadow.png'
 							alt='me'
@@ -43,16 +30,14 @@ const Home = () => {
 				</div>
 			</section>
 
-			<section className='p-5'>
-				<h1 className='text-white text-4xl font-extrabold mb-5 p-0'>Проекты</h1>
+			<section>
+				<Title text='Проекты' />
 				<ProjectList count={4} />
-
-				<div className='mt-5 text-violet flex justify-end'>
-					<Link to='/projects'>Смотреть все</Link>
-				</div>
+				<CustomLink to='/projects' text='Смотреть все' position='right' />
 			</section>
 
 			<section>
+				<Title text='Связаться со мной' />
 				<ContactForm />
 			</section>
 		</Container>

@@ -1,33 +1,32 @@
 import { useStores } from '@app/index'
+import CustomLink from '@shared/ui/CustomLink'
 import { observer } from 'mobx-react-lite'
 import { GoArrowLeft } from 'react-icons/go'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import Container from '../shared/layouts/Container'
 
 const ProfileWrapper = () => {
 	const { userStore } = useStores()
-	const navigate = useNavigate()
+
+	const isAdmin = userStore.user.roles?.includes('admin')
 
 	return (
 		<>
-			<section className='bg-gray-dark p-5 text-sm'>
+			<section className='p-5 text-sm'>
 				<Container>
-					<div className='flex'>
-						<GoArrowLeft
-							className='text-xl cursor-pointer text-gray hover:text-white mr-5'
-							onClick={() => {
-								navigate('/')
-							}}
-						/>
-
-						<Link to={'/profile'} className='mr-5 text-gray  hover:text-white'>
-							Профиль
+					<div className='flex items-center'>
+						<Link to='/'>
+							<GoArrowLeft className='text-xl cursor-pointer text-violet hover:text-white mr-5' />
 						</Link>
 
-						{userStore.user.roles?.includes('admin') && (
-							<Link to={'users'} className='mr-5 text-gray hover:text-white'>
-								Список пользователей
-							</Link>
+						<CustomLink to='/profile' text='Профиль' className='my-0 mr-5' />
+
+						{isAdmin && (
+							<CustomLink
+								to='users'
+								text='Список пользователей'
+								className='my-0'
+							/>
 						)}
 					</div>
 				</Container>

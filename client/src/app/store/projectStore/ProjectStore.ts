@@ -79,6 +79,8 @@ export class ProjectStore {
 				// эта функция срабатывает при первой загрузке редактирования проекта, поэтому ставим сохранение в true, при всех остальных вариантах будет false
 				this.setSaved(true)
 			})
+
+			return data
 		} catch (err) {
 			this.setLoading(false)
 			throw new Error((err as Error).message)

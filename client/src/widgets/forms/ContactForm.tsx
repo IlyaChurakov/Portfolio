@@ -1,7 +1,6 @@
 import Button from '@shared/ui/Button'
 import Input from '@shared/ui/Input'
 import Textarea from '@shared/ui/Textarea'
-import classNames from 'classnames'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 type Inputs = {
@@ -14,27 +13,21 @@ const ContactForm = () => {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting },
-		setError,
 	} = useForm<Inputs>({
 		mode: 'onChange',
 	})
 
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		try {
-		} catch (e) {}
+			console.log(data)
+		} catch (e) {
+			console.log(errors, e)
+		}
 	}
 
 	return (
-		<form className='p-5 w-full'>
-			<h1 className='text-white text-4xl font-extrabold mb-10 p-0'>
-				Связаться со мной
-			</h1>
-
-			<div
-				className={classNames(
-					'w-full mb-10 grid grid-cols-[1fr_0.5fr] gap-x-5 justify-items-center'
-				)}
-			>
+		<form onSubmit={handleSubmit(onSubmit)}>
+			<div className='mb-10 grid grid-cols-[1fr_0.5fr] gap-x-5 justify-items-center'>
 				<div className='w-full'>
 					<Input
 						type='text'
@@ -72,6 +65,7 @@ const ContactForm = () => {
 			</div>
 
 			<Button
+				type='submit'
 				isLoading={isSubmitting}
 				variant='contained'
 				className='w-full h-10'

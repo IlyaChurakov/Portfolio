@@ -1,7 +1,7 @@
 import { useStores } from '@app/index'
+import CustomLink from '@shared/ui/CustomLink'
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
-import { Link } from 'react-router-dom'
 import Container from '../shared/layouts/Container'
 
 const Footer: FC = () => {
@@ -10,32 +10,16 @@ const Footer: FC = () => {
 	return (
 		<footer className=' max-h-[200px] w-full h-full p-10 bg-[#232426]'>
 			<Container>
-				<div className='flex flex-col text-[#6F7680]'>
-					<div>
-						<Link className='hover:text-white inline-block w-auto' to={'/'}>
-							Главная
-						</Link>
-					</div>
+				<div className='grid grid-rows-3 grid-flow-col w-min gap-x-[100px]'>
+					<CustomLink to='/' text='Главная' className='my-0' />
 
 					{authStore.isAuth ? (
-						<div>
-							<Link className=' hover:text-white inline-block' to={'/profile'}>
-								Профиль
-							</Link>
-						</div>
+						<CustomLink to='/profile' text='Профиль' className='my-0' />
 					) : (
-						<div>
-							<Link className=' hover:text-white inline-block' to={'/login'}>
-								Вход в аккаунт
-							</Link>
-						</div>
+						<CustomLink to='/login' text='Вход в аккаунт' className='my-0' />
 					)}
 
-					<div>
-						<Link className=' hover:text-white inline-block' to={'/projects'}>
-							Проекты
-						</Link>
-					</div>
+					<CustomLink to='/projects' text='Проекты' className='my-0' />
 				</div>
 			</Container>
 		</footer>

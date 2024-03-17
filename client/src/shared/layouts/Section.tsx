@@ -19,11 +19,7 @@ const Section = ({
 		padding: section.paddings ?? defaultSectionPaddings,
 	})
 
-	return (
-		<section key={section.id} style={getSectionStyles(section)}>
-			{children}
-		</section>
-	)
+	return <section style={getSectionStyles(section)}>{children}</section>
 }
 
 export default Section

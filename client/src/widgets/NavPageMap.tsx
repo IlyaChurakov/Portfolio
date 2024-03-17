@@ -51,7 +51,7 @@ const NavPageMap = () => {
 					/>
 				</div>
 
-				<div className='relative w-36 h-36 m-auto mb-5 bg-white rounded-lg'>
+				<div className='relative w-36 m-auto mb-5 bg-white rounded-lg'>
 					<ProjectImageForm />
 				</div>
 

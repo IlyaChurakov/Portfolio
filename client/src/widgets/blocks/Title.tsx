@@ -1,13 +1,13 @@
-import { IBlock } from '@app/store/projectStore/types/project.types'
-
-const Title = ({ block }: { block: IBlock }) => {
+const Title = ({
+	text = '',
+	color = '#fff',
+}: {
+	text: string
+	color?: string
+}) => {
 	return (
-		<h1
-			className={`text-4xl font-bold mb-5`}
-			style={{ color: block.color }}
-			key={block.id}
-		>
-			{block.text}
+		<h1 className={`text-4xl font-bold my-5`} style={{ color }}>
+			{text}
 		</h1>
 	)
 }
