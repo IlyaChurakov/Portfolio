@@ -19,43 +19,49 @@ const Section = ({
 }) => {
 	const { projectStore } = useStores()
 
+	// Управление секцией
+
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 	const openSection = () => setIsVisible(isVisible ? false : true)
-
-	const [editingBlock, setEditingBlock] = useState<IBlock | null>(null)
 
 	const deleteSection = (id: string | number) => {
 		const project = { ...projectStore.project }
 
 		project.sections = project.sections.filter(section => section.id !== id)
-
 		projectStore.setProject(project)
 	}
+	const changeOrderUp = (section: ISection) => {
+		const project = { ...projectStore.project }
+		const currentSectionIndex = project.sections.indexOf(section)
+
+		const isFirstSection: boolean = currentSectionIndex === 0
+		if (isFirstSection) return
+
+		const extractedSection = project.sections.splice(currentSectionIndex, 1)[0]
+
+		project.sections.splice(currentSectionIndex - 1, 0, extractedSection)
+		projectStore.setProject({ ...project })
+	}
+	const changeOrderDown = (section: ISection) => {
+		const project = { ...projectStore.project }
+		const sectionsLength = project.sections.length
+		const currentSectionIndex = project.sections.indexOf(section)
+
+		const isLastSection: boolean = currentSectionIndex === sectionsLength - 1
+		if (isLastSection) return
+
+		const extractedSection = project.sections.splice(currentSectionIndex, 1)[0]
+
+		project.sections.splice(currentSectionIndex + 1, 0, extractedSection)
+		projectStore.setProject({ ...project })
+	}
+
+	// Управление модальным окном
+
+	const [editingBlock, setEditingBlock] = useState<IBlock | null>(null)
 
 	const openBlockModal = (block: IBlock) => setEditingBlock(block)
 	const closeBlockModal = () => setEditingBlock(null)
-
-	const orderUp = (section: ISection) => {
-		const project = { ...projectStore.project }
-		const index = project.sections.indexOf(section)
-
-		const cut = project.sections.splice(index, 1)[0]
-
-		project.sections.splice(index - 1, 0, cut)
-
-		projectStore.setProject({ ...project })
-	}
-
-	const orderDown = (section: ISection) => {
-		const project = { ...projectStore.project }
-		const index = project.sections.indexOf(section)
-
-		const cut = project.sections.splice(index, 1)[0]
-
-		project.sections.splice(index + 1, 0, cut)
-
-		projectStore.setProject({ ...project })
-	}
 
 	return (
 		<div className='bg-gray-600 mb-2 p-2 border-l-[1px] border-l-gray'>
@@ -85,11 +91,11 @@ const Section = ({
 					</span>
 
 					<GoArrowUp
-						onClick={() => orderUp(section)}
+						onClick={() => changeOrderUp(section)}
 						className='cursor-pointer mr-2 text-xs text-gray hover:text-white'
 					/>
 					<GoArrowDown
-						onClick={() => orderDown(section)}
+						onClick={() => changeOrderDown(section)}
 						className='cursor-pointer mr-2 text-xs text-gray hover:text-white'
 					/>
 				</div>

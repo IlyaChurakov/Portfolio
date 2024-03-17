@@ -92,7 +92,8 @@ class ProjectService {
 								backgroundPath,
 								blocks: {
 									create: blocks.map(({ sectionId, ...block }) => ({
-										...block
+										...block,
+										serial: index
 									}))
 								},
 								serial: index

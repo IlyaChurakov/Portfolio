@@ -35,9 +35,9 @@ const Home = () => {
 							}}
 						></div>
 						<img
-							src='me.png'
+							src='MeArtShadow.png'
 							alt='me'
-							className='h-full absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 z-20'
+							className='pt-20 h-full absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 z-20'
 						/>
 					</div>
 				</div>
