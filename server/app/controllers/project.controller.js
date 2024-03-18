@@ -5,9 +5,24 @@ import ProjectService from '../services/Project.service.js'
 class ProjectController {
 	async createProject(req, res, next) {
 		try {
-			const { name } = req.params
+			const { name, archived, previewImage, labels } = req.params
 
-			const project = await ProjectService.createProject(name)
+			const project = await ProjectService.createProject({
+				name,
+				archived,
+				previewImage,
+				labels
+			})
+
+			res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async getProject(req, res, next) {
+		try {
+			const { id } = req.params
+			const project = await ProjectService.getProject(id)
 			res.json(project)
 		} catch (err) {
 			next(err)
@@ -23,50 +38,17 @@ class ProjectController {
 	}
 	async getLastProjects(req, res, next) {
 		try {
-			const projects = await ProjectService.getLastProjects(+req.params.count)
+			const count = parseInt(req.params.count)
+			const projects = await ProjectService.getLastProjects(count)
 			res.json(projects)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async getProject(req, res, next) {
-		try {
-			const { id } = req.params
-
-			const project = await ProjectService.getProject(id)
-			res.json(project)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async saveProject(req, res, next) {
-		try {
-			const { project: newProject } = req.body
-			const project = await ProjectService.saveProject(newProject)
-			res.json(project)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async uploadPreview(req, res, next) {
-		try {
-			const { id } = req.params
-			const { img } = req.files
-
-			const fileName = uuidv4() + '.jpg'
-
-			img.mv(path.resolve('static', fileName))
-
-			const project = await ProjectService.uploadPreview(id, fileName)
-			console.log(project)
-			return res.json(project)
 		} catch (err) {
 			next(err)
 		}
 	}
 	async deleteProjectById(req, res, next) {
 		try {
-			const project = await ProjectService.deleteProjectById(req.params.id)
+			const id = req.params.id
+			const project = await ProjectService.deleteProjectById(id)
 			res.json(project)
 		} catch (err) {
 			next(err)
@@ -76,6 +58,58 @@ class ProjectController {
 		try {
 			const projects = await ProjectService.deleteAllProjects()
 			res.json(projects)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async saveProject(req, res, next) {
+		try {
+			const project = req.body.project
+			const savedProject = await ProjectService.saveProject(project)
+			res.json(savedProject)
+		} catch (err) {
+			next(err)
+		}
+	}
+	async assignPreview(req, res, next) {
+		try {
+			const { id } = req.params
+			const { fileName } = req.body
+
+			const project = await ProjectService.assignPreview(id, fileName)
+
+			return res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	async uploadImage(req, res, next) {
+		try {
+			if (!req.files)
+				return res.status(400).json({ message: 'No file uploaded' })
+
+			const { file } = req.files
+
+			if (!file) return res.json({ error: 'Incorrect input name' })
+
+			const fileName = uuidv4() + '.' + file.name.split('.')[1]
+
+			const filePath = path.resolve('static', fileName)
+
+			file.mv(filePath, err => {
+				if (err) {
+					console.error(err)
+					return res.status(500).send(err)
+				}
+
+				res.json({
+					name: file.name,
+					type: file.type,
+					path: fileName,
+					size: file.size
+				})
+			})
 		} catch (err) {
 			next(err)
 		}

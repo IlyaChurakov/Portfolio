@@ -46,8 +46,7 @@ class UserService {
 	}
 
 	async activate(activationLink) {
-		// TODO: Сделать поиск уникального юзера
-		const user = await prisma.user.findMany({
+		const user = await prisma.user.findUnique({
 			where: {
 				activationLink
 			}
@@ -71,10 +70,10 @@ class UserService {
 				email
 			}
 		})
-		if (!user) throw ApiError.BadRequest('User not found')
+		if (!user) throw ApiError.NotFound('User not found')
 
 		const isPassEquals = await verify(user.password, password)
-		if (!isPassEquals) throw ApiError.BadRequest('Invalid password')
+		if (!isPassEquals) throw ApiError.UnauthorizedError('Invalid password')
 
 		const userDto = new UserDto(user)
 		const { accessToken, refreshToken } = AuthService.generateTokens({
@@ -170,24 +169,13 @@ class UserService {
 		})
 	}
 
-	async uploadAvatar(id, avatar) {
+	async updateUser({ id, ...otherUserFields }) {
 		return await prisma.user.update({
 			where: {
 				id
 			},
 			data: {
-				avatar
-			}
-		})
-	}
-
-	async addDescription(id, description) {
-		return await prisma.user.update({
-			where: {
-				id
-			},
-			data: {
-				description
+				...otherUserFields
 			}
 		})
 	}

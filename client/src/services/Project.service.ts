@@ -1,37 +1,57 @@
+import { IProject } from '@app/provider/store/projectStore/types/project.types'
+import { apiConfig } from '@shared/config'
 import { AxiosResponse } from 'axios'
-import $axios from '../http'
-import { IProject } from '../models/IProject'
+import { $axios } from '../shared/config/http/axios'
 
 export default class ProjectService {
 	static async createProject(name: string): Promise<AxiosResponse<IProject>> {
-		return $axios.post<IProject>(`/projects/${name}`)
+		const path = apiConfig.projects.create(name)
+		return await $axios.post<IProject>(path)
 	}
-	static async getProjectList(): Promise<AxiosResponse<IProject[]>> {
-		return $axios.get(`/projects`)
-	}
-	static async getLastProjects(
-		count: number
+
+	static async getProjectList(
+		count?: number
 	): Promise<AxiosResponse<IProject[]>> {
-		return $axios.get(`/projects/last/${count}`)
+		const path = count
+			? apiConfig.projects.last(count)
+			: apiConfig.projects.all()
+		return await $axios.get<IProject[]>(path)
 	}
+
+	// static async getLastProjects(
+	// 	count: number
+	// ): Promise<AxiosResponse<IProject[]>> {
+	// 	const path = apiConfig.projects.last(count)
+	// 	return await $axios.get<IProject[]>(path)
+	// }
+
 	static async getProject(id: string): Promise<AxiosResponse<IProject>> {
-		return $axios.get(`/projects/${id}`)
+		const path = apiConfig.projects.one(id)
+		return await $axios.get<IProject>(path)
 	}
+
 	static async deleteProjectById(id: string): Promise<AxiosResponse<IProject>> {
-		return $axios.delete(`/projects/${id}`)
+		const path = apiConfig.projects.one(id)
+		return await $axios.delete<IProject>(path)
 	}
+
 	static async saveProject(
 		project: IProject
 	): Promise<AxiosResponse<IProject>> {
-		return $axios.post<IProject>(`/projects/save`, { project })
+		const path = apiConfig.projects.save()
+		return await $axios.post<IProject>(path, { project })
 	}
-	static async uploadPreview(
+
+	static async assignPreview(
 		id: string,
-		image: FormData
+		imgPath: string | undefined
 	): Promise<AxiosResponse<IProject>> {
-		return $axios.post(`/projects/upload-preview/${id}`, image)
+		const path = apiConfig.projects.assignPreview(id)
+		return await $axios.post<IProject>(path, { imgPath })
 	}
-	static async deleteAllProjects(): Promise<AxiosResponse<IProject[]>> {
-		return $axios.delete<IProject[]>(`/projects`)
+
+	static async uploadImage(image: FormData): Promise<AxiosResponse<string>> {
+		const path = apiConfig.projects.uploadImage()
+		return await $axios.post<string>(path, image)
 	}
 }

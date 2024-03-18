@@ -1,28 +1,54 @@
-import { AxiosResponse } from 'axios'
-import $axios from '../http'
-import { AuthResponse } from '../models/response/AuthResponse'
+import { AuthResponse } from '@app/store/authStore/types/auth.types'
+import { apiConfig } from '@shared/config'
+import axios from 'axios'
+import { $axios } from '../shared/config/http/axios'
 
 export default class AuthService {
-	static async login(
+	static login = async (
 		email: string,
 		password: string
-	): Promise<AxiosResponse<AuthResponse>> {
-		return $axios.post<AuthResponse>('/auth/login', { email, password })
+	): Promise<AuthResponse> => {
+		const path = apiConfig.auth.login()
+
+		const { data } = await $axios.post<AuthResponse>(path, {
+			email,
+			password,
+		})
+
+		return data
 	}
 
-	static async register(
+	static register = async (
 		email: string,
 		password: string,
 		name: string
-	): Promise<AxiosResponse<AuthResponse>> {
-		return $axios.post<AuthResponse>('/auth/register', {
+	): Promise<AuthResponse> => {
+		const path = apiConfig.auth.register()
+
+		const { data } = await $axios.post<AuthResponse>(path, {
 			email,
 			password,
 			name,
 		})
+
+		return data
+	}
+
+	static refresh = async (): Promise<AuthResponse> => {
+		const path = apiConfig.auth.refresh()
+
+		const { data } = await axios.get<AuthResponse>(
+			`${import.meta.env.VITE_API_URL}${path}`,
+			{
+				withCredentials: true,
+			}
+		)
+
+		return data
 	}
 
 	static async logout(): Promise<void> {
-		return $axios.post('/auth/logout')
+		const path = apiConfig.auth.logout()
+		await $axios.post(path)
 	}
 }

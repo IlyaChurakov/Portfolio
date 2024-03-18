@@ -1,31 +1,61 @@
-import { AxiosResponse } from 'axios'
-import $axios from '../http'
-import { IUser } from '../models/IUser'
-import { UserResponse } from '../models/response/UsersResponse'
+import { IUser } from '@app/store/authStore/types/auth.types'
+import { apiConfig } from '@shared/config'
+import { $axios } from '../shared/config/http/axios'
 
 export default class UserService {
-	static async getUsersList(): Promise<AxiosResponse<UserResponse[]>> {
-		return $axios.get<UserResponse[]>('/user')
+	static async getUsersList(): Promise<IUser[]> {
+		const path = apiConfig.user.all()
+		const { data } = await $axios.get<IUser[]>(path)
+
+		return data
 	}
-	static async deleteAccount(id: number): Promise<void> {
-		return $axios.delete(`/user/${id}`)
+
+	static async deleteAccount(id: string): Promise<IUser> {
+		const path = apiConfig.user.deleteAccount(id)
+		const { data } = await $axios.delete<IUser>(path)
+
+		return data
 	}
-	static async addRole(id: number, role: string): Promise<void> {
-		return $axios.patch(`/user/add-role/${id}`, { role })
+
+	static async addRole(id: string, role: string): Promise<IUser> {
+		const path = apiConfig.user.addRole(id)
+		const { data } = await $axios.patch<IUser>(path, { role })
+
+		return data
 	}
-	static async changeDescription(
-		id: number,
-		description: string
-	): Promise<AxiosResponse<IUser>> {
-		return $axios.post(`/user/change-description/${id}`, { description })
+
+	static async update(user: IUser): Promise<IUser> {
+		const path = apiConfig.user.update()
+		const { data } = await $axios.put(path, { user })
+
+		return data
 	}
-	static async deleteRole(id: number, role: string): Promise<void> {
-		return $axios.patch(`/user/delete-role/${id}`, { role })
+
+	static async deleteRole(id: string, role: string): Promise<IUser> {
+		const path = apiConfig.user.deleteRole(id)
+		const { data } = await $axios.patch(path, { role })
+
+		return data
 	}
-	static async uploadAvatar(
-		id: number,
-		avatar: FormData
-	): Promise<AxiosResponse<IUser>> {
-		return $axios.post(`/user/upload-avatar/${id}`, avatar)
+
+	// static async assignAvatar(id: string, avatar: string): Promise<IUser> {
+	// 	const path = apiConfig.user.uploadAvatar(id)
+	// 	const { data } = await $axios.post(path, { avatar })
+
+	// 	return data
+	// }
+
+	static async fetchAvatar(imgPath: string): Promise<any> {
+		const { data } = await $axios.get<any>(imgPath)
+
+		const blob = new Blob([data])
+
+		const regex = new RegExp('/([^/]+)$')
+		const matches = imgPath.match(regex)
+		if (!matches) return
+
+		const file = new File([blob], `${matches[1]}`)
+
+		return file
 	}
 }

@@ -1,5 +1,3 @@
-import path from 'path'
-import { v4 as uuidv4 } from 'uuid'
 import * as yup from 'yup'
 import UserService from '../services/User.service.js'
 
@@ -27,17 +25,7 @@ class UserController {
 			next(err)
 		}
 	}
-	async deleteUser(req, res, next) {
-		try {
-			const { id } = req.params
-			const userData = await UserService.deleteUserById(+id)
 
-			// TODO: удалять токены пользователя
-			res.json(userData)
-		} catch (err) {
-			next(err)
-		}
-	}
 	async login(req, res, next) {
 		try {
 			const { email, password } = req.body
@@ -47,33 +35,25 @@ class UserController {
 				maxAge: 30 * 24 * 60 * 60 * 1000,
 				httpOnly: true
 			})
+
 			res.json(userData)
 		} catch (err) {
 			next(err)
 		}
 	}
+
 	async logout(req, res, next) {
 		try {
 			const { refreshToken } = req.cookies
 			const token = await UserService.logout(refreshToken)
 
 			res.clearCookie('refreshToken')
-			return res.json(token)
+			res.json(token)
 		} catch (err) {
 			next(err)
 		}
 	}
-	async activate(req, res, next) {
-		try {
-			const activateLink = req.params.link
 
-			await UserService.activate(activateLink)
-
-			return res.redirect(process.env.CLIENT_URL)
-		} catch (err) {
-			next(err)
-		}
-	}
 	async refresh(req, res, next) {
 		try {
 			const { refreshToken } = req.cookies
@@ -89,63 +69,72 @@ class UserController {
 			next(err)
 		}
 	}
-	async getAllUsers(req, res, next) {
+
+	async activate(req, res, next) {
 		try {
-			const users = await UserService.getAllUsers()
-			return res.json(users)
+			const activateLink = req.params.link
+
+			await UserService.activate(activateLink)
+
+			res.redirect(process.env.CLIENT_URL)
 		} catch (err) {
 			next(err)
 		}
 	}
+
+	async deleteUser(req, res, next) {
+		try {
+			const { id } = req.params
+			const userData = await UserService.deleteUserById(+id)
+
+			// TODO: удалять токены пользователя
+			res.json(userData)
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	async getAllUsers(req, res, next) {
+		try {
+			const users = await UserService.getAllUsers()
+			res.json(users)
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	async addRole(req, res, next) {
 		try {
 			const { id } = req.params
 			const { role } = req.body
 
 			const user = await UserService.addRole(+id, role)
-			return res.json(user)
+			res.json(user)
 		} catch (err) {
 			next(err)
 		}
 	}
+
 	async deleteRole(req, res, next) {
 		try {
 			const { id } = req.params
 			const { role } = req.body
 
 			const user = await UserService.deleteRole(+id, role)
-			return res.json(user)
+			res.json(user)
 		} catch (err) {
 			next(err)
 		}
 	}
 
-	async uploadAvatar(req, res, next) {
+	async updateUser(req, res, next) {
 		try {
-			const { id } = req.params
-			const { img } = req.files
+			const { user } = req.body
 
-			const fileName = uuidv4() + '.jpg'
-
-			img.mv(path.resolve('static', fileName))
-
-			const user = await UserService.uploadAvatar(+id, fileName)
-			console.log(user)
-			return res.json(user)
-		} catch (err) {
-			next(err)
-		}
-	}
-
-	async addDescription(req, res, next) {
-		try {
-			const { id } = req.params
-			const { description } = req.body
-
-			const user = await UserService.addDescription(+id, description)
-			return res.json(user)
-		} catch (err) {
-			next(err)
+			const updatedUser = await UserService.updateUser(user)
+			res.json(updatedUser)
+		} catch (e) {
+			next(e)
 		}
 	}
 }

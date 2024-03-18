@@ -4,8 +4,9 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				violet: '#9255E8',
+				white: '#fff',
 				gray: '#6F7680',
+				violet: '#9255E8',
 				'gray-dark': 'rgb(35,36,38)',
 				black: '#171717',
 				red: '#C24D51',

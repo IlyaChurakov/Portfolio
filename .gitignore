@@ -6,3 +6,5 @@ node_modules
 *.prettierrc
 package-lock.json
 migrations
+
+*/static
