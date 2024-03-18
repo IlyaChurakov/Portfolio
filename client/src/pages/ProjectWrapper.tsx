@@ -56,14 +56,14 @@ const ProjectWrapper = () => {
 				<Container>
 					<div className='flex'>
 						<GoArrowLeft
-							className='text-xl cursor-pointer text-violet hover:text-white mr-5'
+							className='text-xl cursor-pointer text-gray hover:text-white mr-5'
 							onClick={leave}
 						/>
 
 						{isAdminOnProjectListPage && (
 							<Link
 								to={'/projects/new'}
-								className='mr-5 text-violet hover:text-white'
+								className='mr-5 text-gray hover:text-white'
 								onClick={e => addProject(e)}
 							>
 								Добавить проект
@@ -73,7 +73,7 @@ const ProjectWrapper = () => {
 						{isAdminOnProjectPage && id && (
 							<Link
 								to={`/projects/${id}/edit`}
-								className='mr-5 text-violet hover:text-white'
+								className='mr-5 text-gray hover:text-white'
 							>
 								Редактировать проект
 							</Link>

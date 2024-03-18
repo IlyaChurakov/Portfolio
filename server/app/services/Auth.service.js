@@ -52,6 +52,15 @@ class AuthService {
 		return tokenData
 	}
 
+	async removeUserTokens(userId) {
+		const tokenData = await prisma.refreshToken.deleteMany({
+			where: {
+				userId
+			}
+		})
+		return tokenData
+	}
+
 	async findToken(refreshToken) {
 		const tokenData = await prisma.refreshToken.findMany({
 			where: {

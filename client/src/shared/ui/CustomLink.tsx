@@ -1,3 +1,5 @@
+import classNames from 'classnames'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 
 const CustomLink = ({
@@ -5,21 +7,23 @@ const CustomLink = ({
 	text,
 	position = 'none',
 	className,
+	color = '#9255E8',
 }: {
 	to: string
 	text: string
 	position?: 'left' | 'none' | 'right'
 	className?: string
+	color?: string
 }) => {
 	return (
 		<Link
 			to={to}
-			className={`inline-block text-violet hover:text-white my-5 ${className}`}
 			style={{ float: position }}
+			className={classNames(`inline-block hover:text-white`, color, className)}
 		>
 			{text}
 		</Link>
 	)
 }
 
-export default CustomLink
+export default memo(CustomLink)

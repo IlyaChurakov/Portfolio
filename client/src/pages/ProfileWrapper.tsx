@@ -16,16 +16,21 @@ const ProfileWrapper = () => {
 				<Container>
 					<div className='flex items-center'>
 						<Link to='/'>
-							<GoArrowLeft className='text-xl cursor-pointer text-violet hover:text-white mr-5' />
+							<GoArrowLeft className='text-xl cursor-pointer text-gray hover:text-white mr-5' />
 						</Link>
 
-						<CustomLink to='/profile' text='Профиль' className='my-0 mr-5' />
+						<CustomLink
+							to='/profile'
+							text='Профиль'
+							className='mr-5'
+							color='text-gray'
+						/>
 
 						{isAdmin && (
 							<CustomLink
 								to='users'
 								text='Список пользователей'
-								className='my-0'
+								color='text-gray'
 							/>
 						)}
 					</div>

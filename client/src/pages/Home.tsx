@@ -22,9 +22,9 @@ const Home = () => {
 					<div className='min-h-[600px] aspect-square relative'>
 						<div className={styles.background} />
 						<img
-							src='MeArtShadow.png'
+							src='me.png'
 							alt='me'
-							className='pt-20 h-full absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 z-20'
+							className='h-full absolute top-1/2 left-1/2 -translate-x-[60%] -translate-y-1/2 z-20'
 						/>
 					</div>
 				</div>
@@ -33,7 +33,13 @@ const Home = () => {
 			<section>
 				<Title text='Проекты' />
 				<ProjectList count={4} />
-				<CustomLink to='/projects' text='Смотреть все' position='right' />
+				<CustomLink
+					to='/projects'
+					text='Смотреть все'
+					position='right'
+					className='my-5'
+					color='text-gray'
+				/>
 			</section>
 
 			<section>

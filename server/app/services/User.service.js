@@ -80,6 +80,7 @@ class UserService {
 			...userDto
 		})
 
+		// await AuthService.removeUserTokens(userDto.id)
 		await AuthService.saveToken(userDto.id, refreshToken)
 
 		return {
@@ -113,6 +114,7 @@ class UserService {
 		const userDto = new UserDto(user)
 		const tokens = AuthService.generateTokens({ ...userDto })
 
+		// await AuthService.removeUserTokens(userDto.id)
 		await AuthService.saveToken(userDto.id, tokens.refreshToken)
 
 		return {

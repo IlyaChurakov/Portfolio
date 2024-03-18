@@ -2,7 +2,7 @@ import React from 'react'
 
 export function WithLinks({
 	text,
-	linkStyles = { color: '#3096CE' },
+	linkStyles = { color: '#9255E8' },
 }: {
 	text: string | undefined
 	linkStyles?: React.CSSProperties
