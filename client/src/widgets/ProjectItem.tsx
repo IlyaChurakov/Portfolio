@@ -9,7 +9,6 @@ interface IProjectItemProps {
 }
 
 const ProjectItem: React.FC<IProjectItemProps> = ({ project, archived }) => {
-	console.log(archived)
 	return (
 		<Link
 			to={`/projects/${project.id}`}
@@ -19,8 +18,8 @@ const ProjectItem: React.FC<IProjectItemProps> = ({ project, archived }) => {
 				<img
 					src={`${import.meta.env.VITE_API_STATIC_URL}/${project.previewImage}`}
 					alt='project'
-					className={`h-full w-full object-cover rounded-lg brightness-[60%] ${
-						archived && 'brightness-[20%]'
+					className={`h-full w-full object-cover rounded-lg ${
+						archived ? 'brightness-[20%]' : 'brightness-[60%]'
 					}`}
 				/>
 			) : (

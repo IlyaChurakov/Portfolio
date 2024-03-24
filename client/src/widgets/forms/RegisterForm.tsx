@@ -47,6 +47,8 @@ const RegisterForm = () => {
 			onSubmit={handleSubmit(onSubmit)}
 			className='w-full h-full relative bg-black flex flex-col p-5 rounded-lg'
 		>
+			<h2 className='text-lg text-violet text-center mb-5'>Регистрация</h2>
+
 			<Input
 				isEdit
 				type='text'
@@ -79,9 +81,13 @@ const RegisterForm = () => {
 			>
 				Зарегистрироваться
 			</Button>
-			<Link to={'/login'} className='text-violet block m-auto'>
-				Авторизоваться
-			</Link>
+
+			<div className='flex justify-start text-sm text-gray border-t-[1px] border-gray mt-3 pt-3'>
+				<p className='mr-2'>Уже есть аккаунт?</p>
+				<Link to={'/login'} className='text-violet block'>
+					Войти
+				</Link>
+			</div>
 		</form>
 	)
 }

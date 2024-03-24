@@ -41,6 +41,8 @@ const LoginForm = () => {
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
 		>
+			<h2 className='text-lg text-violet text-center mb-5'>Вход в аккаунт</h2>
+
 			<Input
 				type='text'
 				isEdit
@@ -76,12 +78,21 @@ const LoginForm = () => {
 				Авторизоваться
 			</Button>
 
-			<Link to={'/register'} className='text-violet block m-auto'>
-				Зарегистрироваться
-			</Link>
-			<Link to={'/restore-access'} className='text-violet block m-auto'>
-				Забыли пароль?
-			</Link>
+			<div className='text-sm text-gray border-t-[1px] border-gray mt-3 pt-3'>
+				<div className='flex justify-start'>
+					<p className='mr-2'>Еще нет аккаунта?</p>
+					<Link to={'/register'} className='text-violet block'>
+						Зарегистрироваться
+					</Link>
+				</div>
+
+				<div className='flex justify-start'>
+					<p className='mr-2'>Забыли пароль?</p>
+					<Link to={'/restore-access'} className='text-violet block'>
+						Восстановить
+					</Link>
+				</div>
+			</div>
 		</form>
 	)
 }

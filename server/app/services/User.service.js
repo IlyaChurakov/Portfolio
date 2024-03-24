@@ -131,7 +131,7 @@ class UserService {
 		})
 
 		if (!candidate)
-			throw ApiError.NotFound(`User with email ${email} does not exist`)
+			throw ApiError.BadRequest(`User with email ${email} does not exist`)
 
 		const user = await prisma.user.update({
 			where: { email },

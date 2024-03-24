@@ -41,6 +41,10 @@ const RequestRestoringAccessForm = () => {
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
 		>
+			<h2 className='text-lg text-violet text-center mb-5'>
+				Запрос на смену пароля
+			</h2>
+
 			<Input
 				type='text'
 				isEdit
@@ -59,7 +63,7 @@ const RequestRestoringAccessForm = () => {
 				Восстановить доступ
 			</Button>
 
-			<p className='text-violet block m-auto'>
+			<p className='text-gray block m-auto text-sm text-center border-t-[1px] border-gray mt-3 pt-3'>
 				Письмо с ссылкой для восстановления доступа будет отправлено на
 				указанную почту
 			</p>
