@@ -2,14 +2,13 @@ import { AxiosError } from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
 import AuthService from '../../../services/Auth.service'
 import { RootStore } from '../rootStore'
-import { IUser } from './types/auth.types'
+import { AuthResponse, IUser } from './types/auth.types'
 
 export class AuthStore {
 	rootStore: RootStore
 
 	isAuth: boolean
 	isLoading: boolean
-	error?: AxiosError
 
 	constructor(rootStore: RootStore) {
 		makeAutoObservable(this)
@@ -29,9 +28,6 @@ export class AuthStore {
 	setLoading(bool: boolean) {
 		this.isLoading = bool
 	}
-	setError(err: AxiosError) {
-		this.error = err
-	}
 
 	async register(email: string, password: string, name: string) {
 		try {
@@ -46,7 +42,20 @@ export class AuthStore {
 				this.setUser(authResponse.user)
 			})
 		} catch (err) {
-			this.setError(err as AxiosError)
+			const { response } = err as AxiosError<AuthResponse>
+			if (!response) return
+
+			const { status } = response
+
+			if (status === 400) {
+				this.rootStore.errorStore.add(
+					'Пользователь с таким email уже существует!'
+				)
+			} else if (status === 422) {
+				this.rootStore.errorStore.add('Указанный пароль не допустим')
+			} else {
+				this.rootStore.errorStore.add(`Неизвестная ошибка`)
+			}
 		} finally {
 			this.setLoading(false)
 		}
@@ -65,7 +74,18 @@ export class AuthStore {
 				this.setUser(authResponse.user)
 			})
 		} catch (err) {
-			this.setError(err as AxiosError)
+			const { response } = err as AxiosError<AuthResponse>
+			if (!response) return
+
+			const { status } = response
+
+			if (status === 404) {
+				this.rootStore.errorStore.add('Пользователь не найден')
+			} else if (status === 401) {
+				this.rootStore.errorStore.add('Неверный пароль')
+			} else {
+				this.rootStore.errorStore.add(`Неизвестная ошибка`)
+			}
 		} finally {
 			this.setLoading(false)
 		}
@@ -84,7 +104,12 @@ export class AuthStore {
 				this.setUser({} as IUser)
 			})
 		} catch (err) {
-			this.setError(err as AxiosError)
+			const { response } = err as AxiosError<AuthResponse>
+			if (!response) return
+
+			const { status } = response
+
+			this.rootStore.errorStore.add(`Неизвестная ошибка: ${status}`)
 		} finally {
 			this.setLoading(false)
 		}
@@ -103,7 +128,58 @@ export class AuthStore {
 				this.setUser(authResponse.user)
 			})
 		} catch (err) {
-			this.setError(err as AxiosError)
+			const { response } = err as AxiosError<AuthResponse>
+			if (!response) return
+
+			const { status } = response
+
+			this.rootStore.errorStore.add(`Неизвестная ошибка: ${status}`)
+		} finally {
+			this.setLoading(false)
+		}
+	}
+
+	async requestRestoreAccess(email: string) {
+		try {
+			this.setLoading(true)
+
+			await AuthService.requestRestoreAccess(email)
+		} catch (err) {
+			const { response } = err as AxiosError<AuthResponse>
+			if (!response) return
+
+			const { status } = response
+
+			if (status === 400) {
+				this.rootStore.errorStore.add(
+					'Пользователь c таким email не существует'
+				)
+			} else {
+				this.rootStore.errorStore.add(`Неизвестная ошибка`)
+			}
+		} finally {
+			this.setLoading(false)
+		}
+	}
+
+	async changePassword(password: string, link: string) {
+		try {
+			this.setLoading(true)
+
+			await AuthService.changePassword(password, link)
+		} catch (err) {
+			const { response } = err as AxiosError<AuthResponse>
+			if (!response) return
+
+			const { status } = response
+
+			if (status === 400) {
+				this.rootStore.errorStore.add(
+					'Пользователь c таким email не существует'
+				)
+			} else {
+				this.rootStore.errorStore.add(`Неизвестная ошибка`)
+			}
 		} finally {
 			this.setLoading(false)
 		}

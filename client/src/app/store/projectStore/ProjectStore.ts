@@ -100,6 +100,20 @@ export class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
+	async archiveProject(id: string, bool: boolean) {
+		try {
+			this.setLoading(true)
+			const { data } = await ProjectService.archiveProject(id, bool)
+			this.setLoading(false)
+
+			await this.getProjectList()
+
+			return data
+		} catch (err) {
+			console.log(err)
+			throw new Error((err as Error).message)
+		}
+	}
 	async saveProject() {
 		try {
 			this.setLoading(true)

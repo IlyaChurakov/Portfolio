@@ -30,6 +30,14 @@ const NavPageMap = () => {
 	const openSectionModal = (section: ISection) => setEditingSection(section)
 	const closeSectionModal = () => setEditingSection(null)
 
+	const archiveProject = async () => {
+		await projectStore.archiveProject(
+			projectStore.project.id,
+			!projectStore.project.archived
+		)
+		await projectStore.getProject(projectStore.project.id)
+	}
+
 	return (
 		<nav className='fixed top-0 right-0 w-[350px] h-screen bg-black p-5 overflow-y-auto flex flex-col'>
 			<Modal isOpen={!!editingSection}>
@@ -45,9 +53,16 @@ const NavPageMap = () => {
 						onClick={deleteProject}
 					/>
 					<MdArchive
-						fill='#C24D51'
+						fill={
+							projectStore.project.archived ? 'rgb(65, 155, 65)' : '#C24D51'
+						}
 						className='mr-1 text-xl'
-						title='Добавить проект в архив'
+						title={
+							projectStore.project.archived
+								? 'Разархивировать проект'
+								: 'Добавить проект в архив'
+						}
+						onClick={archiveProject}
 					/>
 				</div>
 

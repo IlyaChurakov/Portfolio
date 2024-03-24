@@ -1,6 +1,5 @@
 import { AuthResponse } from '@app/store/authStore/types/auth.types'
 import { apiConfig } from '@shared/config'
-import axios from 'axios'
 import { $axios } from '../shared/config/http/axios'
 
 export default class AuthService {
@@ -37,12 +36,9 @@ export default class AuthService {
 	static refresh = async (): Promise<AuthResponse> => {
 		const path = apiConfig.auth.refresh()
 
-		const { data } = await axios.get<AuthResponse>(
-			`${import.meta.env.VITE_API_URL}${path}`,
-			{
-				withCredentials: true,
-			}
-		)
+		const { data } = await $axios.get<AuthResponse>(path, {
+			withCredentials: true,
+		})
 
 		return data
 	}
@@ -50,5 +46,15 @@ export default class AuthService {
 	static async logout(): Promise<void> {
 		const path = apiConfig.auth.logout()
 		await $axios.post(path)
+	}
+
+	static async requestRestoreAccess(email: string): Promise<void> {
+		const path = apiConfig.user.requestRestoreAccess()
+		await $axios.post(path, { email })
+	}
+
+	static async changePassword(password: string, link: string): Promise<void> {
+		const path = apiConfig.user.changePassword()
+		await $axios.post(path, { password, link })
 	}
 }

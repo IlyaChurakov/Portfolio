@@ -58,6 +58,16 @@ class ProjectService {
 			}
 		})
 	}
+	async archiveProject(id, bool) {
+		return await prisma.project.update({
+			where: {
+				id
+			},
+			data: {
+				archived: bool
+			}
+		})
+	}
 	async deleteAllProjects() {
 		return await prisma.project.deleteMany()
 	}

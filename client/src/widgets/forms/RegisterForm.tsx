@@ -1,7 +1,6 @@
 import { useStores } from '@app/index'
 import Button from '@shared/ui/Button'
 import Input from '@shared/ui/Input'
-import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -21,8 +20,7 @@ const RegisterForm = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isSubmitting },
-		setError,
+		formState: { isSubmitting },
 	} = useForm<Inputs>({
 		mode: 'onChange',
 	})
@@ -38,18 +36,7 @@ const RegisterForm = () => {
 		email,
 		password,
 	}: Inputs) => {
-		try {
-			await authStore.register(email, password, name)
-		} catch (e) {
-			const err = e as AxiosError
-
-			if (err.response?.status === 400) {
-				setError('email', {
-					type: 'value',
-					message: 'Пользователь с таким email уже существует',
-				})
-			}
-		}
+		await authStore.register(email, password, name)
 	}
 
 	return (
@@ -67,7 +54,6 @@ const RegisterForm = () => {
 				register={register('name', { required: true })}
 				className='my-2'
 			/>
-			{errors.name && <p className='text-red'>{errors.name.message}</p>}
 
 			<Input
 				isEdit
@@ -76,7 +62,6 @@ const RegisterForm = () => {
 				register={register('email', { required: true })}
 				className='my-2'
 			/>
-			{errors.name && <p className='text-red'>{errors.name.message}</p>}
 
 			<Input
 				isEdit
@@ -85,7 +70,6 @@ const RegisterForm = () => {
 				register={register('password', { required: true })}
 				className='my-2'
 			/>
-			{errors.name && <p className='text-red'>{errors.name.message}</p>}
 
 			<Button
 				type='submit'

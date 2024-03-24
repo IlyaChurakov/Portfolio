@@ -16,7 +16,8 @@ model User {
   name           String
   password       String
   isActivated    Boolean  @default(false)
-  activationLink String?  @map("activation_link")
+  activationLink String?  @unique @map("activation_link")
+  restoreLink    String?  @unique @map("restore_link")
   roles          String[]
   avatar         String?
   description    String?

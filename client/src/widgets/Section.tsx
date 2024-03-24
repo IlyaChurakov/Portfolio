@@ -19,10 +19,8 @@ const Section = ({
 }) => {
 	const { projectStore } = useStores()
 
-	// Управление секцией
-
 	const [isVisible, setIsVisible] = useState<boolean>(false)
-	const openSection = () => setIsVisible(isVisible ? false : true)
+	const switchSectionInsidesVisibility = () => setIsVisible(!isVisible)
 
 	const deleteSection = (id: string | number) => {
 		const project = { ...projectStore.project }
@@ -56,8 +54,6 @@ const Section = ({
 		projectStore.setProject({ ...project })
 	}
 
-	// Управление модальным окном
-
 	const [editingBlock, setEditingBlock] = useState<IBlock | null>(null)
 
 	const openBlockModal = (block: IBlock) => setEditingBlock(block)
@@ -74,12 +70,12 @@ const Section = ({
 					{isVisible ? (
 						<BiSolidDownArrow
 							className='cursor-pointer mr-1 text-xs text-gray hover:text-white'
-							onClick={openSection}
+							onClick={switchSectionInsidesVisibility}
 						/>
 					) : (
 						<BiSolidRightArrow
 							className='cursor-pointer mr-1 text-xs text-gray hover:text-white'
-							onClick={openSection}
+							onClick={switchSectionInsidesVisibility}
 						/>
 					)}
 
@@ -100,12 +96,11 @@ const Section = ({
 					/>
 				</div>
 
-				<div
-					className='text-red-500 cursor-pointer flex items-center'
+				<MdDelete
+					fill='#C24D51'
+					className='mr-1 text-lg text-red-500 cursor-pointer'
 					onClick={() => deleteSection(section.id)}
-				>
-					<MdDelete fill='#C24D51' className='mr-1 text-lg' />
-				</div>
+				/>
 			</div>
 
 			{isVisible && (

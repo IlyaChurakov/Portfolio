@@ -13,6 +13,7 @@ router.post('/assign-preview/:id', projectController.assignPreview)
 router.post('/upload-image', projectController.uploadImage)
 router.post('/save', AuthMiddleware, projectController.saveProject)
 router.post('/:name', AuthMiddleware, projectController.createProject)
+router.put('/archive', AuthMiddleware, projectController.archiveProject)
 
 router.delete('/', AuthMiddleware, projectController.deleteAllProjects)
 

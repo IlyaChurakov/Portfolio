@@ -123,6 +123,41 @@ class UserService {
 		}
 	}
 
+	async requestRestoreAccess(email) {
+		const candidate = await prisma.user.findUnique({
+			where: {
+				email
+			}
+		})
+
+		if (!candidate)
+			throw ApiError.NotFound(`User with email ${email} does not exist`)
+
+		const user = await prisma.user.update({
+			where: { email },
+			data: {
+				restoreLink: uuidv4()
+			}
+		})
+
+		await MailService.sendRestoringAccessMail(
+			email,
+			`${process.env.CLIENT_URL}/restore-access/${user.restoreLink}`
+		)
+	}
+
+	async changePassword(password, link) {
+		await prisma.user.update({
+			where: {
+				restoreLink: link
+			},
+			data: {
+				password: await hash(password),
+				restoreLink: null
+			}
+		})
+	}
+
 	async getAllUsers() {
 		const users = await prisma.user.findMany({
 			orderBy: {

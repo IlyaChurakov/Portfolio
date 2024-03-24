@@ -30,7 +30,7 @@ $axios.interceptors.response.use(
 				)
 				localStorage.setItem('token', response.data.accessToken)
 			} catch (err) {
-				throw new Error('Пользователь не авторизован')
+				console.log(err)
 			}
 		}
 		throw error

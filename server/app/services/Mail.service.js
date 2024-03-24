@@ -30,6 +30,22 @@ class MailService {
 			`
 		})
 	}
+
+	async sendRestoringAccessMail(email, link) {
+		await this.transporter.sendMail({
+			from: process.env.SMTP_USER,
+			to: email,
+			subject: 'Смена пароля на ' + process.env.API_URL,
+			text: '',
+			html: `
+				<div>
+					<h1>Для смены пароля перейдите по ссылке</h1>
+					<a href="${link}">${link}</a>
+					<p>Если вы не запрашивали смену пароля просто игнорируйте это письмо</p>
+				</div>
+			`
+		})
+	}
 }
 
 export default new MailService()

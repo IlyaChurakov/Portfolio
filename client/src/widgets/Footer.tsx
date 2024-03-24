@@ -8,7 +8,7 @@ const Footer: FC = () => {
 	const { authStore } = useStores()
 
 	return (
-		<footer className='max-h-[200px] w-full h-full p-10 bg-[#232426]'>
+		<footer className='max-h-[200px] w-full h-full p-10 bg-gray-dark'>
 			<Container>
 				<div className='grid grid-rows-3 grid-flow-col w-min gap-x-[100px]'>
 					<CustomLink

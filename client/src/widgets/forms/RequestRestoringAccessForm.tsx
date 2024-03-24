@@ -4,14 +4,14 @@ import Input from '@shared/ui/Input'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type Inputs = {
 	email: string
 	password: string
 }
 
-const LoginForm = () => {
+const RequestRestoringAccessForm = () => {
 	const navigate = useNavigate()
 	const { authStore } = useStores()
 
@@ -29,8 +29,8 @@ const LoginForm = () => {
 		mode: 'onSubmit',
 	})
 
-	const onSubmit: SubmitHandler<Inputs> = async ({ email, password }) => {
-		await authStore.login(email, password)
+	const onSubmit: SubmitHandler<Inputs> = async ({ email }) => {
+		await authStore.requestRestoreAccess(email)
 	}
 
 	return (
@@ -50,40 +50,21 @@ const LoginForm = () => {
 			/>
 			{errors.email && <p className='text-red mb-2'>{errors.email.message}</p>}
 
-			<Input
-				type='password'
-				isEdit
-				register={register('password', {
-					required: 'Заполните это поле',
-					minLength: {
-						value: 8,
-						message: 'Длина пароля должна быть не менее 8 символов',
-					},
-				})}
-				placeholder='Пароль'
-				className='mb-2'
-			/>
-			{errors.password && (
-				<p className='text-red mb-2'>{errors.password.message}</p>
-			)}
-
 			<Button
 				type='submit'
 				loadingColor='white'
 				isLoading={isSubmitting}
 				className='bg-violet text-white my-2 p-1'
 			>
-				Авторизоваться
+				Восстановить доступ
 			</Button>
 
-			<Link to={'/register'} className='text-violet block m-auto'>
-				Зарегистрироваться
-			</Link>
-			<Link to={'/restore-access'} className='text-violet block m-auto'>
-				Забыли пароль?
-			</Link>
+			<p className='text-violet block m-auto'>
+				Письмо с ссылкой для восстановления доступа будет отправлено на
+				указанную почту
+			</p>
 		</form>
 	)
 }
 
-export default observer(LoginForm)
+export default observer(RequestRestoringAccessForm)

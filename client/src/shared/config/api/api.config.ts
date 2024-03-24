@@ -16,6 +16,8 @@ export const apiConfig = {
 		changeName: (id: string) => `/user/change-name/${id}`,
 		changeMail: (id: string) => `/user/change-mail/${id}`,
 		update: () => `/user/update`,
+		requestRestoreAccess: () => `/user/request-restore-access`,
+		changePassword: () => `/user/change-password`,
 	},
 	projects: {
 		all: () => `/projects`,
@@ -25,5 +27,6 @@ export const apiConfig = {
 		uploadImage: () => `/projects/upload-image`,
 		save: () => `/projects/save`,
 		create: (name: string) => `/projects/${name}`,
+		archive: () => `/projects/archive`,
 	},
 }

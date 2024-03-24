@@ -9,7 +9,8 @@ router.delete('/:id', userController.deleteUser)
 router.patch('/delete-role/:id', userController.deleteRole)
 router.patch('/add-role/:id', userController.addRole)
 router.get('/activate/:link', userController.activate)
-// router.post('/assign-avatar/:id', userController.assignAvatar)
+router.post('/request-restore-access', userController.requestRestoreAccess)
+router.post('/change-password', userController.changePassword)
 router.put('/update', userController.updateUser)
 
 export default router

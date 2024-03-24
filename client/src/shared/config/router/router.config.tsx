@@ -10,6 +10,7 @@ import {
 	LazyProjectPage,
 	LazyProjectWrapperPage,
 	LazyRegisterPage,
+	LazyRestoringAccessPage,
 } from '../../../pages/index'
 
 import { AppRoles, AppRoutes, RoutePropsCustom } from './types'
@@ -18,6 +19,7 @@ export const RoutePaths: Record<AppRoutes, string> = {
 	[AppRoutes.HOME]: '/',
 	[AppRoutes.LOGIN]: '/login',
 	[AppRoutes.REGISTER]: '/register',
+	[AppRoutes.RESTORING_ACCESS]: '/restore-access/*',
 	[AppRoutes.PROFILE]: '/profile/*',
 	[AppRoutes.PROJECTS]: '/projects/*',
 	[AppRoutes.NOT_FOUND]: '*',
@@ -35,6 +37,10 @@ export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
 	[AppRoutes.REGISTER]: {
 		path: RoutePaths.register,
 		element: <LazyRegisterPage />,
+	},
+	[AppRoutes.RESTORING_ACCESS]: {
+		path: RoutePaths['restore-access'],
+		element: <LazyRestoringAccessPage />,
 	},
 	[AppRoutes.PROJECTS]: {
 		path: RoutePaths.projects,

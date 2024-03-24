@@ -6,6 +6,7 @@ export enum AppRoles {
 export enum AppRoutes {
 	LOGIN = 'login',
 	REGISTER = 'register',
+	RESTORING_ACCESS = 'restore-access',
 	NOT_FOUND = 'notFound',
 	HOME = 'home',
 	PROJECTS = 'projects',

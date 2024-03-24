@@ -26,6 +26,30 @@ class UserController {
 		}
 	}
 
+	async requestRestoreAccess(req, res, next) {
+		try {
+			const { email } = req.body
+
+			await UserService.requestRestoreAccess(email)
+
+			res.status(200).send()
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	async changePassword(req, res, next) {
+		try {
+			const { password, link } = req.body
+
+			await UserService.changePassword(password, link)
+
+			res.status(200).send()
+		} catch (err) {
+			next(err)
+		}
+	}
+
 	async login(req, res, next) {
 		try {
 			const { email, password } = req.body

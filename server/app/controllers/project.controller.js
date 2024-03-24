@@ -71,6 +71,16 @@ class ProjectController {
 			next(err)
 		}
 	}
+	async archiveProject(req, res, next) {
+		try {
+			const { id, bool } = req.body
+			const savedProject = await ProjectService.archiveProject(id, bool)
+
+			res.json(savedProject)
+		} catch (err) {
+			next(err)
+		}
+	}
 	async assignPreview(req, res, next) {
 		try {
 			const { id } = req.params

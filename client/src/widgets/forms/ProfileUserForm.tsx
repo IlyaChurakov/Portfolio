@@ -92,25 +92,21 @@ const ProfileUserForm = () => {
 				gridTemplateRows: isEditForm ? '1fr 40px' : '1fr',
 			}}
 		>
-			<div>
-				{isEditForm ? (
-					<>
-						<ImageLoader
-							uploadedImageUrl={isDeletedAvatar ? null : userStore.user.avatar}
-							register={register('avatar')}
-							setValue={setValue}
-						/>
-					</>
-				) : userStore.user.avatar ? (
-					<img
-						src={static_url + userStore.user.avatar}
-						alt='avatar'
-						className='w-full h-[250px] object-cover rounded-lg'
-					/>
-				) : (
-					<div className='w-full h-full bg-gray rounded-lg'></div>
-				)}
-			</div>
+			{isEditForm ? (
+				<ImageLoader
+					uploadedImageUrl={isDeletedAvatar ? null : userStore.user.avatar}
+					register={register('avatar')}
+					setValue={setValue}
+				/>
+			) : userStore.user.avatar ? (
+				<img
+					src={static_url + userStore.user.avatar}
+					alt='avatar'
+					className='w-full h-[250px] object-cover rounded-lg'
+				/>
+			) : (
+				<div className='w-full h-full bg-gray rounded-lg'></div>
+			)}
 
 			<div className='flex flex-col items-start border-l-[1px] border-r-[1px] border-[#9255e859] px-5'>
 				<Input
