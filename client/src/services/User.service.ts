@@ -10,6 +10,16 @@ export default class UserService {
 		return data
 	}
 
+	static async deleteFiles(files: string[]): Promise<string[]> {
+		const path = apiConfig.user.deleteFiles()
+
+		const { data } = await $axios.delete<{ files: string[] }>(path, {
+			data: { files },
+		})
+
+		return data.files
+	}
+
 	static async deleteAccount(id: string): Promise<IUser> {
 		const path = apiConfig.user.deleteAccount(id)
 		const { data } = await $axios.delete<IUser>(path)

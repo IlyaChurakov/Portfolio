@@ -167,6 +167,14 @@ class UserService {
 		return users
 	}
 
+	async getUserById(id) {
+		return await prisma.user.findUnique({
+			where: {
+				id
+			}
+		})
+	}
+
 	async deleteUserById(id) {
 		return await prisma.user.delete({
 			where: {

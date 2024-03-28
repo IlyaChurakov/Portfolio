@@ -38,8 +38,10 @@ class ProjectController {
 	}
 	async getLastProjects(req, res, next) {
 		try {
+			const user = req.user
+
 			const count = parseInt(req.params.count)
-			const projects = await ProjectService.getLastProjects(count)
+			const projects = await ProjectService.getLastProjects(count, user)
 			res.json(projects)
 		} catch (err) {
 			next(err)
@@ -64,8 +66,16 @@ class ProjectController {
 	}
 	async saveProject(req, res, next) {
 		try {
-			const project = req.body.project
-			const savedProject = await ProjectService.saveProject(project)
+			const newProject = req.body.project
+			const currentProject = await ProjectService.getProject(newProject.id)
+
+			const newPreview = newProject.previewImage
+			const currentPreview = currentProject.previewImage
+
+			if (currentPreview && newPreview !== currentPreview)
+				await ProjectService.deleteFiles([currentPreview])
+
+			const savedProject = await ProjectService.saveProject(newProject)
 			res.json(savedProject)
 		} catch (err) {
 			next(err)
@@ -89,6 +99,18 @@ class ProjectController {
 			const project = await ProjectService.assignPreview(id, fileName)
 
 			return res.json(project)
+		} catch (err) {
+			next(err)
+		}
+	}
+
+	async deleteFiles(req, res, next) {
+		try {
+			const { files } = req.body
+			console.log(req.body)
+			await ProjectService.deleteFiles(files)
+
+			res.status(200).json({ deletedFiles: files })
 		} catch (err) {
 			next(err)
 		}

@@ -18,6 +18,7 @@ export const apiConfig = {
 		update: () => `/user/update`,
 		requestRestoreAccess: () => `/user/request-restore-access`,
 		changePassword: () => `/user/change-password`,
+		deleteFiles: () => `/projects/files`,
 	},
 	projects: {
 		all: () => `/projects`,

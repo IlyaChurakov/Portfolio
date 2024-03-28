@@ -11,7 +11,7 @@ const Home = () => {
 	return (
 		<Container>
 			<section>
-				<div className='grid grid-cols-[1fr_0.8fr] items-center '>
+				<div className='grid grid-cols-[1fr_0.8fr] items-center'>
 					<div>
 						<Title text='Илья Чураков' />
 						<Subtitle text='Портфолио' color='#9255E8' />

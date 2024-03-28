@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+import ProjectService from '../services/Project.service.js'
 import UserService from '../services/User.service.js'
 
 const registrationSchema = yup.object().shape({
@@ -154,6 +155,14 @@ class UserController {
 	async updateUser(req, res, next) {
 		try {
 			const { user } = req.body
+			const newAvatar = user.avatar
+
+			const currentUser = await UserService.getUserById(user.id)
+			const currentAvatar = currentUser.avatar
+
+			// удаление старого аватара
+			if (currentAvatar && newAvatar !== currentAvatar)
+				await ProjectService.deleteFiles([currentAvatar])
 
 			const updatedUser = await UserService.updateUser(user)
 			res.json(updatedUser)
