@@ -110,26 +110,31 @@ class ProjectService {
 				if (currentBg && currentBg !== newBg) {
 					await this.deleteFiles([currentBg])
 				}
+			} else {
+				const currentBg = currentSection.backgroundPath
+
+				await this.deleteFiles([currentBg])
 			}
 
 			const currentBlocks = currentSection.blocks
-			const newBlocks = newSection.blocks
-
-			console.log(currentBlocks)
-			console.log(newBlocks)
-
-			// FIXME: разные id нового и старого блоков до перезагрузки
+			const updatedBlocks = newSection?.blocks
 
 			for (let currentBlock of currentBlocks) {
-				const newBlock = newBlocks.find(block => block.id === currentBlock.id)
-				console.log(currentBlock.type, newBlock?.type)
+				const updatedBlock = updatedBlocks?.find(
+					block => block.id === currentBlock.id
+				)
 
-				if (newBlock) {
+				if (updatedBlock) {
 					const currentImg = currentBlock.imgPath
-					const newImg = newBlock.imgPath
-					if (currentImg && currentImg !== newImg) {
+					const updatedImg = updatedBlock.imgPath
+
+					if (currentImg && currentImg !== updatedImg) {
 						await this.deleteFiles([currentImg])
 					}
+				} else {
+					const currentImg = currentBlock.imgPath
+
+					await this.deleteFiles([currentImg])
 				}
 			}
 		}
@@ -220,8 +225,11 @@ class ProjectService {
 			},
 			include: {
 				sections: {
+					orderBy: { serial: 'asc' },
 					include: {
-						blocks: true
+						blocks: {
+							orderBy: { serial: 'asc' }
+						}
 					}
 				}
 			}

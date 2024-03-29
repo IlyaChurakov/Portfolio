@@ -116,9 +116,8 @@ export class ProjectStore {
 	}
 	async saveProject() {
 		try {
-			this.setLoading(true)
-			await ProjectService.saveProject(this.project)
-			this.setLoading(false)
+			const { data } = await ProjectService.saveProject(this.project)
+			this.setProject(data)
 
 			this.setSaved(true)
 		} catch (err) {
