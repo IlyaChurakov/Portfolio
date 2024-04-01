@@ -44,7 +44,9 @@ const SectionForm = ({ section: sectionObj, close }: ISectionFormProps) => {
 
 			closeForm()
 		} catch (err) {
-			errorStore.add((err as AxiosError).message)
+			errorStore.add(
+				(err as AxiosError<{ message: string }>).response?.data?.message
+			)
 		}
 	}
 

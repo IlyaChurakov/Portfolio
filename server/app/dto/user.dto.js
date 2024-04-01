@@ -10,14 +10,16 @@ export class UserDto {
 	description
 
 	constructor(model) {
-		this.name = model.name
-		this.email = model.email
 		this.id = model.id
+		this.email = model.email
+		this.name = model.name
+
 		this.isActivated = model.isActivated
 		this.roles = model.roles
-		this.createdAt = model.createdAt
-		this.updatedAt = model.updatedAt
 		this.avatar = model.avatar
 		this.description = model.description
+
+		this.createdAt = model.createdAt
+		this.updatedAt = model.updatedAt
 	}
 }

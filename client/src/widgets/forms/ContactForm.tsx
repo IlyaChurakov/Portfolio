@@ -1,27 +1,43 @@
+import { useStores } from '@app/index'
 import Button from '@shared/ui/Button'
+import DisappearMessage from '@shared/ui/DisappearMessage'
 import Input from '@shared/ui/Input'
 import Textarea from '@shared/ui/Textarea'
+import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import MailService from '../../services/Mail.service'
 
 type Inputs = {
 	company: string
-	message: string
+	text: string
+	phone: string
+	email: string
 }
 
 const ContactForm = () => {
+	const { errorStore } = useStores()
+
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isSubmitting },
+		formState: { isSubmitting },
+		reset,
 	} = useForm<Inputs>({
 		mode: 'onChange',
 	})
 
+	const [isSuccess, setIsSuccess] = useState<boolean>(false)
+
 	const onSubmit: SubmitHandler<Inputs> = async data => {
 		try {
-			console.log(data)
+			await MailService.sendCommunicationMail(data)
+
+			reset()
+			setIsSuccess(true)
 		} catch (e) {
-			console.log(errors, e)
+			setIsSuccess(false)
+			errorStore.add('Ошибка отправки сообщения')
+			throw new Error()
 		}
 	}
 
@@ -40,7 +56,7 @@ const ContactForm = () => {
 					<Input
 						type='email'
 						isEdit
-						register={register('company')}
+						register={register('email')}
 						placeholder='Почта'
 						className='mb-5 w-full'
 					/>
@@ -48,17 +64,21 @@ const ContactForm = () => {
 					<Input
 						type='phone'
 						isEdit
-						register={register('company')}
+						register={register('phone')}
 						placeholder='Телефон'
 						className='mb-5 w-full'
 					/>
 
 					<Textarea
 						isEdit
-						register={register('message')}
+						register={register('text')}
 						placeholder='Сообщение'
 						className='w-full'
 					/>
+
+					<DisappearMessage trigger={isSuccess}>
+						<div className='text-green'>Данные отправлены!</div>
+					</DisappearMessage>
 				</div>
 
 				<img src='PostBox.png' alt='img' className='h-[225px]' />

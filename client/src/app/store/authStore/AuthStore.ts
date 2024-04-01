@@ -79,7 +79,7 @@ export class AuthStore {
 
 			const { status } = response
 
-			if (status === 404) {
+			if (status === 400) {
 				this.rootStore.errorStore.add('Пользователь не найден')
 			} else if (status === 401) {
 				this.rootStore.errorStore.add('Неверный пароль')
@@ -127,13 +127,6 @@ export class AuthStore {
 				this.setAuth(true)
 				this.setUser(authResponse.user)
 			})
-		} catch (err) {
-			const { response } = err as AxiosError<AuthResponse>
-			if (!response) return
-
-			const { status } = response
-
-			this.rootStore.errorStore.add(`Неизвестная ошибка: ${status}`)
 		} finally {
 			this.setLoading(false)
 		}

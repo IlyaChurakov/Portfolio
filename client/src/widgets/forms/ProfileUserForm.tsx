@@ -60,7 +60,9 @@ const ProfileUserForm = () => {
 
 			closeForm()
 		} catch (err) {
-			errorStore.add((err as AxiosError).message)
+			errorStore.add(
+				(err as AxiosError<{ message: string }>).response?.data?.message
+			)
 		}
 	}
 

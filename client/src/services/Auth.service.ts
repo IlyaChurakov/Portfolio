@@ -49,7 +49,7 @@ export default class AuthService {
 	}
 
 	static async requestRestoreAccess(email: string): Promise<void> {
-		const path = apiConfig.user.requestRestoreAccess()
+		const path = apiConfig.user.resetMail()
 		await $axios.post(path, { email })
 	}
 

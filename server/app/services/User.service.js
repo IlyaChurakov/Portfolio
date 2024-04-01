@@ -2,34 +2,47 @@ import { hash, verify } from 'argon2'
 import { v4 as uuidv4 } from 'uuid'
 import { UserDto } from '../dto/user.dto.js'
 import ApiError from '../errors/api.error.js'
-import { prisma } from '../utils/prisma.js'
+import UserRepository from '../repository/User.repository.js'
 import AuthService from './Auth.service.js'
 import MailService from './Mail.service.js'
 
 class UserService {
 	async register(name, email, password) {
-		const candidate = await prisma.user.findUnique({
-			where: {
-				email
-			}
-		})
-
+		const candidate = await UserRepository.getOne({ email })
 		if (candidate)
-			throw ApiError.BadRequest(`User with email ${email} already exists`)
+			throw ApiError.BadRequest(`Пользователь ${email} уже существует`)
 
-		const user = await prisma.user.create({
-			data: {
-				name,
-				email,
-				password: await hash(password),
-				activationLink: uuidv4()
-			}
+		const user = await UserRepository.create({
+			name,
+			email,
+			password: await hash(password),
+			activationLink: uuidv4()
 		})
 
-		await MailService.sendActivationMail(
-			email,
-			`${process.env.API_URL}/api/user/activate/${user.activationLink}`
-		)
+		const link = `${process.env.API_URL}/api/user/activate/${user.activationLink}`
+
+		await MailService.sendActivationMail(email, link)
+
+		const userDto = new UserDto(user)
+		const { accessToken, refreshToken } = AuthService.generateTokens({
+			...userDto
+		})
+
+		await AuthService.saveToken(userDto.id, refreshToken)
+
+		return {
+			accessToken,
+			refreshToken,
+			user: userDto
+		}
+	}
+
+	async login(email, password) {
+		const user = await UserRepository.getOne({ email })
+		if (!user) throw ApiError.BadRequest('Пользователь не найден')
+
+		const isPassEquals = await verify(user.password, password)
+		if (!isPassEquals) throw ApiError.UnauthorizedError('Неверный пароль')
 
 		const userDto = new UserDto(user)
 		const { accessToken, refreshToken } = AuthService.generateTokens({
@@ -46,75 +59,32 @@ class UserService {
 	}
 
 	async activate(activationLink) {
-		const user = await prisma.user.findUnique({
-			where: {
-				activationLink
-			}
-		})
+		const user = await UserRepository.getOne({ activationLink })
 
-		if (!user) throw ApiError.BadRequest('Invalid activation link')
+		if (!user) throw ApiError.BadRequest('Неверная ссылка активации')
 
-		await prisma.user.update({
-			where: {
-				id: user[0].id
-			},
-			data: {
-				isActivated: true
-			}
-		})
-	}
-
-	async login(email, password) {
-		const user = await prisma.user.findUnique({
-			where: {
-				email
-			}
-		})
-		if (!user) throw ApiError.NotFound('User not found')
-
-		const isPassEquals = await verify(user.password, password)
-		if (!isPassEquals) throw ApiError.UnauthorizedError('Invalid password')
-
-		const userDto = new UserDto(user)
-		const { accessToken, refreshToken } = AuthService.generateTokens({
-			...userDto
-		})
-
-		// await AuthService.removeUserTokens(userDto.id)
-		await AuthService.saveToken(userDto.id, refreshToken)
-
-		return {
-			accessToken,
-			refreshToken,
-			user: userDto
-		}
+		await UserRepository.update({ id: user[0].id }, { isActivated: true })
 	}
 
 	async logout(refreshToken) {
-		const token = await AuthService.removeToken(refreshToken)
-		return token
+		return await AuthService.removeToken(refreshToken)
 	}
 
 	async refresh(refreshToken) {
-		if (!refreshToken) {
-			throw ApiError.UnauthorizedError()
-		}
+		if (!refreshToken) throw ApiError.UnauthorizedError()
+
 		const userData = AuthService.validateRefreshToken(refreshToken)
 		const tokenFromDb = await AuthService.findToken(refreshToken)
 
-		if (!userData || !tokenFromDb) {
-			throw ApiError.UnauthorizedError()
-		}
+		if (!userData || !tokenFromDb) throw ApiError.UnauthorizedError()
 
-		const user = await prisma.user.findUnique({
-			where: {
-				id: userData.id
-			}
+		const user = await UserRepository.getOne({
+			id: userData.id
 		})
+
 		const userDto = new UserDto(user)
 		const tokens = AuthService.generateTokens({ ...userDto })
 
-		// await AuthService.removeUserTokens(userDto.id)
 		await AuthService.saveToken(userDto.id, tokens.refreshToken)
 
 		return {
@@ -123,106 +93,56 @@ class UserService {
 		}
 	}
 
-	async requestRestoreAccess(email) {
-		const candidate = await prisma.user.findUnique({
-			where: {
-				email
-			}
-		})
+	async sendResetMail(email) {
+		const candidate = await UserRepository.getOne({ email })
 
 		if (!candidate)
-			throw ApiError.BadRequest(`User with email ${email} does not exist`)
+			throw ApiError.BadRequest(`Пользователь ${email} не существует`)
 
-		const user = await prisma.user.update({
-			where: { email },
-			data: {
-				restoreLink: uuidv4()
-			}
-		})
+		const user = await UserRepository.update(
+			{ email },
+			{ restoreLink: uuidv4() }
+		)
 
-		await MailService.sendRestoringAccessMail(
+		await MailService.sendResetMail(
 			email,
 			`${process.env.CLIENT_URL}/restore-access/${user.restoreLink}`
 		)
 	}
 
 	async changePassword(password, link) {
-		await prisma.user.update({
-			where: {
-				restoreLink: link
-			},
-			data: {
-				password: await hash(password),
-				restoreLink: null
-			}
-		})
-	}
-
-	async getAllUsers() {
-		const users = await prisma.user.findMany({
-			orderBy: {
-				id: 'desc'
-			}
-		})
-		return users
-	}
-
-	async getUserById(id) {
-		return await prisma.user.findUnique({
-			where: {
-				id
-			}
-		})
-	}
-
-	async deleteUserById(id) {
-		return await prisma.user.delete({
-			where: {
-				id
-			}
-		})
+		await UserRepository.update(
+			{ restoreLink: link },
+			{ password: await hash(password), restoreLink: null }
+		)
 	}
 
 	async addRole(id, role) {
-		return await prisma.user.update({
-			where: {
-				id
-			},
-			data: {
-				roles: {
-					push: role
-				}
-			}
-		})
+		return UserRepository.update({ id }, { roles: { push: role } })
 	}
 
-	async deleteRole(id, role) {
-		const user = await prisma.user.findUnique({
-			where: {
-				id
-			}
-		})
+	async getUser(user) {
+		const findedUser = await UserRepository.getOne({ ...user })
+		if (!findedUser) throw ApiError.BadRequest('Пользователь не найден')
 
-		if (!user) throw ApiError.BadRequest('User not found')
-		return await prisma.user.update({
-			where: {
-				id
-			},
-			data: {
-				roles: { set: user.roles.filter(r => r !== role) }
-			}
-		})
+		return findedUser
 	}
 
-	async updateUser({ id, ...otherUserFields }) {
-		return await prisma.user.update({
-			where: {
-				id
-			},
-			data: {
-				...otherUserFields
+	async getAllUsers() {
+		return await UserRepository.getMany(
+			{},
+			{
+				id: 'desc'
 			}
-		})
+		)
+	}
+
+	async deleteUser(user) {
+		return await UserRepository.delete({ ...user })
+	}
+
+	async updateUser({ id, ...data }) {
+		return await UserRepository.update({ id }, { ...data })
 	}
 }
 

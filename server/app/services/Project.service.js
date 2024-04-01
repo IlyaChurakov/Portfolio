@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { v4 as uuidv4 } from 'uuid'
 import { prisma } from '../utils/prisma.js'
 
 class ProjectService {
@@ -94,72 +93,66 @@ class ProjectService {
 			})
 		}
 	}
-	async saveProject({ id, sections, ...projectData }) {
-		const currentProject = await this.getProject(id)
+	async saveProject(receivedProject) {
+		const { id: receivedId, sections, ...receivedProjectData } = receivedProject
+
+		const currentProject = await this.getProject(receivedId)
+
 		const currentSections = currentProject.sections
+		const receivedSections = receivedProject.sections
+
+		const deleteOutdatedFile = async (current, received, key) => {
+			if (received) {
+				const currentImage = current[key]
+				const receivedImage = received[key]
+
+				const isExistAndChangedCurrentBg =
+					currentImage && currentImage !== receivedImage
+				if (isExistAndChangedCurrentBg) await this.deleteFiles([currentImage])
+			} else {
+				const currentImage = current[key]
+				if (currentImage) await this.deleteFiles([currentImage])
+			}
+		}
 
 		for (let currentSection of currentSections) {
-			const newSection = sections.find(
-				section => section.id === currentSection.id
+			const findedReceivedSection = receivedSections.find(
+				({ id }) => id === currentSection.id
 			)
 
-			if (newSection) {
-				const currentBg = currentSection.backgroundPath
-				const newBg = newSection.backgroundPath
-
-				if (currentBg && currentBg !== newBg) {
-					await this.deleteFiles([currentBg])
-				}
-			} else {
-				const currentBg = currentSection.backgroundPath
-
-				await this.deleteFiles([currentBg])
-			}
+			await deleteOutdatedFile(
+				currentSection,
+				findedReceivedSection,
+				'backgroundPath'
+			)
 
 			const currentBlocks = currentSection.blocks
-			const updatedBlocks = newSection?.blocks
+			const receivedBlocks = findedReceivedSection?.blocks
 
 			for (let currentBlock of currentBlocks) {
-				const updatedBlock = updatedBlocks?.find(
-					block => block.id === currentBlock.id
+				const findedReceivedBlock = receivedBlocks?.find(
+					({ id }) => id === currentBlock.id
 				)
 
-				if (updatedBlock) {
-					const currentImg = currentBlock.imgPath
-					const updatedImg = updatedBlock.imgPath
-
-					if (currentImg && currentImg !== updatedImg) {
-						await this.deleteFiles([currentImg])
-					}
-				} else {
-					const currentImg = currentBlock.imgPath
-
-					await this.deleteFiles([currentImg])
-				}
+				await deleteOutdatedFile(currentBlock, findedReceivedBlock, 'imgPath')
 			}
 		}
 
 		return await prisma.project.update({
 			where: {
-				id
+				id: receivedId
 			},
 			data: {
-				...projectData,
+				...receivedProjectData,
 				sections: {
 					deleteMany: {
-						NOT: sections.map(({ id: sectionId = uuidv4() }) => ({
+						NOT: receivedSections.map(({ id: sectionId }) => ({
 							id: sectionId
 						}))
 					},
-					upsert: sections.map(
+					upsert: receivedSections.map(
 						(
-							{
-								id: sectionId = uuidv4(),
-								blocks = [],
-								name,
-								paddings,
-								backgroundPath
-							},
+							{ id: sectionId, blocks = [], name, paddings, backgroundPath },
 							index
 						) => ({
 							where: { id: sectionId },
@@ -181,20 +174,13 @@ class ProjectService {
 								backgroundPath,
 								blocks: {
 									deleteMany: {
-										NOT: blocks.map(({ id: blockId = uuidv4() }) => ({
+										NOT: blocks.map(({ id: blockId }) => ({
 											id: blockId
 										}))
 									},
 									upsert: blocks.map(
 										(
-											{
-												id: blockId = uuidv4(),
-												color,
-												text,
-												type,
-												imgPath,
-												imgDescr
-											},
+											{ id: blockId, color, text, type, imgPath, imgDescr },
 											index
 										) => ({
 											where: { id: blockId },

@@ -9,7 +9,7 @@ router.delete('/:id', userController.deleteUser)
 router.patch('/delete-role/:id', userController.deleteRole)
 router.patch('/add-role/:id', userController.addRole)
 router.get('/activate/:link', userController.activate)
-router.post('/request-restore-access', userController.requestRestoreAccess)
+router.post('/reset-mail', userController.sendResetMail)
 router.post('/change-password', userController.changePassword)
 router.put('/update', userController.updateUser)
 

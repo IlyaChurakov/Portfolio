@@ -16,7 +16,7 @@ export const apiConfig = {
 		changeName: (id: string) => `/user/change-name/${id}`,
 		changeMail: (id: string) => `/user/change-mail/${id}`,
 		update: () => `/user/update`,
-		requestRestoreAccess: () => `/user/request-restore-access`,
+		resetMail: () => `/user/reset-mail`,
 		changePassword: () => `/user/change-password`,
 		deleteFiles: () => `/projects/files`,
 	},
@@ -29,5 +29,8 @@ export const apiConfig = {
 		save: () => `/projects/save`,
 		create: (name: string) => `/projects/${name}`,
 		archive: () => `/projects/archive`,
+	},
+	mail: {
+		contact: () => '/mail/contact',
 	},
 }

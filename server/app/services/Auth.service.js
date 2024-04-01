@@ -15,59 +15,51 @@ class AuthService {
 
 	validateAccessToken(token) {
 		try {
-			const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
-
-			return userData
+			return jwt.verify(token, process.env.JWT_ACCESS_SECRET)
 		} catch (err) {
-			console.log(err)
 			return null
 		}
 	}
 
 	validateRefreshToken(token) {
 		try {
-			const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET)
-			return userData
+			return jwt.verify(token, process.env.JWT_REFRESH_SECRET)
 		} catch (err) {
 			return null
 		}
 	}
 
 	async saveToken(userId, refreshToken) {
-		const token = await prisma.refreshToken.create({
+		return await prisma.refreshToken.create({
 			data: {
 				userId,
 				hashedToken: refreshToken
 			}
 		})
-		return token
 	}
 
 	async removeToken(refreshToken) {
-		const tokenData = await prisma.refreshToken.deleteMany({
+		return await prisma.refreshToken.deleteMany({
 			where: {
 				hashedToken: refreshToken
 			}
 		})
-		return tokenData
 	}
 
 	async removeUserTokens(userId) {
-		const tokenData = await prisma.refreshToken.deleteMany({
+		return await prisma.refreshToken.deleteMany({
 			where: {
 				userId
 			}
 		})
-		return tokenData
 	}
 
 	async findToken(refreshToken) {
-		const tokenData = await prisma.refreshToken.findMany({
+		return await prisma.refreshToken.findMany({
 			where: {
 				hashedToken: refreshToken
 			}
 		})
-		return tokenData
 	}
 }
 

@@ -137,12 +137,11 @@ export class ProjectStore {
 	}
 	async uploadImage(image: FormData) {
 		try {
-			this.setLoading(true)
 			const { data } = await ProjectService.uploadImage(image)
-			this.setLoading(false)
 
 			return data
 		} catch (err) {
+			console.log(err)
 			throw new Error((err as Error).message)
 		}
 	}

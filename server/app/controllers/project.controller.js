@@ -1,5 +1,6 @@
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
+import ApiError from '../errors/api.error.js'
 import ProjectService from '../services/Project.service.js'
 
 class ProjectController {
@@ -124,6 +125,9 @@ class ProjectController {
 			const { file } = req.files
 
 			if (!file) return res.json({ error: 'Incorrect input name' })
+
+			if (file.size > 2 * 1048576)
+				throw ApiError.BadRequest('Файл слишком большой, выберите файл < 1Мб')
 
 			const fileName = uuidv4() + '.' + file.name.split('.')[1]
 

@@ -31,7 +31,7 @@ class MailService {
 		})
 	}
 
-	async sendRestoringAccessMail(email, link) {
+	async sendResetMail(email, link) {
 		await this.transporter.sendMail({
 			from: process.env.SMTP_USER,
 			to: email,
@@ -42,6 +42,25 @@ class MailService {
 					<h1>Для смены пароля перейдите по ссылке</h1>
 					<a href="${link}">${link}</a>
 					<p>Если вы не запрашивали смену пароля просто игнорируйте это письмо</p>
+				</div>
+			`
+		})
+	}
+
+	async sendContactMail(data, user) {
+		await this.transporter.sendMail({
+			from: process.env.SMTP_USER,
+			to: 'churakov018@mail.ru',
+			subject: 'Обратная связь с ' + process.env.API_URL,
+			text: user
+				? `Сообщение от пользователя ${user.name}`
+				: `Сообщение от незарегистированного пользователя`,
+			html: `
+				<div>
+					<h1>${data.company}</h1>
+					<p>Почта: ${data.email}</p>
+					<p>Телефон: ${data.phone}</p>
+					<p>${data.text}</p>
 				</div>
 			`
 		})

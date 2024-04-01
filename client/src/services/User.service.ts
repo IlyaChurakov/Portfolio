@@ -48,13 +48,6 @@ export default class UserService {
 		return data
 	}
 
-	// static async assignAvatar(id: string, avatar: string): Promise<IUser> {
-	// 	const path = apiConfig.user.uploadAvatar(id)
-	// 	const { data } = await $axios.post(path, { avatar })
-
-	// 	return data
-	// }
-
 	static async fetchAvatar(imgPath: string): Promise<any> {
 		const { data } = await $axios.get<any>(imgPath)
 

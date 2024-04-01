@@ -10,6 +10,7 @@ import router from './app/routes/index.js'
 import { prisma } from './app/utils/prisma.js'
 
 import fileUpload from 'express-fileupload'
+import UserMiddleware from './app/middlewares/User.middleware.js'
 
 dotenv.config()
 
@@ -23,7 +24,6 @@ async function main() {
 			credentials: true,
 			origin: process.env.CLIENT_URL
 		})
-		//TODO: обработка ошибок cors
 	)
 	app.use(express.json())
 	app.use(express.static('static'))
@@ -32,6 +32,8 @@ async function main() {
 
 	app.use('/api', router)
 	app.use(errorMiddleware)
+	// получаем данные о пользователе на публичных маршрутах, если пользователь авторизован, чтобы маршрут оставался публичным
+	app.use(UserMiddleware)
 
 	const PORT = process.env.PORT || 5000
 
@@ -49,7 +51,7 @@ main()
 		await prisma.$disconnect()
 	})
 	.catch(async err => {
-		console.log(err)
+		console.error(err)
 		await prisma.$disconnect()
 		process.exit(1)
 	})
