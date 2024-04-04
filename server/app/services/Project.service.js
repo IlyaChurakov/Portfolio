@@ -1,102 +1,45 @@
-import fs from 'fs'
-import path from 'path'
+import ProjectRepository from '../repository/Project.repository.js'
 import { prisma } from '../utils/prisma.js'
+import FileService from './File.service.js'
 
 class ProjectService {
-	async createProject({ name, archived, previewImage, labels }) {
-		return await prisma.project.create({
-			data: {
-				name,
-				archived,
-				previewImage,
-				labels
-			},
-			include: {
-				sections: {
-					include: {
-						blocks: true
-					}
-				}
-			}
-		})
+	async createProject(project) {
+		return await ProjectRepository.createProject(project)
 	}
-	async getProject(id) {
-		return await prisma.project.findUnique({
-			where: {
-				id
-			},
-			include: {
-				sections: {
-					orderBy: { serial: 'asc' },
-					include: {
-						blocks: {
-							orderBy: { serial: 'asc' }
-						}
-					}
-				}
-			}
-		})
+
+	async getProjectById(id) {
+		return await ProjectRepository.getProject({ id })
 	}
-	async getProjectList() {
-		return await prisma.project.findMany({
-			orderBy: {
-				createdAt: 'desc'
-			}
-		})
-	}
-	async getLastProjects(count, user) {
+
+	async getProjectList(count, user) {
 		if (!user || !user.roles.includes('admin')) {
-			return await prisma.project.findMany({
+			return await ProjectRepository.getProjectList({
 				where: {
 					archived: false || null
 				},
-				orderBy: {
-					createdAt: 'desc'
-				},
-				take: count
+				orderBy: { createdAt: 'desc' },
+				take: count || undefined
 			})
 		} else {
 			return await prisma.project.findMany({
 				orderBy: {
 					createdAt: 'desc'
 				},
-				take: count
+				take: count || undefined
 			})
 		}
 	}
-	async deleteProjectById(id) {
-		return await prisma.project.delete({
-			where: {
-				id
-			}
-		})
-	}
-	async archiveProject(id, bool) {
-		return await prisma.project.update({
-			where: {
-				id
-			},
-			data: {
-				archived: bool
-			}
-		})
-	}
-	async deleteAllProjects() {
-		return await prisma.project.deleteMany()
-	}
-	async deleteFiles(files) {
-		for (let fileName of files) {
-			const filePath = path.resolve('static', fileName)
-			fs.unlink(filePath, err => {
-				if (err) throw err
-				console.log('Deleted')
-			})
-		}
-	}
-	async saveProject(receivedProject) {
-		const { id: receivedId, sections, ...receivedProjectData } = receivedProject
 
-		const currentProject = await this.getProject(receivedId)
+	async deleteProjectById(id) {
+		return await ProjectRepository.deleteProject({ id })
+	}
+
+	async archiveProjectById(id, bool) {
+		return await ProjectRepository.updateProject({ id, archived: bool })
+	}
+
+	async saveProject(receivedProject) {
+		const currentProject = await this.getProjectById(receivedProject.id)
 
 		const currentSections = currentProject.sections
 		const receivedSections = receivedProject.sections
@@ -108,10 +51,11 @@ class ProjectService {
 
 				const isExistAndChangedCurrentBg =
 					currentImage && currentImage !== receivedImage
-				if (isExistAndChangedCurrentBg) await this.deleteFiles([currentImage])
+				if (isExistAndChangedCurrentBg)
+					await FileService.deleteFiles([currentImage])
 			} else {
 				const currentImage = current[key]
-				if (currentImage) await this.deleteFiles([currentImage])
+				if (currentImage) await FileService.deleteFiles([currentImage])
 			}
 		}
 
@@ -138,105 +82,7 @@ class ProjectService {
 			}
 		}
 
-		return await prisma.project.update({
-			where: {
-				id: receivedId
-			},
-			data: {
-				...receivedProjectData,
-				sections: {
-					deleteMany: {
-						NOT: receivedSections.map(({ id: sectionId }) => ({
-							id: sectionId
-						}))
-					},
-					upsert: receivedSections.map(
-						(
-							{ id: sectionId, blocks = [], name, paddings, backgroundPath },
-							index
-						) => ({
-							where: { id: sectionId },
-							create: {
-								name,
-								paddings,
-								backgroundPath,
-								blocks: {
-									create: blocks.map(({ sectionId, ...block }) => ({
-										...block,
-										serial: index
-									}))
-								},
-								serial: index
-							},
-							update: {
-								name,
-								paddings,
-								backgroundPath,
-								blocks: {
-									deleteMany: {
-										NOT: blocks.map(({ id: blockId }) => ({
-											id: blockId
-										}))
-									},
-									upsert: blocks.map(
-										(
-											{ id: blockId, color, text, type, imgPath, imgDescr },
-											index
-										) => ({
-											where: { id: blockId },
-											create: {
-												color,
-												text,
-												type,
-												imgPath,
-												imgDescr,
-												serial: index
-											},
-											update: {
-												color,
-												text,
-												type,
-												imgPath,
-												imgDescr,
-												serial: index
-											}
-										})
-									)
-								},
-								serial: index
-							}
-						})
-					)
-				}
-			},
-			include: {
-				sections: {
-					orderBy: { serial: 'asc' },
-					include: {
-						blocks: {
-							orderBy: { serial: 'asc' }
-						}
-					}
-				}
-			}
-		})
-	}
-	async assignPreview(id, image) {
-		return await prisma.project.update({
-			where: {
-				id
-			},
-			data: {
-				previewImage: image
-			},
-			include: {
-				sections: {
-					include: {
-						blocks: true
-					}
-				}
-			}
-		})
+		return await ProjectRepository.saveProject(receivedProject)
 	}
 }
 

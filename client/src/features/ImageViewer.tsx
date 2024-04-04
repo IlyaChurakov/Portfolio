@@ -1,4 +1,5 @@
 import Button from '@shared/ui/Button'
+import Centered from '@shared/ui/Centered'
 import { useEffect, useState } from 'react'
 
 const ImageViewer = ({
@@ -25,11 +26,13 @@ const ImageViewer = ({
 				>
 					Закрыть
 				</Button>
-				<img
-					src={import.meta.env.VITE_API_STATIC_URL + path}
-					alt='img'
-					className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[90vw] max-h-[90vh]'
-				/>
+				<Centered>
+					<img
+						src={import.meta.env.VITE_API_STATIC_URL + path}
+						alt='img'
+						className=' max-w-[90vw] max-h-[90vh]'
+					/>
+				</Centered>
 			</div>
 		</div>
 	)

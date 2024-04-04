@@ -12,16 +12,18 @@ class UserService {
 		if (candidate)
 			throw ApiError.BadRequest(`Пользователь ${email} уже существует`)
 
+		const activationLink = uuidv4()
+
+		const link = `${process.env.API_URL}/api/user/activate/${activationLink}`
+
+		await MailService.sendActivationMail(email, link)
+
 		const user = await UserRepository.create({
 			name,
 			email,
 			password: await hash(password),
-			activationLink: uuidv4()
+			activationLink
 		})
-
-		const link = `${process.env.API_URL}/api/user/activate/${user.activationLink}`
-
-		await MailService.sendActivationMail(email, link)
 
 		const userDto = new UserDto(user)
 		const { accessToken, refreshToken } = AuthService.generateTokens({

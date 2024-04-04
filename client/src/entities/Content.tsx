@@ -1,18 +1,46 @@
-import { IProject } from '@app/store/projectStore/types/project.types'
+import { useStores } from '@app/index'
 import Section from '@shared/layouts/Section'
-import Image from '@widgets/blocks/Image'
-import Text from '@widgets/blocks/Text'
-import Title from '@widgets/blocks/Title'
-import { useState } from 'react'
+import Centered from '@shared/ui/Centered'
+import Image from '@shared/ui/Image'
+import PageLoader from '@shared/ui/PageLoader'
+import Text from '@shared/ui/Text'
+import Title from '@shared/ui/Title'
+import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import ImageViewer from '../features/ImageViewer'
 import Container from '../shared/layouts/Container'
 
-export const Content = ({ project }: { project: IProject }) => {
+const Content = () => {
+	const { id } = useParams()
+	const { projectStore } = useStores()
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		getProject(id)
+	}, [id])
+
+	async function getProject(id: string | null | undefined) {
+		if (!id) return
+
+		const project = await projectStore.getProject(id)
+		if (!project) navigate('/not-found')
+	}
+
 	const [imagePath, setImagePath] = useState<string>()
+
+	if (projectStore.loading)
+		return (
+			<Centered>
+				<PageLoader />
+			</Centered>
+		)
+
+	if (!projectStore.project) return
 
 	return (
 		<>
-			{project.sections?.map(section => (
+			{projectStore.project.sections?.map(section => (
 				<Section key={section.id} section={section}>
 					<Container>
 						{section.blocks?.map(block => {
@@ -45,3 +73,5 @@ export const Content = ({ project }: { project: IProject }) => {
 		</>
 	)
 }
+
+export default observer(Content)

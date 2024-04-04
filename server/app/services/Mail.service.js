@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
+import ApiError from '../errors/api.error.js'
 
 dotenv.config()
 
@@ -17,18 +18,22 @@ class MailService {
 	}
 
 	async sendActivationMail(email, link) {
-		await this.transporter.sendMail({
-			from: process.env.SMTP_USER,
-			to: email,
-			subject: 'Активация аккаунта на ' + process.env.API_URL,
-			text: '',
-			html: `
+		try {
+			await this.transporter.sendMail({
+				from: process.env.SMTP_USER,
+				to: email,
+				subject: 'Активация аккаунта на ' + process.env.API_URL,
+				text: '',
+				html: `
 				<div>
 					<h1>Для активации перейдите по ссылке</h1>
 					<a href="${link}">${link}</a>
 				</div>
 			`
-		})
+			})
+		} catch (err) {
+			throw ApiError.BadRequest('Не удалось отправить письмо')
+		}
 	}
 
 	async sendResetMail(email, link) {

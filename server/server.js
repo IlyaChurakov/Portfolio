@@ -5,11 +5,11 @@ import dotenv from 'dotenv'
 
 import express from 'express'
 import morgan from 'morgan'
-import errorMiddleware from './app/middlewares/error.middleware.js'
 import router from './app/routes/index.js'
 import { prisma } from './app/utils/prisma.js'
 
 import fileUpload from 'express-fileupload'
+import ErrorMiddleware from './app/middlewares/Error.middleware.js'
 import UserMiddleware from './app/middlewares/User.middleware.js'
 
 dotenv.config()
@@ -30,10 +30,11 @@ async function main() {
 	app.use(fileUpload({}))
 	app.use(cookieParser())
 
-	app.use('/api', router)
-	app.use(errorMiddleware)
 	// получаем данные о пользователе на публичных маршрутах, если пользователь авторизован, чтобы маршрут оставался публичным
 	app.use(UserMiddleware)
+
+	app.use('/api', router)
+	app.use(ErrorMiddleware)
 
 	const PORT = process.env.PORT || 5000
 

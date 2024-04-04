@@ -1,10 +1,11 @@
+import Centered from '@shared/ui/Centered'
 import LoginForm from '@widgets/forms/LoginForm'
 
 const Login = () => {
 	return (
-		<div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-96'>
+		<Centered>
 			<LoginForm />
-		</div>
+		</Centered>
 	)
 }
 

@@ -4,13 +4,15 @@ import AuthMiddleware from '../middlewares/Auth.middleware.js'
 
 const router = new Router()
 
+// Private
 router.get('/', AuthMiddleware, userController.getAllUsers)
-router.delete('/:id', userController.deleteUser)
-router.patch('/delete-role/:id', userController.deleteRole)
-router.patch('/add-role/:id', userController.addRole)
-router.get('/activate/:link', userController.activate)
-router.post('/reset-mail', userController.sendResetMail)
-router.post('/change-password', userController.changePassword)
-router.put('/update', userController.updateUser)
+router.delete('/:id', AuthMiddleware, userController.deleteUser)
+router.patch('/delete-role/:id', AuthMiddleware, userController.deleteRole)
+router.patch('/add-role/:id', AuthMiddleware, userController.addRole)
+router.get('/activate/:link', AuthMiddleware, userController.activate)
+router.post('/reset-mail', AuthMiddleware, userController.sendResetMail)
+router.put('/update', AuthMiddleware, userController.updateUser)
 
+// Public
+router.post('/change-password', userController.changePassword)
 export default router

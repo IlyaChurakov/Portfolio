@@ -1,12 +1,7 @@
-import * as yup from 'yup'
+import ApiError from '../errors/api.error.js'
 import ProjectService from '../services/Project.service.js'
 import UserService from '../services/User.service.js'
-
-const registrationSchema = yup.object().shape({
-	name: yup.string().required(),
-	email: yup.string().required(),
-	password: yup.string().required()
-})
+import registrationSchema from '../validation/registration.schema.js'
 
 class UserController {
 	async register(req, res, next) {
@@ -25,7 +20,7 @@ class UserController {
 			})
 			return res.json(userData)
 		} catch (err) {
-			return next(err)
+			return next(ApiError.BadRequest(err.message))
 		}
 	}
 

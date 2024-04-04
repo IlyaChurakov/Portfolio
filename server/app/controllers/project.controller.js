@@ -23,7 +23,7 @@ class ProjectController {
 	async getProject(req, res, next) {
 		try {
 			const { id } = req.params
-			const project = await ProjectService.getProject(id)
+			const project = await ProjectService.getProjectById(id)
 			res.json(project)
 		} catch (err) {
 			next(err)
@@ -31,23 +31,16 @@ class ProjectController {
 	}
 	async getProjectList(req, res, next) {
 		try {
-			const projects = await ProjectService.getProjectList()
-			res.json(projects)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async getLastProjects(req, res, next) {
-		try {
 			const user = req.user
 
 			const count = parseInt(req.params.count)
-			const projects = await ProjectService.getLastProjects(count, user)
-			res.json(projects)
+			const projects = await ProjectService.getProjectList(count, user)
+			return res.json(projects)
 		} catch (err) {
 			next(err)
 		}
 	}
+
 	async deleteProjectById(req, res, next) {
 		try {
 			const id = req.params.id
@@ -57,18 +50,11 @@ class ProjectController {
 			next(err)
 		}
 	}
-	async deleteAllProjects(req, res, next) {
-		try {
-			const projects = await ProjectService.deleteAllProjects()
-			res.json(projects)
-		} catch (err) {
-			next(err)
-		}
-	}
+
 	async saveProject(req, res, next) {
 		try {
 			const newProject = req.body.project
-			const currentProject = await ProjectService.getProject(newProject.id)
+			const currentProject = await ProjectService.getProjectById(newProject.id)
 
 			const newPreview = newProject.previewImage
 			const currentPreview = currentProject.previewImage
@@ -85,21 +71,9 @@ class ProjectController {
 	async archiveProject(req, res, next) {
 		try {
 			const { id, bool } = req.body
-			const savedProject = await ProjectService.archiveProject(id, bool)
+			const savedProject = await ProjectService.archiveProjectById(id, bool)
 
 			res.json(savedProject)
-		} catch (err) {
-			next(err)
-		}
-	}
-	async assignPreview(req, res, next) {
-		try {
-			const { id } = req.params
-			const { fileName } = req.body
-
-			const project = await ProjectService.assignPreview(id, fileName)
-
-			return res.json(project)
 		} catch (err) {
 			next(err)
 		}

@@ -45,17 +45,7 @@ export class AuthStore {
 			const { response } = err as AxiosError<AuthResponse>
 			if (!response) return
 
-			const { status } = response
-
-			if (status === 400) {
-				this.rootStore.errorStore.add(
-					'Пользователь с таким email уже существует!'
-				)
-			} else if (status === 422) {
-				this.rootStore.errorStore.add('Указанный пароль не допустим')
-			} else {
-				this.rootStore.errorStore.add(`Неизвестная ошибка`)
-			}
+			this.rootStore.errorStore.add(response.data.message)
 		} finally {
 			this.setLoading(false)
 		}

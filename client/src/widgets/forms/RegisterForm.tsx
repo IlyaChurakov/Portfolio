@@ -45,7 +45,7 @@ const RegisterForm = () => {
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
 			onSubmit={handleSubmit(onSubmit)}
-			className='w-full h-full relative bg-black flex flex-col p-5 rounded-lg'
+			className='w-96 h-full relative bg-black flex flex-col p-5 rounded-lg'
 		>
 			<h2 className='text-lg text-violet text-center mb-5'>Регистрация</h2>
 
