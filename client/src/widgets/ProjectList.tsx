@@ -1,28 +1,37 @@
 import { useStores } from '@app/index'
 import { IProject } from '@app/store/projectStore/types/project.types'
+import { pageTypes } from '@pages/types'
 import { AppRoles } from '@shared/config/router/types'
 import Loader from '@shared/ui/Loader'
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { PiImageSquareFill } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
+import ProjectService from '../services/Project.service'
 
 const ProjectList = ({ count, type }: { count?: number; type?: string }) => {
-	const { userStore, projectStore } = useStores()
+	const { userStore } = useStores()
 	const user = userStore.user
 
+	const [projects, setProjects] = useState<IProject[] | null>(null)
+
 	useEffect(() => {
-		projectStore.getProjectList(count, type)
+		fetchProjects()
 	}, [])
 
-	const isLoaded = projectStore.projectList
+	async function fetchProjects() {
+		const { data } = await ProjectService.getProjectList(count, type)
+		setProjects(data)
+	}
+
+	const isLoaded = !!projects
 	if (!isLoaded) return <Loader />
 
-	const isFilled = !!projectStore.projectList?.length
+	const isFilled = !!projects.length
 	const columns = isFilled ? 'grid-cols-4' : 'grid-cols-1'
 	const isAdmin = user.roles?.includes(AppRoles.ADMIN)
 
-	const content = projectStore.projectList?.map(project =>
+	const content = projects.map(project =>
 		project.archived && !isAdmin ? null : (
 			<ProjectItem
 				key={project.id}
@@ -50,9 +59,16 @@ const ProjectItem = ({
 	const staticPath = import.meta.env.VITE_API_STATIC_URL + '/'
 	const url = project.previewImage && staticPath + project.previewImage
 
+	const href =
+		(project.type === pageTypes.skill
+			? '/skills'
+			: project.type === pageTypes.project && '/projects') +
+		'/' +
+		project.id
+
 	return (
 		<Link
-			to={project.id}
+			to={href}
 			className={`w-full bg-gray aspect-square flex justify-center items-center relative rounded-lg`}
 		>
 			{url ? (

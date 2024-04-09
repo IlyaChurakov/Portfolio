@@ -1,6 +1,7 @@
 import { useStores } from '@app/index'
 import { ISection } from '@app/store/projectStore/types/project.types'
 import ProjectSavingButton from '@features/ProjectSavingButton'
+import { pageTypes } from '@pages/types'
 import Button from '@shared/ui/Button'
 import Section from '@widgets/editor/Section'
 import ProjectImageForm from '@widgets/forms/ProjectImageForm'
@@ -24,7 +25,9 @@ const Editor = () => {
 		if (!agree) return
 
 		await projectStore.deleteProjectById(project.id)
-		navigate('/projects')
+
+		if (project.type === pageTypes.project) navigate('/projects')
+		if (project.type === pageTypes.skill) navigate('/skills')
 	}
 
 	const openSectionModal = (section: ISection) => setEditingSection(section)
