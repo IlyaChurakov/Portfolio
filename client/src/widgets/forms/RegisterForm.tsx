@@ -14,7 +14,6 @@ type Inputs = {
 
 const RegisterForm = () => {
 	const { authStore } = useStores()
-
 	const navigate = useNavigate()
 
 	const {
@@ -26,9 +25,7 @@ const RegisterForm = () => {
 	})
 
 	useEffect(() => {
-		if (authStore.isAuth) {
-			navigate('/')
-		}
+		if (authStore.isAuth) navigate('/')
 	}, [authStore.isAuth])
 
 	const onSubmit: SubmitHandler<Inputs> = async ({
@@ -41,11 +38,11 @@ const RegisterForm = () => {
 
 	return (
 		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className='w-96 h-full relative bg-black flex flex-col p-5 rounded-lg'
 			style={{
 				boxShadow: '0px 3px 42px -3px rgba(255, 255, 255, 0.1)',
 			}}
-			onSubmit={handleSubmit(onSubmit)}
-			className='w-96 h-full relative bg-black flex flex-col p-5 rounded-lg'
 		>
 			<h2 className='text-lg text-violet text-center mb-5'>Регистрация</h2>
 

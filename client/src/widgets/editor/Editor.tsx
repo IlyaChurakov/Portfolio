@@ -2,16 +2,16 @@ import { useStores } from '@app/index'
 import { ISection } from '@app/store/projectStore/types/project.types'
 import ProjectSavingButton from '@features/ProjectSavingButton'
 import Button from '@shared/ui/Button'
-import Section from '@widgets/Section'
+import Section from '@widgets/editor/Section'
 import ProjectImageForm from '@widgets/forms/ProjectImageForm'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { MdArchive, MdDelete } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import Modal from '../shared/ui/Modal'
-import SectionForm from './forms/SectionForm'
+import Modal from '../../shared/ui/Modal'
+import SectionForm from '../forms/SectionForm'
 
-const NavPageMap = () => {
+const Editor = () => {
 	const { projectStore } = useStores()
 	const navigate = useNavigate()
 
@@ -93,4 +93,4 @@ const NavPageMap = () => {
 	)
 }
 
-export default observer(NavPageMap)
+export default observer(Editor)

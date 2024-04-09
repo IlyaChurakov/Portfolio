@@ -16,13 +16,13 @@ export const LazyProfilePersonPage = lazy(
 export const LazyProfileUsersPage = lazy(
 	async () => await import('./ProfileUsers')
 )
-export const LazyProjectListPage = lazy(
-	async () => await import('./ProjectList')
-)
-export const LazyProjectEditorPage = lazy(
-	async () => await import('./ProjectEditor')
-)
+export const LazyProjects = lazy(async () => await import('./Projects.tsx'))
+export const LazyEditorPage = lazy(async () => await import('./EditorPage.tsx'))
 export const LazyProjectWrapperPage = lazy(
 	async () => await import('./ProjectWrapper')
 )
 export const LazyProjectPage = lazy(async () => await import('./Project'))
+export const LazySkillsPage = lazy(async () => await import('./Skills'))
+export const LazySkillWrapperPage = lazy(
+	async () => await import('./SkillWrapper')
+)

@@ -1,5 +1,5 @@
 import { IBlock } from '@app/store/projectStore/types/project.types'
-import { WithLinks } from '@shared/lib/withLinks'
+import { WithLinks } from '@shared/lib/WithLinks'
 import { MouseEventHandler } from 'react'
 
 const Image = ({
@@ -9,13 +9,16 @@ const Image = ({
 	block: IBlock
 	onClick: MouseEventHandler<HTMLImageElement>
 }) => {
+	const staticUrl = import.meta.env.VITE_API_STATIC_URL
+	const url = staticUrl + block.imgPath
+
 	return (
 		<>
 			<img
-				className='max-w-[50%] max-h-64 m-auto my-5 object-cover cursor-zoom-in'
-				src={`${import.meta.env.VITE_API_STATIC_URL}${block.imgPath}`}
-				alt='img'
+				src={url}
 				onClick={onClick}
+				alt='img'
+				className='max-w-[50%] max-h-64 m-auto my-5 object-cover cursor-zoom-in'
 			/>
 			{block.imgDescr && (
 				<p

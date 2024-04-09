@@ -41,7 +41,6 @@ const SectionForm = ({ section: sectionObj, close }: ISectionFormProps) => {
 	const onSubmit: SubmitHandler<SectionFormInputs> = async data => {
 		try {
 			await addOrEditSection(data)
-
 			closeForm()
 		} catch (err) {
 			errorStore.add(
@@ -67,10 +66,11 @@ const SectionForm = ({ section: sectionObj, close }: ISectionFormProps) => {
 			section => section.id === sectionObj?.id
 		)
 
-		if (findedSection) section = { ...findedSection, ...data }
-
-		if (!section)
+		if (findedSection) {
+			section = { ...findedSection, ...data }
+		} else {
 			section = { id: uuidv4(), blocks: [], ...data, backgroundPath: null }
+		}
 
 		if (backgroundPath) {
 			const uploaded = await uploadFile(backgroundPath)

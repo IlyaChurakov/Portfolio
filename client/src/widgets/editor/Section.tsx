@@ -7,8 +7,8 @@ import { useState } from 'react'
 import { BiSolidDownArrow, BiSolidRightArrow } from 'react-icons/bi'
 import { GoArrowDown, GoArrowUp } from 'react-icons/go'
 import { MdDelete } from 'react-icons/md'
+import BlockForm from '../forms/BlockForm'
 import Block from './Block'
-import BlockForm from './forms/BlockForm'
 
 const Section = ({
 	section,
@@ -24,10 +24,10 @@ const Section = ({
 
 	const deleteSection = (id: string | number) => {
 		const project = { ...projectStore.project }
-
 		project.sections = project.sections.filter(section => section.id !== id)
 		projectStore.setProject(project)
 	}
+
 	const changeOrderUp = (section: ISection) => {
 		const project = { ...projectStore.project }
 		const currentSectionIndex = project.sections.indexOf(section)
@@ -40,6 +40,7 @@ const Section = ({
 		project.sections.splice(currentSectionIndex - 1, 0, extractedSection)
 		projectStore.setProject({ ...project })
 	}
+
 	const changeOrderDown = (section: ISection) => {
 		const project = { ...projectStore.project }
 		const sectionsLength = project.sections.length

@@ -11,6 +11,8 @@ export enum AppRoutes {
 	HOME = 'home',
 	PROJECTS = 'projects',
 	PROFILE = 'profile',
+	SKILLS = 'skills',
+	EDITOR = 'editor',
 }
 
 export interface RoutePropsCustom {

@@ -7,14 +7,17 @@ const Errors = () => {
 	return (
 		<ul className='fixed bottom-5 right-5'>
 			{errorStore.errors.map((error, index) => (
-				<li
-					key={index}
-					className='relative w-[300px] h-14 text-red bg-black rounded-lg mt-5 flex items-center p-2 border-[1px] border-violet '
-				>
-					{error}
-				</li>
+				<Error key={index} error={error} />
 			))}
 		</ul>
+	)
+}
+
+function Error({ error }: { error: string }) {
+	return (
+		<li className='relative w-[300px] h-14 text-red bg-black rounded-lg mt-5 flex items-center p-2 border-[1px] border-violet '>
+			{error}
+		</li>
 	)
 }
 

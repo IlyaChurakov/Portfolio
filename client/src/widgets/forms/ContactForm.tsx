@@ -1,8 +1,9 @@
 import { useStores } from '@app/index'
+import DisappearMessage from '@features/DisappearMessage'
 import Button from '@shared/ui/Button'
-import DisappearMessage from '@shared/ui/DisappearMessage'
 import Input from '@shared/ui/Input'
 import Textarea from '@shared/ui/Textarea'
+import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import MailService from '../../services/Mail.service'
@@ -77,7 +78,7 @@ const ContactForm = () => {
 					/>
 
 					<DisappearMessage trigger={isSuccess}>
-						<div className='text-green'>Данные отправлены!</div>
+						<span className='text-violet'>Данные отправлены!</span>
 					</DisappearMessage>
 				</div>
 
@@ -96,4 +97,4 @@ const ContactForm = () => {
 	)
 }
 
-export default ContactForm
+export default observer(ContactForm)

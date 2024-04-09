@@ -1,5 +1,5 @@
 import { IBlock } from '@app/store/projectStore/types/project.types'
-import { WithLinks } from '../lib/withLinks'
+import { WithLinks } from '../lib/WithLinks'
 
 const Text = ({
 	block,

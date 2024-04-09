@@ -11,17 +11,21 @@ class ProjectService {
 		return await ProjectRepository.getProject({ id })
 	}
 
-	async getProjectList(count, user) {
+	async getProjectList({ count, type }, user) {
 		if (!user || !user.roles.includes('admin')) {
 			return await ProjectRepository.getProjectList({
 				where: {
-					archived: false || null
+					archived: false || null,
+					type
 				},
 				orderBy: { createdAt: 'desc' },
 				take: count || undefined
 			})
 		} else {
 			return await prisma.project.findMany({
+				where: {
+					type
+				},
 				orderBy: {
 					createdAt: 'desc'
 				},

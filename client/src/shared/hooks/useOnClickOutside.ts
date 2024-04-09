@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const useOnClickOutside = isInitialValue => {
-	const [isShow, setIsShow] = useState(isInitialValue)
-	const ref = useRef(null)
+export const useOnClickOutside = (isInitialValue: boolean) => {
+	const [isShow, setIsShow] = useState<boolean>(isInitialValue)
+	const ref = useRef<HTMLDivElement>(null)
 
-	const handleClickOutside = event => {
-		if (ref.current && !ref.current.contains(event.target)) {
+	const handleClickOutside = (event: MouseEvent) => {
+		if (ref.current && !ref.current.contains(event.target as Node)) {
 			setIsShow(false)
 		}
 	}
@@ -16,7 +16,7 @@ export const useOnClickOutside = isInitialValue => {
 		return () => {
 			document.removeEventListener('click', handleClickOutside, true)
 		}
-	})
+	}, [])
 
 	return { ref, isShow, setIsShow }
 }

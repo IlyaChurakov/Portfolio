@@ -1,4 +1,4 @@
-import { useOnClickOutside } from '@shared/hooks/useOnClickOutside.js'
+import { useOnClickOutside } from '@shared/hooks/useOnClickOutside.ts'
 import List from './List.js'
 
 const Menu = ({ id, roles }: { id: string; roles: string[] }) => {

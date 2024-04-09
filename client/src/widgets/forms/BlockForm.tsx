@@ -53,8 +53,8 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 	} = useForm<BlockFormInputs>({
 		values: {
 			type: transformedBlockType ?? 'Заголовок',
-			text: blockObj?.text ?? '',
-			color: blockObj?.color ?? '#fff',
+			text: blockObj.text ?? '',
+			color: blockObj.color ?? '#fff',
 			imgDescr: blockObj.imgDescr,
 		},
 	})
@@ -64,14 +64,13 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 	const onSubmit: SubmitHandler<BlockFormInputs> = async data => {
 		try {
 			await addOrEditBlock(data)
-
 			closeForm()
 		} catch (err) {
 			errorStore.add((err as AxiosError).message)
 		}
 	}
 
-	const closeForm = () => {
+	function closeForm() {
 		reset()
 		close()
 	}
@@ -90,14 +89,13 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 			block => block.id === blockObj!.id
 		)
 
-		if (findedBlock)
+		if (findedBlock) {
 			block = {
 				...findedBlock,
 				type: BlockTypesText[type as keyof typeof BlockTypesText],
 				...data,
 			}
-
-		if (!block)
+		} else {
 			block = {
 				id: uuidv4(),
 				type: BlockTypesText[type as keyof typeof BlockTypesText],
@@ -105,6 +103,7 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 				imgPath: null,
 				sectionId: blockObj!.sectionId,
 			}
+		}
 
 		if (imgPath) {
 			const uploaded = await uploadFile(imgPath)

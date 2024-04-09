@@ -1,32 +1,31 @@
 import { useStores } from '@app/index'
 import { observer } from 'mobx-react-lite'
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
-import { FaGithub, FaTelegram } from 'react-icons/fa6'
+import { FaBookBookmark, FaGithub, FaTelegram } from 'react-icons/fa6'
 import { FiLogOut } from 'react-icons/fi'
 import { IoClose, IoMenu } from 'react-icons/io5'
 import { SlLayers } from 'react-icons/sl'
 import { TbHome } from 'react-icons/tb'
 import { Link, useNavigate } from 'react-router-dom'
 
-const Menu: FC = () => {
+const Menu = () => {
 	const { authStore } = useStores()
 	const navigate = useNavigate()
 
 	const [isVisible, setIsVisible] = useState<boolean>(false)
 
-	const openMenu = () => {
-		setIsVisible(true)
-	}
-
-	const closeMenu = () => {
-		setIsVisible(false)
-	}
+	const openMenu = () => setIsVisible(true)
+	const closeMenu = () => setIsVisible(false)
 
 	async function logoutHandler() {
 		await authStore.logout()
 		navigate('/login')
 	}
+
+	const linkClassNames = `flex items-center my-2 text-gray hover:text-white cursor-pointer ${
+		!isVisible && 'justify-center'
+	}`
 
 	return (
 		<nav
@@ -60,51 +59,35 @@ const Menu: FC = () => {
 				<Link
 					to={authStore.isAuth ? '/profile' : '/login'}
 					onClick={closeMenu}
-					className={`flex items-center my-2 text-gray hover:text-white cursor-pointer ${
-						!isVisible && 'justify-center'
-					}`}
+					className={linkClassNames}
 				>
 					<AiOutlineUser className='text-xl' />
-					{isVisible && (
-						<span className='text-sm ml-5'>
-							{authStore.isAuth ? 'Профиль' : 'Войти'}
-						</span>
+					{authStore.isAuth ? (
+						<LinkText isVisible={isVisible} text='Профиль' />
+					) : (
+						<LinkText isVisible={isVisible} text='Войти' />
 					)}
 				</Link>
 
-				<Link
-					to='/'
-					onClick={closeMenu}
-					className={`flex items-center my-2 text-gray hover:text-white cursor-pointer ${
-						!isVisible && 'justify-center'
-					}`}
-				>
+				<Link to='/' onClick={closeMenu} className={linkClassNames}>
 					<TbHome className='text-xl' />
-					{isVisible && <span className='text-sm ml-5'>Главная</span>}
+					<LinkText isVisible={isVisible} text='Главная' />
 				</Link>
 
-				<Link
-					to={'/projects'}
-					onClick={closeMenu}
-					className={`flex items-center my-2 text-gray hover:text-white cursor-pointer ${
-						!isVisible && 'justify-center'
-					}`}
-				>
+				<Link to={'/projects'} onClick={closeMenu} className={linkClassNames}>
 					<SlLayers className='text-xl' />
-					{isVisible && <span className='text-sm ml-5'>Проекты</span>}
+					<LinkText isVisible={isVisible} text='Проекты' />
+				</Link>
+
+				<Link to={'/skills'} onClick={closeMenu} className={linkClassNames}>
+					<FaBookBookmark className='text-xl' />
+					<LinkText isVisible={isVisible} text='Стек' />
 				</Link>
 
 				{authStore.isAuth && (
-					<div
-						onClick={() => {
-							logoutHandler()
-						}}
-						className={`flex items-center my-2 text-gray hover:text-white cursor-pointer ${
-							!isVisible && 'justify-center'
-						}`}
-					>
+					<div onClick={logoutHandler} className={linkClassNames}>
 						<FiLogOut className='text-xl' />
-						{isVisible && <span className='text-sm ml-5'>Выйти</span>}
+						<LinkText isVisible={isVisible} text='Выйти' />
 					</div>
 				)}
 			</div>
@@ -127,6 +110,11 @@ const Menu: FC = () => {
 			</div>
 		</nav>
 	)
+}
+
+function LinkText({ text, isVisible }: { text: string; isVisible: boolean }) {
+	if (!isVisible) return
+	return <span className='text-sm ml-5'>{text}</span>
 }
 
 export default observer(Menu)

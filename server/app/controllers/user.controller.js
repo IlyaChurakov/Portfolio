@@ -1,5 +1,5 @@
 import ApiError from '../errors/api.error.js'
-import ProjectService from '../services/Project.service.js'
+import FileService from '../services/File.service.js'
 import UserService from '../services/User.service.js'
 import registrationSchema from '../validation/registration.schema.js'
 
@@ -170,7 +170,7 @@ class UserController {
 			const currentAvatar = currentUser.avatar
 
 			if (currentAvatar && newAvatar !== currentAvatar)
-				await ProjectService.deleteFiles([currentAvatar])
+				await FileService.deleteFiles([currentAvatar])
 
 			const updatedUser = await UserService.updateUser(user)
 

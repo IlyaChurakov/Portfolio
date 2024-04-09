@@ -21,8 +21,9 @@ export const apiConfig = {
 		deleteFiles: () => `/projects/files`,
 	},
 	projects: {
-		all: () => `/projects`,
-		last: (count: number = 1) => `/projects/last/${count}`,
+		all: (type?: string) => `/projects${type ? '?type=' + type : ''}`,
+		last: (count: number = 1, type?: string) =>
+			`/projects/last/${count}${type && '?type=' + type}`,
 		one: (id: string) => `/projects/${id}`, // delete
 		assignPreview: (id: string) => `/projects/assign-preview/${id}`,
 		uploadImage: () => `/projects/upload-image`,

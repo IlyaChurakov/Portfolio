@@ -3,6 +3,7 @@ export interface IProject {
 	updatedAt: Date
 	createdAt: Date
 
+	type?: string
 	name: string
 	previewImage: string | null
 	archived?: boolean

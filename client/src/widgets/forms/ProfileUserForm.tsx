@@ -26,7 +26,7 @@ const ProfileUserForm = () => {
 	const [isEditForm, setIsEditForm] = useState<boolean>(false)
 	const [isDeletedAvatar, setIsDeletedAvatar] = useState<boolean>(false)
 
-	const static_url = import.meta.env.VITE_API_STATIC_URL
+	const staticUrl = import.meta.env.VITE_API_STATIC_URL
 
 	const {
 		register,
@@ -102,7 +102,7 @@ const ProfileUserForm = () => {
 				/>
 			) : userStore.user.avatar ? (
 				<img
-					src={static_url + userStore.user.avatar}
+					src={staticUrl + userStore.user.avatar}
 					alt='avatar'
 					className='w-full h-[250px] object-cover rounded-lg'
 				/>

@@ -1,7 +1,7 @@
 import Header from '@widgets/Header'
 import { Outlet } from 'react-router-dom'
 
-const ProjectWrapper = () => {
+const SkillWrapper = () => {
 	return (
 		<>
 			<Header />
@@ -10,4 +10,4 @@ const ProjectWrapper = () => {
 	)
 }
 
-export default ProjectWrapper
+export default SkillWrapper

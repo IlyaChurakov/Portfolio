@@ -4,7 +4,7 @@ export function WithLinks({
 	text,
 	linkStyles = { color: '#9255E8' },
 }: {
-	text: string | undefined
+	text?: string
 	linkStyles?: React.CSSProperties
 }) {
 	if (!text) return null

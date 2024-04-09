@@ -4,17 +4,22 @@ import { AxiosResponse } from 'axios'
 import { $axios } from '../shared/config/http/axios'
 
 export default class ProjectService {
-	static async createProject(name: string): Promise<AxiosResponse<IProject>> {
+	static async createProject(
+		name: string,
+		type: string
+	): Promise<AxiosResponse<IProject>> {
 		const path = apiConfig.projects.create(name)
-		return await $axios.post<IProject>(path)
+		return await $axios.post<IProject>(path, { type })
 	}
 
 	static async getProjectList(
-		count?: number
+		count?: number,
+		type?: string
 	): Promise<AxiosResponse<IProject[]>> {
 		const path = count
-			? apiConfig.projects.last(count)
-			: apiConfig.projects.all()
+			? apiConfig.projects.last(count, type)
+			: apiConfig.projects.all(type)
+		console.log(path)
 		return await $axios.get<IProject[]>(path)
 	}
 

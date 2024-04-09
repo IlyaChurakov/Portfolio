@@ -2,13 +2,15 @@ import { useStores } from '@app/index'
 import ImageLoader from '@features/ImageLoader'
 import { uploadFile } from '@shared/lib/utils'
 import Button from '@shared/ui/Button'
+import Select from '@shared/ui/Select'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import ReactLoading from 'react-loading'
 
 type Inputs = {
-	preview: FileList | undefined
+	preview?: FileList | undefined
+	type: string
 }
 
 const ProjectImageForm = () => {
@@ -19,16 +21,20 @@ const ProjectImageForm = () => {
 		setValue,
 		handleSubmit,
 		formState: { isSubmitting },
-	} = useForm<Inputs>()
+	} = useForm<Inputs>({
+		values: {
+			type: projectStore.project.type || 'Проект',
+		},
+	})
 
-	const onSubmit: SubmitHandler<Inputs> = async ({ preview }) => {
+	const onSubmit: SubmitHandler<Inputs> = async ({ preview, type }) => {
 		try {
 			if (preview) {
 				const uploadedPreview = await uploadFile(preview)
 				if (uploadedPreview) projectStore.project.previewImage = uploadedPreview
-			} else {
-				projectStore.project.previewImage = null
 			}
+
+			if (type) projectStore.project.type = type
 
 			await projectStore.saveProject()
 		} catch (err) {
@@ -38,10 +44,18 @@ const ProjectImageForm = () => {
 
 	const deletePreview = () => {
 		setValue('preview', undefined)
+		projectStore.project.previewImage = null
 		sendForm()
 	}
 
 	const sendForm = handleSubmit(onSubmit)
+
+	const onChangeType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setValue('type', e.target.value)
+		sendForm()
+	}
+
+	const values = ['Проект', 'Навык']
 
 	return (
 		<form onSubmit={sendForm} className='w-full h-full'>
@@ -61,6 +75,12 @@ const ProjectImageForm = () => {
 					</Button>
 				</div>
 			)}
+
+			<Select
+				onChange={onChangeType}
+				values={values}
+				register={register('type')}
+			/>
 		</form>
 	)
 }

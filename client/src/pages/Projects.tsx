@@ -1,15 +1,17 @@
-import Projects from '@widgets/ProjectList'
+import ProjectList from '@widgets/ProjectList'
 import { observer } from 'mobx-react-lite'
 import Container from '../shared/layouts/Container'
 
-const ProjectList = () => {
+const type = 'Проект'
+
+const Projects = () => {
 	return (
 		<section>
 			<Container>
-				<Projects />
+				<ProjectList type={type} />
 			</Container>
 		</section>
 	)
 }
 
-export default observer(ProjectList)
+export default observer(Projects)

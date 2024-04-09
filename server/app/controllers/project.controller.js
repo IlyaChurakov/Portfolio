@@ -1,18 +1,17 @@
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import ApiError from '../errors/api.error.js'
+import FileService from '../services/File.service.js'
 import ProjectService from '../services/Project.service.js'
 
 class ProjectController {
 	async createProject(req, res, next) {
 		try {
-			const { name, archived, previewImage, labels } = req.params
-
+			const { name } = req.params
+			const { type } = req.body
 			const project = await ProjectService.createProject({
 				name,
-				archived,
-				previewImage,
-				labels
+				type
 			})
 
 			res.json(project)
@@ -34,7 +33,12 @@ class ProjectController {
 			const user = req.user
 
 			const count = parseInt(req.params.count)
-			const projects = await ProjectService.getProjectList(count, user)
+			const type = req.query.type
+			console.log(type)
+			const projects = await ProjectService.getProjectList(
+				{ count, type },
+				user
+			)
 			return res.json(projects)
 		} catch (err) {
 			next(err)
@@ -60,7 +64,7 @@ class ProjectController {
 			const currentPreview = currentProject.previewImage
 
 			if (currentPreview && newPreview !== currentPreview)
-				await ProjectService.deleteFiles([currentPreview])
+				await FileService.deleteFiles([currentPreview])
 
 			const savedProject = await ProjectService.saveProject(newProject)
 			res.json(savedProject)

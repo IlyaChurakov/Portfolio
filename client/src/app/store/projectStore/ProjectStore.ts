@@ -7,7 +7,7 @@ export class ProjectStore {
 	private rootStore: RootStore
 
 	project: IProject
-	projectList: IProject[]
+	projectList: IProject[] | null
 	lastProjects: IProject[]
 	saved: boolean
 	loading: boolean
@@ -17,7 +17,7 @@ export class ProjectStore {
 
 		this.rootStore = rootStore
 
-		this.projectList = [] as IProject[]
+		this.projectList = null
 		this.project = {} as IProject
 		this.lastProjects = [] as IProject[]
 		this.saved = true
@@ -42,10 +42,10 @@ export class ProjectStore {
 		this.loading = bool
 	}
 
-	async createProject(name: string) {
+	async createProject(name: string, type: string) {
 		try {
 			this.setLoading(true)
-			const { data } = await ProjectService.createProject(name)
+			const { data } = await ProjectService.createProject(name, type)
 			this.setLoading(false)
 
 			this.setProject(data)
@@ -57,9 +57,9 @@ export class ProjectStore {
 			throw new Error((err as Error).message)
 		}
 	}
-	async getProjectList(count?: number): Promise<IProject[]> {
+	async getProjectList(count?: number, type?: string): Promise<IProject[]> {
 		try {
-			const { data } = await ProjectService.getProjectList(count)
+			const { data } = await ProjectService.getProjectList(count, type)
 
 			this.setProjectList(data)
 

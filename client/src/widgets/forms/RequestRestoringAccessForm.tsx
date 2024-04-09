@@ -16,9 +16,7 @@ const RequestRestoringAccessForm = () => {
 	const { authStore } = useStores()
 
 	useEffect(() => {
-		if (authStore.isAuth) {
-			navigate('/')
-		}
+		if (authStore.isAuth) navigate('/')
 	}, [authStore.isAuth])
 
 	const {

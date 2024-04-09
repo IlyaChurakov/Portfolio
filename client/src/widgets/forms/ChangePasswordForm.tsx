@@ -17,9 +17,7 @@ const ChangePasswordForm = () => {
 	const { pathname } = useLocation()
 
 	useEffect(() => {
-		if (authStore.isAuth) {
-			navigate('/')
-		}
+		if (authStore.isAuth) navigate('/')
 	}, [authStore.isAuth])
 
 	const {
@@ -34,8 +32,9 @@ const ChangePasswordForm = () => {
 	const password = watch('password')
 
 	const onSubmit: SubmitHandler<Inputs> = async ({ password }) => {
-		await authStore.changePassword(password, pathname.split('/')[2])
+		const secretFromLink = pathname.split('/')[2]
 
+		await authStore.changePassword(password, secretFromLink)
 		navigate('/login')
 	}
 
@@ -72,7 +71,7 @@ const ChangePasswordForm = () => {
 				register={register('repeat_password', {
 					required: 'Заполните это поле',
 					validate: {
-						positive: val => val === password || 'Пароли не совпадают',
+						positive: value => value === password || 'Пароли не совпадают',
 					},
 					minLength: {
 						value: 8,
