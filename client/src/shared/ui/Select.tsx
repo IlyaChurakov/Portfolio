@@ -19,6 +19,11 @@ const Select: React.FC<SelectProps> = ({
 			{...register}
 			{...props}
 		>
+			{props.placeholder && (
+				<option value='' disabled selected>
+					{props.placeholder}
+				</option>
+			)}
 			{values.map(value => {
 				return (
 					<option value={value} key={value} className='text-white'>

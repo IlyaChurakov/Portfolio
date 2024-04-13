@@ -12,7 +12,8 @@ import { default as Select } from '@shared/ui/Select'
 import Textarea from '@shared/ui/Textarea'
 import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { IoClose } from 'react-icons/io5'
 import { v4 as uuidv4 } from 'uuid'
 import ImageLoader from '../../features/ImageLoader'
 
@@ -22,6 +23,9 @@ type BlockFormInputs = {
 	color: string
 	imgDescr?: string
 	imgPath?: FileList
+	items: {
+		value: string
+	}[]
 }
 
 interface IBlockFormProps {
@@ -50,13 +54,20 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 		reset,
 		setValue,
 		watch,
+		control,
 	} = useForm<BlockFormInputs>({
-		values: {
+		defaultValues: {
 			type: transformedBlockType ?? 'Заголовок',
 			text: blockObj.text ?? '',
 			color: blockObj.color ?? '#fff',
 			imgDescr: blockObj.imgDescr,
+			items: blockObj.items?.map(item => ({ value: item })) ?? [],
 		},
+	})
+
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: 'items',
 	})
 
 	const type = watch('type')
@@ -94,12 +105,14 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 				...findedBlock,
 				type: BlockTypesText[type as keyof typeof BlockTypesText],
 				...data,
+				items: data.items.map(item => item.value),
 			}
 		} else {
 			block = {
 				id: uuidv4(),
 				type: BlockTypesText[type as keyof typeof BlockTypesText],
 				...data,
+				items: data.items.map(item => item.value),
 				imgPath: null,
 				sectionId: blockObj!.sectionId,
 			}
@@ -180,7 +193,46 @@ const BlockForm = ({ block: blockObj, close }: IBlockFormProps) => {
 					</>
 				)}
 
-				<Select values={valuesForColorSelect} register={register('color')} />
+				{isEqual(type, [BlockTypes.list]) && (
+					<>
+						{fields.length ? (
+							fields.map((field, index) => (
+								<div className='w-full flex my-2 items-center'>
+									<div className='text-white mr-2 w-5'>{index + 1}</div>
+									<Input
+										isEdit
+										type='text'
+										className='flex-1 mr-2'
+										key={field.id}
+										register={register(`items.${index}.value` as const)}
+									/>
+									<button
+										className='text-white'
+										type='button'
+										onClick={() => remove(index)}
+									>
+										<IoClose className='text-red text-2xl' />
+									</button>
+								</div>
+							))
+						) : (
+							<div className='text-violet'>Список пуст</div>
+						)}
+						<button
+							type='button'
+							className='self-end mr-8 text-violet mb-5'
+							onClick={() => append({ value: '' })}
+						>
+							Добавить
+						</button>
+					</>
+				)}
+
+				<Select
+					placeholder='Выберите цвет текста'
+					values={valuesForColorSelect}
+					register={register('color')}
+				/>
 			</div>
 
 			<div className='flex justify-between'>

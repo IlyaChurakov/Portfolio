@@ -63,6 +63,14 @@ const Content = () => {
 											onClick={() => setImagePath(block.imgPath ?? undefined)}
 										/>
 									)
+								case 'list':
+									return (
+										<ul className='ml-10 my-5' style={{ color: block.color }}>
+											{block.items?.map(item => (
+												<li>{item}</li>
+											))}
+										</ul>
+									)
 							}
 						})}
 					</Container>
