@@ -1,7 +1,7 @@
 import { useStores } from '@app/index'
-import { IProject } from '@app/store/projectStore/types/project.types'
+import { IProject } from '@app/store/projectStore/project.types'
 import { pageTypes } from '@pages/types'
-import { AppRoles } from '@shared/config/router/types'
+import { appRoles } from '@shared/config/router/router.config'
 import Loader from '@shared/ui/Loader'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
@@ -9,7 +9,7 @@ import { PiImageSquareFill } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 import ProjectService from '../services/Project.service'
 
-const ProjectList = ({ count, type }: { count?: number; type?: string }) => {
+const ProjectList = ({ count, type }: { count?: number; type: string }) => {
 	const { userStore } = useStores()
 	const user = userStore.user
 
@@ -20,7 +20,7 @@ const ProjectList = ({ count, type }: { count?: number; type?: string }) => {
 	}, [])
 
 	async function fetchProjects() {
-		const { data } = await ProjectService.getProjectList(count, type)
+		const { data } = await ProjectService.getProjectList(type, count)
 		setProjects(data)
 	}
 
@@ -29,7 +29,7 @@ const ProjectList = ({ count, type }: { count?: number; type?: string }) => {
 
 	const isFilled = !!projects.length
 	const columns = isFilled ? 'grid-cols-4' : 'grid-cols-1'
-	const isAdmin = user.roles?.includes(AppRoles.ADMIN)
+	const isAdmin = user.role === appRoles.ADMIN
 
 	const content = projects.map(project =>
 		project.archived && !isAdmin ? null : (

@@ -9,7 +9,6 @@ const router = new Router()
 // Public
 router.get('/', projectController.getProjectList)
 router.get('/:id', projectController.getProject)
-router.get('/last/:count', projectController.getProjectList)
 
 // Private
 router.delete('/files', AuthMiddleware, projectController.deleteFiles)

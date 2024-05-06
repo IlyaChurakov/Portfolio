@@ -16,8 +16,8 @@ const LoginForm = () => {
 	const { authStore } = useStores()
 
 	useEffect(() => {
-		if (authStore.isAuth) navigate('/')
-	}, [authStore.isAuth])
+		if (authStore.isUserLogged) navigate('/')
+	}, [authStore.isUserLogged])
 
 	const {
 		register,

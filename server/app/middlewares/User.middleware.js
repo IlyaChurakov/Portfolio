@@ -1,4 +1,4 @@
-import AuthService from '../services/Auth.service.js'
+import TokenService from '../services/Token.js'
 
 export default (req, res, next) => {
 	let authorizationHeader = req.headers.authorization
@@ -9,7 +9,9 @@ export default (req, res, next) => {
 		accessToken = authorizationHeader.split(' ')[1]
 
 		if (accessToken) {
-			userData = AuthService.validateAccessToken(accessToken)
+			try {
+				userData = TokenService.verifyAccessToken(accessToken)
+			} catch (e) {}
 		}
 	}
 

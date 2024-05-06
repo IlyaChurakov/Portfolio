@@ -1,4 +1,4 @@
-import { IProject } from '@app/store/projectStore/types/project.types'
+import { IProject } from '@app/store/projectStore/project.types'
 import { apiConfig } from '@shared/config'
 import { AxiosResponse } from 'axios'
 import { $axios } from '../shared/config/http/axios'
@@ -13,12 +13,10 @@ export default class ProjectService {
 	}
 
 	static async getProjectList(
-		count?: number,
-		type?: string
+		type: string,
+		count?: number
 	): Promise<AxiosResponse<IProject[]>> {
-		const path = count
-			? apiConfig.projects.last(count, type)
-			: apiConfig.projects.all(type)
+		const path = apiConfig.projects.projects(type, count)
 		console.log(path)
 		return await $axios.get<IProject[]>(path)
 	}

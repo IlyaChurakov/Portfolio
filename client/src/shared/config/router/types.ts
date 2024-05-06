@@ -1,8 +1,3 @@
-export enum AppRoles {
-	ADMIN = 'admin',
-	USER = 'user',
-}
-
 export enum AppRoutes {
 	LOGIN = 'login',
 	REGISTER = 'register',
@@ -19,6 +14,6 @@ export interface RoutePropsCustom {
 	path: string
 	element: React.ReactNode
 	isAuth?: boolean
-	roles?: AppRoles[]
+	role?: number
 	nestedRoutes?: RoutePropsCustom[]
 }

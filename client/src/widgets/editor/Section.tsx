@@ -1,5 +1,5 @@
 import { useStores } from '@app/index'
-import { IBlock, ISection } from '@app/store/projectStore/types/project.types'
+import { IBlock, ISection } from '@app/store/projectStore/project.types'
 import Button from '@shared/ui/Button'
 import Modal from '@shared/ui/Modal'
 import { observer } from 'mobx-react-lite'

@@ -1,9 +1,9 @@
-import { IUser } from '@app/store/authStore/types/auth.types'
+import { IUser } from '@app/store/authStore/auth.types'
 import { apiConfig } from '@shared/config'
 import { $axios } from '../shared/config/http/axios'
 
 export default class UserService {
-	static async getUsersList(): Promise<IUser[]> {
+	static async getUsersList() {
 		const path = apiConfig.user.all()
 		const { data } = await $axios.get<IUser[]>(path)
 
@@ -27,23 +27,16 @@ export default class UserService {
 		return data
 	}
 
-	static async addRole(id: string, role: string): Promise<IUser> {
-		const path = apiConfig.user.addRole(id)
+	static async changeUserRole(userId: string, role: number): Promise<IUser> {
+		const path = apiConfig.user.changeUserRole(userId)
 		const { data } = await $axios.patch<IUser>(path, { role })
 
 		return data
 	}
 
-	static async update(user: IUser): Promise<IUser> {
+	static async updateUser(user: IUser): Promise<IUser> {
 		const path = apiConfig.user.update()
 		const { data } = await $axios.put(path, { user })
-
-		return data
-	}
-
-	static async deleteRole(id: string, role: string): Promise<IUser> {
-		const path = apiConfig.user.deleteRole(id)
-		const { data } = await $axios.patch(path, { role })
 
 		return data
 	}

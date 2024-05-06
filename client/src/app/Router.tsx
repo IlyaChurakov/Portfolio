@@ -4,15 +4,15 @@ import PageLoader from '@shared/ui/PageLoader.tsx'
 import { observer } from 'mobx-react-lite'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import Protect from '../Protect/Protect.tsx'
+import Protect from './Protect'
 
 export const Router = observer(() => {
-	const renderRoutes = (
-		routes:
-			| Record<AppRoutes, RoutePropsCustom>[]
-			| Record<AppRoutes, RoutePropsCustom>
-	) =>
-		Object.values(routes).map(route => (
+	type Routes =
+		| Record<AppRoutes, RoutePropsCustom>[]
+		| Record<AppRoutes, RoutePropsCustom>
+
+	function renderRoutes(routes: Routes) {
+		return Object.values(routes).map(route => (
 			<Route
 				key={route.path}
 				path={route.path}
@@ -21,6 +21,7 @@ export const Router = observer(() => {
 				{route.nestedRoutes && renderRoutes(route.nestedRoutes)}
 			</Route>
 		))
+	}
 
 	const routes = renderRoutes(routesSchema)
 

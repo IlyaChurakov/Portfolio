@@ -56,7 +56,7 @@ const ProfileUserForm = () => {
 				if (isDeletedAvatar) user.avatar = null
 			}
 
-			await userStore.update(user)
+			await userStore.updateUser(user)
 
 			closeForm()
 		} catch (err) {

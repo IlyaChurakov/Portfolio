@@ -1,17 +1,40 @@
 import { useStores } from '@app/index'
-import Menu from '@features/menu/Menu'
+import { IUser } from '@app/store/authStore/auth.types'
+import { appRoles } from '@shared/config/router/router.config'
+import Loader from '@shared/ui/Loader'
 import { observer } from 'mobx-react-lite'
-import { FC, useEffect } from 'react'
-import { GoCheckCircleFill, GoX, GoXCircleFill } from 'react-icons/go'
+import { useEffect, useState } from 'react'
+import { GoCheckCircleFill, GoXCircleFill } from 'react-icons/go'
+import UserService from '../services/User.service'
 
-const ProfileUsers: FC = () => {
+const ProfileUsers = () => {
 	const { userStore } = useStores()
 
+	const [users, setUsers] = useState<IUser[]>()
+
 	useEffect(() => {
-		userStore.getUserList()
+		fetchUsers()
 	}, [])
 
-	const roles = ['admin', 'user', 'developer']
+	async function fetchUsers() {
+		const users = await UserService.getUsersList()
+		setUsers(users)
+	}
+
+	async function changeUserRole(id: string, role: number) {
+		const updatedUser = await UserService.changeUserRole(id, role)
+		const updatedUsers = users?.map(user =>
+			user.id === updatedUser.id ? updatedUser : user
+		)
+		setUsers(updatedUsers)
+	}
+
+	async function deleteUser(user: IUser) {
+		if (confirm(`Удалить пользователя ${user.email}`)) {
+			await UserService.deleteAccount(user.id)
+			await fetchUsers()
+		}
+	}
 
 	const names: string[] = [
 		'Id',
@@ -21,6 +44,10 @@ const ProfileUsers: FC = () => {
 		'Роли',
 		'Действия',
 	]
+
+	if (!users) return <Loader />
+
+	if (!users.length) return <div>Пользователей нет</div>
 
 	return (
 		<div className='p-5'>
@@ -52,7 +79,7 @@ const ProfileUsers: FC = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{userStore.userList.map(item => (
+					{users.map(item => (
 						<tr
 							key={item.id}
 							className='border-b border-dotted border-gray-300 last:border-none'
@@ -68,42 +95,16 @@ const ProfileUsers: FC = () => {
 								)}
 							</td>
 							<td className='h-5 text-center'>
-								{item.roles.map(role => {
-									return (
-										<div
-											key={role}
-											className='grid grid-cols-[1fr_25px] justify-items-center bg-white m-2 rounded-sm hover:bg-gray-300 text-black'
-										>
-											<div>{role}</div>
-											<button
-												onClick={() => userStore.removeRoleById(item.id, role)}
-											>
-												<GoX className='text-red' />
-											</button>
-										</div>
-									)
-								})}
-								<div className='w-full grid justify-items-end relative'>
-									<Menu
-										roles={roles.filter(role => {
-											if (!item.roles.includes(role)) {
-												return role
-											}
-										})}
-										id={item.id}
-									/>
-								</div>
+								<Select
+									value={item.role}
+									onChange={async e =>
+										await changeUserRole(item.id, parseInt(e.target.value))
+									}
+								/>
 							</td>
 							<td className='h-5 text-center'>
-								{+item.id !== +userStore.user.id ? (
-									<button
-										onClick={() => {
-											if (confirm(`Удалить пользователя ${item.email}`)) {
-												userStore.deleteAccount(item.id)
-											}
-										}}
-										className='text-red'
-									>
+								{item.id !== userStore.user.id ? (
+									<button onClick={() => deleteUser(item)} className='text-red'>
 										Delete
 									</button>
 								) : (
@@ -115,6 +116,34 @@ const ProfileUsers: FC = () => {
 				</tbody>
 			</table>
 		</div>
+	)
+}
+
+function Select({
+	value,
+	onChange,
+}: {
+	value: number
+	onChange: React.ChangeEventHandler<HTMLSelectElement>
+}) {
+	const roles = Object.keys(appRoles)
+
+	return (
+		<select value={value} onChange={onChange} className='text-gray'>
+			{roles.map(role => (
+				<option
+					key={role}
+					value={appRoles[role as keyof typeof appRoles]}
+					className={
+						appRoles[role as keyof typeof appRoles] === value
+							? 'bg-red text-white'
+							: 'text-gray'
+					}
+				>
+					{role}
+				</option>
+			))}
+		</select>
 	)
 }
 

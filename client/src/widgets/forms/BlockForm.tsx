@@ -4,7 +4,7 @@ import {
 	BlockTypesText,
 	ColorTypes,
 	IBlock,
-} from '@app/store/projectStore/types/project.types'
+} from '@app/store/projectStore/project.types'
 import { uploadFile } from '@shared/lib/utils'
 import Button from '@shared/ui/Button'
 import Input from '@shared/ui/Input'

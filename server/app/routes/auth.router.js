@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import userController from '../controllers/user.controller.js'
+import AuthController from '../controllers/Auth.js'
+import AuthValidator from '../validation/Auth.js'
 
 const router = new Router()
 
-router.post('/register', userController.register)
-router.post('/login', userController.login)
-router.post('/logout', userController.logout)
-router.get('/refresh', userController.refresh)
+router.post('/sign-in', AuthValidator.signIn, AuthController.signIn)
+router.post('/sign-up', AuthValidator.signUp, AuthController.signUp)
+router.post('/logout', AuthValidator.logOut, AuthController.logOut)
+router.post('/refresh', AuthValidator.refresh, AuthController.refresh)
 
 export default router

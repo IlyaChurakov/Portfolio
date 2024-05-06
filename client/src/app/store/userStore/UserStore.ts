@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios'
 import { makeAutoObservable } from 'mobx'
 import UserService from '../../../services/User.service'
-import { IUser } from '../authStore/types/auth.types'
+import { IUser } from '../authStore/auth.types'
 import { RootStore } from '../rootStore'
 
 export class UserStore {
@@ -78,32 +78,20 @@ export class UserStore {
 		}
 	}
 
-	async addRoleById(id: string, role: string) {
+	async changeUserRole(userId: string, role: number) {
 		try {
-			const updatedUser = await UserService.addRole(id, role)
+			const updatedUser = await UserService.changeUserRole(userId, role)
 
 			const user = this.userList.find(us => us.id === updatedUser.id)
-			if (user) user.roles = updatedUser.roles
+			if (user) user.role = updatedUser.role
 		} catch (e) {
 			throw new Error((e as AxiosError).message)
 		}
 	}
 
-	async removeRoleById(id: string, role: string) {
+	async updateUser(user: IUser) {
 		try {
-			const updatedUser = await UserService.deleteRole(id, role)
-
-			const user = this.userList.find(us => us.id === updatedUser.id)
-			if (user) user.roles = updatedUser.roles
-		} catch (e) {
-			throw new Error((e as AxiosError).message)
-		}
-	}
-
-	async update(user: IUser) {
-		try {
-			const updatedUser = await UserService.update(user)
-
+			const updatedUser = await UserService.updateUser(user)
 			this.setUser(updatedUser)
 		} catch (e) {
 			throw new Error((e as AxiosError).message)

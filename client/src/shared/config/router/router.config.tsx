@@ -15,7 +15,7 @@ import {
 	LazySkillsPage,
 } from '../../../pages/index'
 
-import { AppRoles, AppRoutes, RoutePropsCustom } from './types'
+import { AppRoutes, RoutePropsCustom } from './types'
 
 export const RoutePaths: Record<AppRoutes, string> = {
 	[AppRoutes.HOME]: '/',
@@ -27,6 +27,11 @@ export const RoutePaths: Record<AppRoutes, string> = {
 	[AppRoutes.EDITOR]: '/editor/:id',
 	[AppRoutes.SKILLS]: '/skills/*',
 	[AppRoutes.NOT_FOUND]: '*',
+}
+
+export const appRoles = {
+	ADMIN: 2,
+	USER: 1,
 }
 
 export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
@@ -50,7 +55,7 @@ export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
 		path: RoutePaths.editor,
 		element: <LazyEditorPage />,
 		isAuth: true,
-		roles: [AppRoles.ADMIN],
+		role: appRoles.ADMIN,
 	},
 	[AppRoutes.PROJECTS]: {
 		path: RoutePaths.projects,
@@ -97,7 +102,7 @@ export const routesSchema: Record<AppRoutes, RoutePropsCustom> = {
 				path: 'users',
 				element: <LazyProfileUsersPage />,
 				isAuth: true,
-				roles: [AppRoles.ADMIN],
+				role: appRoles.ADMIN,
 			},
 		],
 	},

@@ -8,32 +8,34 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email          String   @unique
-  name           String
-  password       String
-  isActivated    Boolean  @default(false)
-  activationLink String?  @unique @map("activation_link")
-  restoreLink    String?  @unique @map("restore_link")
-  roles          String[]
+  email    String @unique
+  name     String
+  password String
+  role     Int    @default(1)
+
+  isActivated    Boolean @default(false)
+  activationLink String? @unique @map("activation_link")
+  restoreLink    String? @unique @map("restore_link")
   avatar         String?
   description    String?
 
-  refreshTokens RefreshToken[]
+  refreshSessions RefreshSession[]
 }
 
-model RefreshToken {
-  id        Int      @id @default(autoincrement())
+model RefreshSession {
+  id        String   @id @unique @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  hashedToken String
-  revoked     Boolean @default(false)
-  User        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  refreshToken String @map("refresh_token")
+  fingerPrint  String @map("finger_print")
+  userId       String @map("user_id")
 }
 
 model Project {

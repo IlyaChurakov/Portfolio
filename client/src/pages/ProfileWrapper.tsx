@@ -1,4 +1,5 @@
 import { useStores } from '@app/index'
+import { appRoles } from '@shared/config/router/router.config'
 import CustomLink from '@shared/ui/CustomLink'
 import { observer } from 'mobx-react-lite'
 import { GoArrowLeft } from 'react-icons/go'
@@ -8,7 +9,7 @@ import Container from '../shared/layouts/Container'
 const ProfileWrapper = () => {
 	const { userStore } = useStores()
 
-	const isAdmin = userStore.user.roles?.includes('admin')
+	const isAdmin = userStore.user.role === appRoles.ADMIN
 
 	return (
 		<>

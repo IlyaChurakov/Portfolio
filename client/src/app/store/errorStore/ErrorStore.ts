@@ -14,9 +14,7 @@ export class ErrorStore {
 		this.errors = []
 	}
 
-	async add(err: string | undefined) {
-		if (!err) return
-
+	async add(err: string) {
 		this.errors.push(err)
 
 		setTimeout(() => {

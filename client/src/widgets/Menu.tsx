@@ -57,12 +57,12 @@ const Menu = () => {
 				} `}
 			>
 				<Link
-					to={authStore.isAuth ? '/profile' : '/login'}
+					to={authStore.isUserLogged ? '/profile' : '/login'}
 					onClick={closeMenu}
 					className={linkClassNames}
 				>
 					<AiOutlineUser className='text-xl' />
-					{authStore.isAuth ? (
+					{authStore.isUserLogged ? (
 						<LinkText isVisible={isVisible} text='Профиль' />
 					) : (
 						<LinkText isVisible={isVisible} text='Войти' />
@@ -84,7 +84,7 @@ const Menu = () => {
 					<LinkText isVisible={isVisible} text='Стек' />
 				</Link>
 
-				{authStore.isAuth && (
+				{authStore.isUserLogged && (
 					<div onClick={logoutHandler} className={linkClassNames}>
 						<FiLogOut className='text-xl' />
 						<LinkText isVisible={isVisible} text='Выйти' />

@@ -2,169 +2,130 @@ import { AxiosError } from 'axios'
 import { makeAutoObservable, runInAction } from 'mobx'
 import AuthService from '../../../services/Auth.service'
 import { RootStore } from '../rootStore'
-import { AuthResponse, IUser } from './types/auth.types'
+import { AuthResponse, IUser } from './auth.types'
 
 export class AuthStore {
 	rootStore: RootStore
 
-	isAuth: boolean
-	isLoading: boolean
+	isAppReady: boolean
+	isUserLogged: boolean
 
 	constructor(rootStore: RootStore) {
 		makeAutoObservable(this)
 
 		this.rootStore = rootStore
 
-		this.isAuth = false
-		this.isLoading = false
+		this.isAppReady = false
+		this.isUserLogged = false
 	}
 
-	setAuth(bool: boolean) {
-		this.isAuth = bool
+	setIsAppReady(bool: boolean) {
+		this.isAppReady = bool
 	}
+	setIsUserLogged(bool: boolean) {
+		this.isUserLogged = bool
+	}
+
 	setUser(user: IUser) {
 		this.rootStore.userStore.user = user
-	}
-	setLoading(bool: boolean) {
-		this.isLoading = bool
 	}
 
 	async register(email: string, password: string, name: string) {
 		try {
-			this.setLoading(true)
-
 			const authResponse = await AuthService.register(email, password, name)
 
 			localStorage.setItem('token', authResponse.accessToken)
 
 			runInAction(() => {
-				this.setAuth(true)
 				this.setUser(authResponse.user)
+				this.setIsUserLogged(true)
 			})
 		} catch (err) {
-			const { response } = err as AxiosError<AuthResponse>
-			if (!response) return
-
-			this.rootStore.errorStore.add(response.data.message)
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error)
+				this.rootStore.errorStore.add(error.response?.data.error)
 		} finally {
-			this.setLoading(false)
+			this.setIsAppReady(true)
 		}
 	}
 
 	async login(email: string, password: string) {
 		try {
-			this.setLoading(true)
-
 			const authResponse = await AuthService.login(email, password)
 
 			localStorage.setItem('token', authResponse.accessToken)
 
 			runInAction(() => {
-				this.setAuth(true)
+				this.setIsUserLogged(true)
 				this.setUser(authResponse.user)
 			})
 		} catch (err) {
-			const { response } = err as AxiosError<AuthResponse>
-			if (!response) return
-
-			const { status } = response
-
-			if (status === 400) {
-				this.rootStore.errorStore.add('Пользователь не найден')
-			} else if (status === 401) {
-				this.rootStore.errorStore.add('Неверный пароль')
-			} else {
-				this.rootStore.errorStore.add(`Неизвестная ошибка`)
-			}
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error)
+				this.rootStore.errorStore.add(error.response?.data.error)
 		} finally {
-			this.setLoading(false)
+			this.setIsAppReady(true)
 		}
 	}
 
 	async logout() {
 		try {
-			this.setLoading(true)
-
 			await AuthService.logout()
 
 			localStorage.removeItem('token')
 
 			runInAction(() => {
-				this.setAuth(false)
+				this.setIsUserLogged(false)
 				this.setUser({} as IUser)
 			})
 		} catch (err) {
-			const { response } = err as AxiosError<AuthResponse>
-			if (!response) return
-
-			const { status } = response
-
-			this.rootStore.errorStore.add(`Неизвестная ошибка: ${status}`)
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error)
+				this.rootStore.errorStore.add(error.response?.data.error)
 		} finally {
-			this.setLoading(false)
+			this.setIsAppReady(true)
 		}
 	}
 
 	async checkAuth() {
 		try {
-			this.setLoading(true)
-
 			const authResponse = await AuthService.refresh()
 
 			localStorage.setItem('token', authResponse.accessToken)
 
 			runInAction(() => {
-				this.setAuth(true)
+				this.setIsUserLogged(true)
 				this.setUser(authResponse.user)
 			})
+		} catch (err) {
+			this.setIsUserLogged(false)
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error)
+				this.rootStore.errorStore.add(error.response?.data.error)
 		} finally {
-			this.setLoading(false)
+			this.setIsAppReady(true)
 		}
 	}
 
+	// TODO: вынести запросы из стора
+
 	async requestRestoreAccess(email: string) {
 		try {
-			this.setLoading(true)
-
 			await AuthService.requestRestoreAccess(email)
 		} catch (err) {
-			const { response } = err as AxiosError<AuthResponse>
-			if (!response) return
-
-			const { status } = response
-
-			if (status === 400) {
-				this.rootStore.errorStore.add(
-					'Пользователь c таким email не существует'
-				)
-			} else {
-				this.rootStore.errorStore.add(`Неизвестная ошибка`)
-			}
-		} finally {
-			this.setLoading(false)
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error)
+				this.rootStore.errorStore.add(error.response?.data.error)
 		}
 	}
 
 	async changePassword(password: string, link: string) {
 		try {
-			this.setLoading(true)
-
 			await AuthService.changePassword(password, link)
 		} catch (err) {
-			const { response } = err as AxiosError<AuthResponse>
-			if (!response) return
-
-			const { status } = response
-
-			if (status === 400) {
-				this.rootStore.errorStore.add(
-					'Пользователь c таким email не существует'
-				)
-			} else {
-				this.rootStore.errorStore.add(`Неизвестная ошибка`)
-			}
-		} finally {
-			this.setLoading(false)
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error)
+				this.rootStore.errorStore.add(error.response?.data.error)
 		}
 	}
 }

@@ -1,75 +1,73 @@
-import ApiError from '../errors/api.error.js'
 import FileService from '../services/File.service.js'
 import UserService from '../services/User.service.js'
-import registrationSchema from '../validation/registration.schema.js'
 
 class UserController {
-	async register(req, res, next) {
-		try {
-			await registrationSchema.validate(req.body)
+	// async register(req, res, next) {
+	// 	try {
+	// 		await registrationSchema.validate(req.body)
 
-			const { name, email, password } = req.body
+	// 		const { name, email, password } = req.body
 
-			const userData = await UserService.register(name, email, password)
+	// 		const userData = await UserService.register(name, email, password)
 
-			const maxAge = 30 * 24 * 60 * 60 * 1000
+	// 		const maxAge = 30 * 24 * 60 * 60 * 1000
 
-			res.cookie('refreshToken', userData.refreshToken, {
-				maxAge,
-				httpOnly: true
-			})
-			return res.json(userData)
-		} catch (err) {
-			return next(ApiError.BadRequest(err.message))
-		}
-	}
+	// 		res.cookie('refreshToken', userData.refreshToken, {
+	// 			maxAge,
+	// 			httpOnly: true
+	// 		})
+	// 		return res.json(userData)
+	// 	} catch (err) {
+	// 		return next(ApiError.BadRequest(err.message))
+	// 	}
+	// }
 
-	async login(req, res, next) {
-		try {
-			const { email, password } = req.body
-			const userData = await UserService.login(email, password)
+	// async login(req, res, next) {
+	// 	try {
+	// 		const { email, password } = req.body
+	// 		const userData = await UserService.login(email, password)
 
-			const maxAge = 30 * 24 * 60 * 60 * 1000
+	// 		const maxAge = 30 * 24 * 60 * 60 * 1000
 
-			res.cookie('refreshToken', userData.refreshToken, {
-				maxAge,
-				httpOnly: true
-			})
-			return res.json(userData)
-		} catch (err) {
-			return next(err)
-		}
-	}
+	// 		res.cookie('refreshToken', userData.refreshToken, {
+	// 			maxAge,
+	// 			httpOnly: true
+	// 		})
+	// 		return res.json(userData)
+	// 	} catch (err) {
+	// 		return next(err)
+	// 	}
+	// }
 
-	async logout(req, res, next) {
-		try {
-			const { refreshToken } = req.cookies
-			const token = await UserService.logout(refreshToken)
+	// async logout(req, res, next) {
+	// 	try {
+	// 		const { refreshToken } = req.cookies
+	// 		const token = await UserService.logout(refreshToken)
 
-			res.clearCookie('refreshToken')
-			return res.json(token)
-		} catch (err) {
-			return next(err)
-		}
-	}
+	// 		res.clearCookie('refreshToken')
+	// 		return res.json(token)
+	// 	} catch (err) {
+	// 		return next(err)
+	// 	}
+	// }
 
-	async refresh(req, res, next) {
-		try {
-			const { refreshToken } = req.cookies
+	// async refresh(req, res, next) {
+	// 	try {
+	// 		const { refreshToken } = req.cookies
 
-			const userData = await UserService.refresh(refreshToken)
+	// 		const userData = await UserService.refresh(refreshToken)
 
-			const maxAge = 30 * 24 * 60 * 60 * 1000
+	// 		const maxAge = 30 * 24 * 60 * 60 * 1000
 
-			res.cookie('refreshToken', userData.refreshToken, {
-				maxAge,
-				httpOnly: true
-			})
-			return res.json(userData)
-		} catch (err) {
-			return next(err)
-		}
-	}
+	// 		res.cookie('refreshToken', userData.refreshToken, {
+	// 			maxAge,
+	// 			httpOnly: true
+	// 		})
+	// 		return res.json(userData)
+	// 	} catch (err) {
+	// 		return next(err)
+	// 	}
+	// }
 
 	async activate(req, res, next) {
 		try {
@@ -107,12 +105,12 @@ class UserController {
 		}
 	}
 
-	async addRole(req, res, next) {
+	async changeUserRole(req, res, next) {
 		try {
 			const { id } = req.params
 			const { role } = req.body
 
-			const user = await UserService.addRole(parseInt(id), role)
+			const user = await UserService.changeUserRole(id, role)
 
 			return res.json(user)
 		} catch (err) {
@@ -143,7 +141,7 @@ class UserController {
 	async deleteUser(req, res, next) {
 		try {
 			const { id } = req.params
-			const userData = await UserService.deleteUser({ id: parseInt(id) })
+			const userData = await UserService.deleteUser({ id })
 
 			return res.json(userData)
 		} catch (err) {

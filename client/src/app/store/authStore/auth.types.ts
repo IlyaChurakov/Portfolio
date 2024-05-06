@@ -1,18 +1,20 @@
 export interface IUser {
 	id: string
-	name: string
-	email: string
-	isActivated: boolean
-	roles: string[]
 	updatedAt: Date
 	createdAt: Date
+
+	role: number
+	email: string
+
+	name: string
+	isActivated: boolean
 	avatar: string | null
 	description: string
 }
 
 export interface AuthResponse {
 	accessToken: string
-	refreshToken: string
+	accessTokenExpiration: number
 	user: IUser
-	message?: string
+	error?: string
 }

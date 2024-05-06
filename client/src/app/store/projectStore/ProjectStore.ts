@@ -1,14 +1,14 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import ProjectService from '../../../services/Project.service'
 import { RootStore } from '../rootStore'
-import { IProject } from './types/project.types'
+import { IProject } from './project.types'
 
 export class ProjectStore {
 	private rootStore: RootStore
 
 	project: IProject
-	projectList: IProject[] | null
-	lastProjects: IProject[]
+	// projectList: IProject[] | null
+	// lastProjects: IProject[]
 	saved: boolean
 	loading: boolean
 
@@ -17,19 +17,19 @@ export class ProjectStore {
 
 		this.rootStore = rootStore
 
-		this.projectList = null
+		// this.projectList = null
 		this.project = {} as IProject
-		this.lastProjects = [] as IProject[]
+		// this.lastProjects = [] as IProject[]
 		this.saved = true
 		this.loading = false
 	}
 
-	setProjectList(projects: IProject[]) {
-		this.projectList = projects
-	}
-	setLastProjects(projects: IProject[]) {
-		this.lastProjects = projects
-	}
+	// setProjectList(projects: IProject[]) {
+	// 	this.projectList = projects
+	// }
+	// setLastProjects(projects: IProject[]) {
+	// 	this.lastProjects = projects
+	// }
 	setProject(project: IProject) {
 		this.project = project
 		this.setSaved(false)
@@ -50,24 +50,24 @@ export class ProjectStore {
 
 			this.setProject(data)
 
-			const projectList = await this.getProjectList()
-			this.setProjectList(projectList)
+			// const projectList = await this.getProjectList()
+			// this.setProjectList(projectList)
 			return data
 		} catch (err) {
 			throw new Error((err as Error).message)
 		}
 	}
-	async getProjectList(count?: number, type?: string): Promise<IProject[]> {
-		try {
-			const { data } = await ProjectService.getProjectList(count, type)
+	// async getProjectList(count?: number, type?: string): Promise<IProject[]> {
+	// 	try {
+	// 		const { data } = await ProjectService.getProjectList(count, type)
 
-			this.setProjectList(data)
+	// 		this.setProjectList(data)
 
-			return data
-		} catch (err) {
-			throw new Error((err as Error).message)
-		}
-	}
+	// 		return data
+	// 	} catch (err) {
+	// 		throw new Error((err as Error).message)
+	// 	}
+	// }
 	async getProject(id: string) {
 		try {
 			this.setLoading(true)
@@ -92,8 +92,8 @@ export class ProjectStore {
 			const { data } = await ProjectService.deleteProjectById(id)
 			this.setLoading(false)
 
-			const projects = await this.getProjectList()
-			this.setProjectList(projects)
+			// const projects = await this.getProjectList()
+			// this.setProjectList(projects)
 
 			return data
 		} catch (err) {
@@ -106,7 +106,7 @@ export class ProjectStore {
 			const { data } = await ProjectService.archiveProject(id, bool)
 			this.setLoading(false)
 
-			await this.getProjectList()
+			// await this.getProjectList()
 
 			return data
 		} catch (err) {

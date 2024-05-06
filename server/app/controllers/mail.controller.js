@@ -1,5 +1,5 @@
-import ApiError from '../errors/api.error.js'
 import MailService from '../services/Mail.service.js'
+import ErrorsUtils, { BadRequest } from '../utils/Errors.js'
 
 class MailController {
 	constructor() {
@@ -13,7 +13,7 @@ class MailController {
 
 			const isIpBlocked = this.queue.find(elem => elem === ip)
 			if (isIpBlocked)
-				throw ApiError.BadRequest(
+				throw new BadRequest(
 					'Сообщения через форму можно отправлять каждые 30 сек'
 				)
 
@@ -28,7 +28,8 @@ class MailController {
 
 			return res.status(200).json({ message: 'Сообщение отправлено' })
 		} catch (err) {
-			next(err)
+			console.log(err)
+			return ErrorsUtils.catchError(res, err)
 		}
 	}
 }

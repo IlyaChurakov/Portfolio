@@ -1,4 +1,4 @@
-import { ISection } from '@app/store/projectStore/types/project.types'
+import { ISection } from '@app/store/projectStore/project.types'
 import { ReactNode } from 'react'
 
 const defaultSectionPaddings = '2.5rem 0'

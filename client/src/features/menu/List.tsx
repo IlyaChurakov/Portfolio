@@ -1,4 +1,5 @@
 import { useStores } from '@app/index'
+import { appRoles } from '@shared/config/router/router.config'
 import { observer } from 'mobx-react-lite'
 import { GoPlus } from 'react-icons/go'
 
@@ -23,7 +24,12 @@ const List = ({ id, isShow, roles }: IList) => {
 							<GoPlus
 								fill='green'
 								className='text-lg cursor-pointer '
-								onClick={() => userStore.addRoleById(id, role)}
+								onClick={async () =>
+									await userStore.changeUserRole(
+										id,
+										appRoles[role as keyof typeof appRoles]
+									)
+								}
 							/>
 						</div>
 					</li>

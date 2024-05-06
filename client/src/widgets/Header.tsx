@@ -1,5 +1,6 @@
 import { useStores } from '@app/index'
 import { pageTypes } from '@pages/types'
+import { appRoles } from '@shared/config/router/router.config'
 import Container from '@shared/layouts/Container'
 import { observer } from 'mobx-react-lite'
 import { GoArrowLeft } from 'react-icons/go'
@@ -11,7 +12,8 @@ const Header = () => {
 	const { pathname } = useLocation()
 	const { projectStore, authStore, userStore } = useStores()
 
-	const isAdmin = authStore.isAuth && userStore.user.roles?.includes('admin')
+	const isAdmin =
+		authStore.isUserLogged && userStore.user.role === appRoles.ADMIN
 
 	const isProjectsPage = pathname == '/projects'
 	const isSkillsPage = pathname == '/skills'

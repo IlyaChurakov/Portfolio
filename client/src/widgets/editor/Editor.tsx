@@ -1,5 +1,5 @@
 import { useStores } from '@app/index'
-import { ISection } from '@app/store/projectStore/types/project.types'
+import { ISection } from '@app/store/projectStore/project.types'
 import ProjectSavingButton from '@features/ProjectSavingButton'
 import { pageTypes } from '@pages/types'
 import Button from '@shared/ui/Button'

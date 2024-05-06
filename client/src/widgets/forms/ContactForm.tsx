@@ -1,8 +1,10 @@
 import { useStores } from '@app/index'
+import { AuthResponse } from '@app/store/authStore/auth.types'
 import DisappearMessage from '@features/DisappearMessage'
 import Button from '@shared/ui/Button'
 import Input from '@shared/ui/Input'
 import Textarea from '@shared/ui/Textarea'
+import { AxiosError } from 'axios'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -35,10 +37,10 @@ const ContactForm = () => {
 
 			reset()
 			setIsSuccess(true)
-		} catch (e) {
+		} catch (err) {
 			setIsSuccess(false)
-			errorStore.add('Ошибка отправки сообщения')
-			throw new Error()
+			const error = err as AxiosError<AuthResponse>
+			if (error.response?.data.error) errorStore.add(error.response?.data.error)
 		}
 	}
 

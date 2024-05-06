@@ -1,4 +1,4 @@
-import { IBlock } from '@app/store/projectStore/types/project.types'
+import { IBlock } from '@app/store/projectStore/project.types'
 import { WithLinks } from '../lib/WithLinks'
 
 const Text = ({

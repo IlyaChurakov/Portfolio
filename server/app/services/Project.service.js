@@ -2,6 +2,8 @@ import ProjectRepository from '../repository/Project.repository.js'
 import { prisma } from '../utils/prisma.js'
 import FileService from './File.service.js'
 
+const admin = 2
+
 class ProjectService {
 	async createProject(project) {
 		return await ProjectRepository.createProject(project)
@@ -12,14 +14,14 @@ class ProjectService {
 	}
 
 	async getProjectList({ count, type }, user) {
-		if (!user || !user.roles.includes('admin')) {
+		if (!user || user.role !== admin) {
 			return await ProjectRepository.getProjectList({
 				where: {
 					archived: false || null,
 					type
 				},
 				orderBy: { createdAt: 'desc' },
-				take: count || undefined
+				take: !isNaN(parseInt(count)) ? parseInt(count) : undefined
 			})
 		} else {
 			return await prisma.project.findMany({
@@ -29,7 +31,7 @@ class ProjectService {
 				orderBy: {
 					createdAt: 'desc'
 				},
-				take: count || undefined
+				take: !isNaN(parseInt(count)) ? parseInt(count) : undefined
 			})
 		}
 	}

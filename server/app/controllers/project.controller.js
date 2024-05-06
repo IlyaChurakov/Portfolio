@@ -31,10 +31,11 @@ class ProjectController {
 	async getProjectList(req, res, next) {
 		try {
 			const user = req.user
+			const { count } = req.query
 
-			const count = parseInt(req.params.count)
+			// const count = parseInt(req.params.count)
 			const type = req.query.type
-			console.log(type)
+
 			const projects = await ProjectService.getProjectList(
 				{ count, type },
 				user

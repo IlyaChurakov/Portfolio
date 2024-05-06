@@ -3,7 +3,7 @@ import {
 	BlockTypes,
 	IBlock,
 	IProject,
-} from '@app/store/projectStore/types/project.types'
+} from '@app/store/projectStore/project.types'
 import { observer } from 'mobx-react-lite'
 import { GoArrowDown, GoArrowUp } from 'react-icons/go'
 import { MdDelete } from 'react-icons/md'

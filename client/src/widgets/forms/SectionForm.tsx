@@ -1,5 +1,5 @@
 import { useStores } from '@app/index'
-import { ISection } from '@app/store/projectStore/types/project.types'
+import { ISection } from '@app/store/projectStore/project.types'
 import ImageLoader from '@features/ImageLoader'
 import { uploadFile } from '@shared/lib/utils'
 import Button from '@shared/ui/Button'
